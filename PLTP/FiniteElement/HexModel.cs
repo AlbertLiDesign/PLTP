@@ -153,6 +153,8 @@ namespace PLTP
 
             return meshes;
         }
+
+        #region Private Methods
         private int ComputeFlag(int id, double[] values, double isovalue)
         {
             int flag = 0;
@@ -167,5 +169,7 @@ namespace PLTP
             Cases[id] = flag;
             return flag;
         }
+
+        #endregion
     }
 }

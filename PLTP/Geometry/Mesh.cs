@@ -8,27 +8,26 @@ namespace PLTP
 {
     public class Mesh
     {
-        public List<Vector> vertices = new List<Vector>();
-        public List<Face> faces = new List<Face>();
+        public Vector[] vertices;
+        public Face[] faces;
 
         #region Constructors
-        public Mesh() { }
+        public Mesh() 
+        {
+            vertices = new Vector[3];
+            faces = new Face[1];
+        }
         public Mesh(Mesh mesh)
         {
             vertices = mesh.vertices;
             faces = mesh.faces;
         }
-        public Mesh(List<Vector> vertices, List<Face> faces)
+        public Mesh(Vector[] vertices, Face[] faces)
         {
-            this.vertices = vertices;
-            this.faces = faces;
+            this.vertices = vertices.ToArray();
+            this.faces = faces.ToArray();
         }
         #endregion
-        public void Copy(Mesh mesh)
-        {
-            vertices = mesh.vertices.ToList();
-            faces = mesh.faces.ToList();
-        }
 
     }
 }
