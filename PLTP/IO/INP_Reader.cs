@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PLTP.IO
+namespace PLTP
 {
     /// <summary>
     /// IO class for reading .inp file
@@ -145,7 +145,7 @@ namespace PLTP.IO
 
                     #region Read Elements
                     // Read Hexahedrons
-                    if (line == "*Element, type=C3D10")
+                    if (line == "*Element, type=C3D10" || line == "*Element, type=C3D8")
                     {
                         line = SR.ReadLine();
                         while (!line.StartsWith("*"))
@@ -160,21 +160,30 @@ namespace PLTP.IO
                             int n1 = int.Parse(tokens[2]) - 1;
                             int n2 = int.Parse(tokens[3]) - 1;
                             int n3 = int.Parse(tokens[4]) - 1;
+                            int n4 = int.Parse(tokens[5]) - 1;
+                            int n5 = int.Parse(tokens[6]) - 1;
+                            int n6 = int.Parse(tokens[7]) - 1;
+                            int n7 = int.Parse(tokens[8]) - 1;
 
-                            ids.Add(new int[4] { n0, n1, n2, n3 });
+                            ids.Add(new int[8] { n0, n1, n2, n3, n4, n5, n6, n7});
 
-                            mesh.Vertices.Add(Nds[n0]);
-                            mesh.Vertices.Add(Nds[n1]);
-                            mesh.Vertices.Add(Nds[n2]);
-                            mesh.Vertices.Add(Nds[n3]);
+                            verts.Add(nds[n0]);
+                            verts.Add(nds[n1]);
+                            verts.Add(nds[n2]);
+                            verts.Add(nds[n3]);
+                            verts.Add(nds[n4]);
+                            verts.Add(nds[n5]);
+                            verts.Add(nds[n6]);
+                            verts.Add(nds[n7]);
 
-                            mesh.Faces.AddFace(0, 1, 2);
-                            mesh.Faces.AddFace(0, 1, 3);
-                            mesh.Faces.AddFace(0, 2, 3);
-                            mesh.Faces.AddFace(1, 2, 3);
+                            faces.Add(new Face(0, 1, 2, 3));
+                            faces.Add(new Face(4, 5, 6, 7));
+                            faces.Add(new Face(0, 1, 5, 4));
+                            faces.Add(new Face(1, 2, 6, 5));
+                            faces.Add(new Face(2, 3, 7, 6));
+                            faces.Add(new Face(3, 0, 4, 7));
 
-
-                            elems.Add(mesh);
+                            elems.Add(new Hexahedron(verts.ToArray(), faces.ToArray()));
                             line = SR.ReadLine();
                         }
                     }
