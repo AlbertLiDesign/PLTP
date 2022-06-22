@@ -17,9 +17,9 @@ namespace PLTP
         public List<int> nonDesignID = new List<int>();
 
         public INP_Reader() { }
-        public List<Tetrahedra> ReadTet(string path)
+        public List<Tetrahedron> ReadTet(string path)
         {
-            List<Tetrahedra> elems = new List<Tetrahedra>();
+            List<Tetrahedron> elems = new List<Tetrahedron>();
             if (File.Exists(path))
             {
                 StreamReader SR = new StreamReader(path);
@@ -74,7 +74,7 @@ namespace PLTP
                             faces.Add(new Face(0, 2, 3));
                             faces.Add(new Face(1, 2, 3));
 
-                            elems.Add(new Tetrahedra(verts.ToArray(), faces.ToArray()));
+                            elems.Add(new Tetrahedron(verts.ToArray(), faces.ToArray()));
                             line = SR.ReadLine();
                         }
                     }

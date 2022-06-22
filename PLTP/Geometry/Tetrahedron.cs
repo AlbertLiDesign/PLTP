@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PLTP
 {
-    public class Tetrahedra
+    public class Tetrahedron
     {
         public Vector[] vertices;
         public Face[] faces;
@@ -21,19 +21,19 @@ namespace PLTP
         /// </summary>
         public bool isNonDesign = false;
 
-        public Tetrahedra()
+        public Tetrahedron()
         {
             vertices = new Vector[4];
             faces = new Face[4];
         }
-        public Tetrahedra(Vector[] vertices, Face[] faces)
+        public Tetrahedron(Vector[] vertices, Face[] faces)
         {
             if (vertices.Length != 4) throw new ArgumentException("The number of vertices must be 4!");
             if (faces.Length != 4) throw new ArgumentException("The number of faces must be 4!");
             this.vertices = vertices;
             this.faces = faces;
         }
-        public Tetrahedra(Vector[] vertices, Face[] faces, double[] nodalSensitivityNumbers, bool isNonDesign)
+        public Tetrahedron(Vector[] vertices, Face[] faces, double[] nodalSensitivityNumbers, bool isNonDesign)
         {
             if (vertices.Length != 4) throw new ArgumentException("The number of vertices must be 4!");
             if (faces.Length != 4) throw new ArgumentException("The number of faces must be 4!");
