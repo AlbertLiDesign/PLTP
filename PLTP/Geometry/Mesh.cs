@@ -8,26 +8,30 @@ namespace PLTP
 {
     public class Mesh
     {
-        public Vector[] vertices;
-        public Face[] faces;
+        public Vector[] Vertices;
+        public Face[] Faces;
 
         #region Constructors
         public Mesh() 
         {
-            vertices = new Vector[3];
-            faces = new Face[1];
+            Vertices = new Vector[3];
+            Faces = new Face[1];
         }
         public Mesh(Mesh mesh)
         {
-            vertices = mesh.vertices;
-            faces = mesh.faces;
+            Vertices = mesh.Vertices;
+            Faces = mesh.Faces;
         }
         public Mesh(Vector[] vertices, Face[] faces)
         {
-            this.vertices = vertices.ToArray();
-            this.faces = faces.ToArray();
+            Vertices = vertices.ToArray();
+            Faces = faces.ToArray();
         }
         #endregion
-
+        public void CombineMeshes(Mesh anotherMesh)
+        {
+            Vertices = Vertices.Concat(anotherMesh.Vertices).ToArray();
+            Faces = Faces.Concat(anotherMesh.Faces).ToArray();
+        }
     }
 }

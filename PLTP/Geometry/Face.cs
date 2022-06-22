@@ -8,23 +8,23 @@ namespace PLTP
 {
     public class Face
     {
-        public int[] faces;
+        public int[] Vert_ID;
         public bool isTriagnle = true;
         public Face(int a, int b, int c)
         {
-            faces = new int[3];
-            faces[0] = a;
-            faces[1] = b;
-            faces[2] = c;
+            Vert_ID = new int[3];
+            Vert_ID[0] = a;
+            Vert_ID[1] = b;
+            Vert_ID[2] = c;
             isTriagnle = true;
         }
         public Face(int a, int b, int c, int d)
         {
-            faces = new int[4];
-            faces[0] = a;
-            faces[1] = b;
-            faces[2] = c;
-            faces[3] = d;
+            Vert_ID = new int[4];
+            Vert_ID[0] = a;
+            Vert_ID[1] = b;
+            Vert_ID[2] = c;
+            Vert_ID[3] = d;
             isTriagnle = false;
         }
     }

@@ -176,7 +176,7 @@ namespace PLTP
                             verts.Add(nds[n6]);
                             verts.Add(nds[n7]);
 
-                            faces.Add(new Face(0, 1, 2, 3));
+                            faces.Add(new Face(0, 3, 2, 1));
                             faces.Add(new Face(4, 5, 6, 7));
                             faces.Add(new Face(0, 1, 5, 4));
                             faces.Add(new Face(1, 2, 6, 5));
