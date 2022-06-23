@@ -92,12 +92,9 @@ namespace PLTP
         }
 
         #region Static methods
-        public static void SortHexahedrons_Verts(Hexahedron[] elems)
+        public static void SortVerts(Hexahedron[] elems)
         {
-            Parallel.For(0, elems.Length, i =>
-            {
-                elems[i].SortingVertices();
-            });
+            Parallel.For(0, elems.Length, i =>{elems[i].SortingVertices();});
         }
         public static Mesh CombineHexahedrons(Hexahedron[] elems)
         {

@@ -7,18 +7,27 @@ using System.Threading.Tasks;
 namespace PLTP
 {
     /// <summary>
-    /// IO class for reading .inp file
+    /// IO class for reading files
     /// </summary>
-    public class INP_Reader
+    public class Readers
     {
-        public List<Vector> nds = new List<Vector>();
-        public List<int[]> ids = new List<int[]>();
-        public List<int> solid = new List<int>();
-        public List<int> nonDesignID = new List<int>();
-
-        public INP_Reader() { }
-        public List<Tetrahedron> ReadTet(string path)
+        public static List<double> ReadElemSenNum(string path)
         {
+            List<double> ndlSens = new List<double>();
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();
+                    ndlSens.Add(double.Parse(line));
+                }
+            }
+            return ndlSens;
+        }
+        public static List<Tetrahedron> ReadTet(string path, ref List<int> solidID, ref List<int> nonDesignID)
+        {
+            List<Vector> nds = new List<Vector>();
             List<Tetrahedron> elems = new List<Tetrahedron>();
             if (File.Exists(path))
             {
@@ -62,8 +71,6 @@ namespace PLTP
                             int n2 = int.Parse(tokens[3]) - 1;
                             int n3 = int.Parse(tokens[4]) - 1;
 
-                            ids.Add(new int[4] { n0, n1, n2, n3 });
-
                             verts.Add(nds[n0]);
                             verts.Add(nds[n1]);
                             verts.Add(nds[n2]);
@@ -87,7 +94,7 @@ namespace PLTP
                         while (!line.StartsWith("*"))
                         {
                             var tokens = line.Split(',');
-                            solid.Add(int.Parse(tokens[0]) - 1);
+                            solidID.Add(int.Parse(tokens[0]) - 1);
                             line = SR.ReadLine();
                         }
                     }
@@ -115,9 +122,11 @@ namespace PLTP
             }
             return elems;
         }
-        public List<Hexahedron> ReadHex(string path)
+        public static List<Hexahedron> ReadHex(string path, ref List<int> solidID, ref List<int> nonDesignID)
         {
+            List<Vector> nds = new List<Vector>();
             List<Hexahedron> elems = new List<Hexahedron>();
+
             if (File.Exists(path))
             {
                 StreamReader SR = new StreamReader(path);
@@ -165,8 +174,6 @@ namespace PLTP
                             int n6 = int.Parse(tokens[7]) - 1;
                             int n7 = int.Parse(tokens[8]) - 1;
 
-                            ids.Add(new int[8] { n0, n1, n2, n3, n4, n5, n6, n7});
-
                             verts.Add(nds[n0]);
                             verts.Add(nds[n1]);
                             verts.Add(nds[n2]);
@@ -196,12 +203,11 @@ namespace PLTP
                         while (!line.StartsWith("*"))
                         {
                             var tokens = line.Split(',');
-                            solid.Add(int.Parse(tokens[0]) - 1);
+                            solidID.Add(int.Parse(tokens[0]) - 1);
                             line = SR.ReadLine();
                         }
                     }
                     #endregion
-
 
                     #region Read Non-design elements
                     if (line == "*Elset, elset=Non_Design")
