@@ -10,7 +10,7 @@ namespace PLTP
     {
         #region Table
         // Edge Table
-        public static int[] CubeEdgeFlags =
+        public static int[] EdgeFlags_Hex =
           {
     0x000, 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c, 0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
     0x190, 0x099, 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c, 0x99c, 0x895, 0xb9f, 0xa96, 0xd9a, 0xc93, 0xf99, 0xe90,
@@ -30,7 +30,7 @@ namespace PLTP
     0xf00, 0xe09, 0xd03, 0xc0a, 0xb06, 0xa0f, 0x905, 0x80c, 0x70c, 0x605, 0x50f, 0x406, 0x30a, 0x203, 0x109, 0x000
     };
         // Face Table
-        public static int[,] TriangleConnectionTable = new int[256, 16]
+        public static int[,] ConnectionTable_Hex = new int[256, 16]
           {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -291,7 +291,7 @@ namespace PLTP
           };
 
         // Model
-        private static List<List<double>> SolidVertTable = new List<List<double>>(256)
+        public static List<List<double>> VertTable_Hex = new List<List<double>>(256)
         {
   new List<double>(),
   new List<double>(12){0,0,0,0,0,0.5,0.5,0,0,0,0.5,0},
@@ -550,7 +550,7 @@ namespace PLTP
   new List<double>(30){1,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,1,1,0,1,1,0,0,0.5,0.5,0,0,0,0.5,0},
   new List<double>(24){0,0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,1,1,0,1,1},
         };
-        private static List<List<List<int>>> SolidFaceTable = new List<List<List<int>>>(256)
+        public static List<List<List<int>>> FaceTable_Hex = new List<List<List<int>>>(256)
 {
     new List<List<int>>(6){  new List<int>(4){0,3,2,1},
   new List<int>(4){4,5,6,7},
@@ -3701,7 +3701,7 @@ namespace PLTP
   new List<int>(4){5,1,2,6},
   new List<int>(4){4,0,1,5}},
 };
-        private static List<List<int>> SolidActiveTable = new List<List<int>>(256)
+        public static List<List<int>> ActiveTable_Hex = new List<List<int>>(256)
 {
     new List<int>(0){},
     new List<int>(3){2,1,3},

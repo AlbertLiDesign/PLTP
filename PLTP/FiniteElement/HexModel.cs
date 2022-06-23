@@ -8,7 +8,7 @@ namespace PLTP
 {
     public class HexModel
     {
-        public List<Hexahedron> elements = new List<Hexahedron>();
+        public Hexahedron[] Elements;
         private Vector voxelSize;
 
         private double initialVolume = 0.0;
@@ -65,9 +65,9 @@ namespace PLTP
         /// <summary>
         /// Post-processing method for hexahedron model without keeping volume
         /// </summary>
-        public HexModel(List<Hexahedron> elements, double[] nodalSensitivityNumbers, Vector voxelSize, double isoValue, double tolerance, bool interpolation = true)
+        public HexModel(Hexahedron[] elements, double[] nodalSensitivityNumbers, Vector voxelSize, double isoValue, double tolerance, bool interpolation = true)
         {
-            this.elements = elements;
+            Elements = elements;
             this.voxelSize = voxelSize;
 
             this.isoValue = isoValue;
@@ -76,15 +76,15 @@ namespace PLTP
             this.interpolation = interpolation;
             keepVolume = false;
 
-            Cases = new int[elements.Count];
+            Cases = new int[elements.Length];
         }
 
         /// <summary>
         /// Post-processing method for hexahedron model while keeping volume
         /// </summary>
-        public HexModel(List<Hexahedron> elements, Vector voxelSize, double initialVolume, double targetVolume, double isoValue, double tolerance, bool interpolation = true)
+        public HexModel(Hexahedron[] elements, Vector voxelSize, double initialVolume, double targetVolume, double isoValue, double tolerance, bool interpolation = true)
         {
-            this.elements = elements;
+            Elements = elements;
             this.voxelSize = voxelSize;
 
             this.initialVolume = initialVolume;
@@ -95,7 +95,7 @@ namespace PLTP
             this.interpolation = interpolation;
             keepVolume = true;
 
-            Cases = new int[elements.Count];
+            Cases = new int[elements.Length];
         }
         #endregion
 
@@ -110,51 +110,147 @@ namespace PLTP
             this.maximumIteration = maximumIteration;
         }
 
-        public List<Mesh> Extract()
+        //public Mesh[] Extract()
+        //{
+        //    Mesh[] meshes = new Mesh[Elements.Length];
+
+        //    //// Each hexahedron has 8 vertices
+        //    //Vector[] all_vertices = new Vector[elements.Count * 8];
+
+        //    //// Get all vertices
+        //    //for (int i = 0; i < elements.Count; i++)
+        //    //{
+        //    //    all_vertices[i * 8] = elements[i].vertices[0];
+        //    //    all_vertices[i * 8 + 1] = elements[i].vertices[1];
+        //    //    all_vertices[i * 8 + 2] = elements[i].vertices[2];
+        //    //    all_vertices[i * 8 + 3] = elements[i].vertices[3];
+        //    //    all_vertices[i * 8 + 4] = elements[i].vertices[4];
+        //    //    all_vertices[i * 8 + 5] = elements[i].vertices[5];
+        //    //    all_vertices[i * 8 + 6] = elements[i].vertices[6];
+        //    //    all_vertices[i * 8 + 7] = elements[i].vertices[7];
+        //    //}
+
+        //    for (int i = 0; i < Elements.Length; i++)
+        //    {
+        //        int flag = ComputeFlag(i, Elements[i].ndlSen, isoValue);
+                
+        //        if (Elements[i].isNonDesign)
+        //        {
+        //            // output the original hexahedron
+        //            meshes[i] = Elements[i].ToMesh();
+        //        }
+        //        else
+        //        {
+        //            if (flag == 255)
+        //                meshes[i] = Elements[i].ToMesh();
+        //            if (flag != 0)
+        //            {
+        //                // applying the proposed lookup tables
+        //                var mesh = ApplyLookUpTable(flag);
+
+        //                // To find edges which intersect with the boundary
+        //                int EdgeFlag = Table.EdgeFlags_Hex[flag];
+        //                // This hexahedron is in the boundary.
+        //                if (EdgeFlag == 0) return null;
+
+        //                List<Vector> pts = new List<Vector>();
+        //                Vector[] EdgeVertex = new Vector[12];
+        //                for (int j = 0; j < 12; i++)
+        //                {
+        //                    if ((EdgeFlag & (1 << j)) != 0)
+        //                    {
+        //                        var Offset = GetOffset(values[EdgeConnection[j, 0]], values[EdgeConnection[j, 1]], isovalue, interpolation);
+        //                        var vert0 = new Vector(Vertices[EdgeConnection[j, 0], 0], Vertices[EdgeConnection[j, 0], 1], Vertices[EdgeConnection[j, 0], 2]);
+        //                        var vert1 = new Vector(Vertices[EdgeConnection[j, 0], 0] + EdgeDirection[j, 0],
+        //                            Vertices[EdgeConnection[j, 0], 1] + EdgeDirection[j, 1], Vertices[EdgeConnection[j, 0], 2] + EdgeDirection[j, 2]);
+
+        //                        EdgeVertex[i] = new Vector(
+        //                            (Vertices[EdgeConnection[j, 0], 0] + Offset * EdgeDirection[j, 0]),
+        //                            (Vertices[EdgeConnection[j, 0], 1] + Offset * EdgeDirection[j, 1]),
+        //                            (Vertices[EdgeConnection[j, 0], 2] + Offset * EdgeDirection[j, 2]));
+        //                    }
+        //                }
+
+        //                // Generate triangles
+        //                for (int Triangle = 0; Triangle < 5; Triangle++)
+        //                {
+        //                    if (Table.ConnectionTable_Hex[flag, 3 * Triangle] < 0)
+        //                        break;
+
+
+        //                    for (int Corner = 0; Corner < 3; Corner++)
+        //                    {
+        //                        int Vertex = Table.ConnectionTable_Hex[flag, 3 * Triangle + Corner];
+        //                        pts.Add(EdgeVertex[Vertex]);
+        //                    }
+        //                }
+
+        //                var ids = Table.ActiveTable_Hex[flag];
+        //                for (int j = 0; j < ids.Count; j++)
+        //                    mesh.Vertices[ids[j]] = pts[j];
+        //                meshes[i] = mesh;
+        //            }
+        //        }
+        //    }
+        //    return meshes;
+        //}
+
+        #region Private Methods
+        /// <summary>
+        /// To compute interpolated points.
+        /// </summary>
+        /// <param name="value1"> The first value. </param>
+        /// <param name="value2"> The second value. </param>
+        /// <param name="isovalue"> The isovalue. </param>
+        /// <param name="interpolation"> Whether to use linear interpolation. </param>
+        /// <returns></returns>
+        private double GetOffset(double value1, double value2, double isovalue, bool interpolation)
         {
-            List<Mesh> meshes = new List<Mesh>();
+            if (!interpolation)
+                return 0.5;
 
-            //// Each hexahedron has 8 vertices
-            //Vector[] all_vertices = new Vector[elements.Count * 8];
-
-            //// Get all vertices
-            //for (int i = 0; i < elements.Count; i++)
-            //{
-            //    all_vertices[i * 8] = elements[i].vertices[0];
-            //    all_vertices[i * 8 + 1] = elements[i].vertices[1];
-            //    all_vertices[i * 8 + 2] = elements[i].vertices[2];
-            //    all_vertices[i * 8 + 3] = elements[i].vertices[3];
-            //    all_vertices[i * 8 + 4] = elements[i].vertices[4];
-            //    all_vertices[i * 8 + 5] = elements[i].vertices[5];
-            //    all_vertices[i * 8 + 6] = elements[i].vertices[6];
-            //    all_vertices[i * 8 + 7] = elements[i].vertices[7];
-            //}
-
-            for (int i = 0; i < elements.Count; i++)
+            if (Math.Abs(isovalue - value1) < 0)
             {
-                int flag = ComputeFlag(i, elements[i].ndlSen, isoValue);
-                if (elements[i].isNonDesign)
+                return 0;
+            }
+            return (isovalue - value1) / (value2 - value1);
+        }
+
+
+        private Mesh ApplyLookUpTable(int flag)
+        {
+            List<Vector> vertices = new List<Vector>();
+            List<Face> faces = new List<Face>();
+            // Add vertices
+            for (int v = 0; v < Table.VertTable_Hex[flag].Count / 3; v++)
+            {
+                vertices.Add(new Vector(
+                        Table.VertTable_Hex[flag][3 * v], 
+                        Table.VertTable_Hex[flag][3 * v + 1], 
+                        Table.VertTable_Hex[flag][3 * v + 2]));
+            }
+
+            // Add faces
+            for (int f = 0; f < Table.FaceTable_Hex[flag].Count; f++)
+            {
+                if (Table.FaceTable_Hex[flag][f].Count == 3)
                 {
-                    // output the original hexahedron
+                    faces.Add(new Face(
+                        Table.FaceTable_Hex[flag][f][0], 
+                        Table.FaceTable_Hex[flag][f][1],
+                        Table.FaceTable_Hex[flag][f][2]));
                 }
                 else
                 {
-                    if (flag == 255)
-                    {
-                        // output the original hexahedron
-                    }
-
-
-
+                    faces.Add(new Face(
+                        Table.FaceTable_Hex[flag][f][0], 
+                        Table.FaceTable_Hex[flag][f][1],
+                        Table.FaceTable_Hex[flag][f][2], 
+                        Table.FaceTable_Hex[flag][f][3]));
                 }
             }
-
-
-
-            return meshes;
+            return new Mesh(vertices.ToArray(), faces.ToArray());
         }
-
-        #region Private Methods
         private int ComputeFlag(int id, double[] values, double isovalue)
         {
             int flag = 0;
