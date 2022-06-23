@@ -11,4 +11,10 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="KDTree">
+      <HintPath>Dependencies\KDTree.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

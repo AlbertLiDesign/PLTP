@@ -1,27 +1,41 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KDTree;
 
 namespace PLTP
 {
     public class HexModel
     {
-        public Hexahedron[] Elements;
-        private Vector voxelSize;
+        public List<Vector> NodeList = new List<Vector>();
+        public List<Hexahedron> Elements = new List<Hexahedron>();
+        public List<double> ElemSenNum = new List<double>();
+        private Vector VoxelSize;
 
-        private double initialVolume = 0.0;
-        private double targetVolume = 0.0;
-        public double isoValue = 0.0;
-        public double tolerance = 0.01;
+        /// <summary>
+        /// A mapping dictionary storing adjacent elements
+        /// </summary>
+        public Dictionary<Hexahedron, List<Hexahedron>> FME;
 
-        public bool interpolation = true;
-        public bool keepVolume = false;
+        /// <summary>
+        /// A mapping dictionary storing the relevant weight factors 
+        /// </summary>
+        public Dictionary<Hexahedron, List<double>> FMW;
+
+        private double InitialVolume = 0.0;
+        private double TargetVolume = 0.0;
+        public double Isovalue = 0.0;
+        public double Tolerance = 0.01;
+
+        public bool Interpolation = true;
+        public bool KeepVolume = false;
 
         #region Parameters for keeping volume
-        private double step = 0.01;
-        private int maximumIteration = 20;
+        private double Step = 0.01;
+        private int MaximumIteration = 20;
         #endregion
 
         /// <summary>
@@ -65,49 +79,140 @@ namespace PLTP
         /// <summary>
         /// Post-processing method for hexahedron model without keeping volume
         /// </summary>
-        public HexModel(Hexahedron[] elements, double[] nodalSensitivityNumbers, Vector voxelSize, double isoValue, double tolerance, bool interpolation = true)
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, Vector voxelSize)
         {
+            NodeList = nodeList;
             Elements = elements;
-            this.voxelSize = voxelSize;
+            ElemSenNum = elemSenNum;
+            VoxelSize = voxelSize;
 
-            this.isoValue = isoValue;
-            this.tolerance = tolerance;
-
-            this.interpolation = interpolation;
-            keepVolume = false;
-
-            Cases = new int[elements.Length];
-        }
-
-        /// <summary>
-        /// Post-processing method for hexahedron model while keeping volume
-        /// </summary>
-        public HexModel(Hexahedron[] elements, Vector voxelSize, double initialVolume, double targetVolume, double isoValue, double tolerance, bool interpolation = true)
-        {
-            Elements = elements;
-            this.voxelSize = voxelSize;
-
-            this.initialVolume = initialVolume;
-            this.targetVolume = targetVolume;
-            this.isoValue = isoValue;
-            this.tolerance = tolerance;
-
-            this.interpolation = interpolation;
-            keepVolume = true;
-
-            Cases = new int[elements.Length];
+            Cases = new int[elements.Count];
+            FME = new Dictionary<Hexahedron, List<Hexahedron>>(Elements.Count);
+            FMW = new Dictionary<Hexahedron, List<double>>(Elements.Count);
         }
         #endregion
 
         /// <summary>
+        /// Calculate the nodal sensitivity numbers
+        /// </summary>
+        public List<double> CalNdlSenNums(double rmin)
+        {
+            List<double> ndlSenNums = new List<double>();
+
+            // Construct KDTree
+            var tree = new KDTree<int>(3);
+
+            // Get centers
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                tree.AddPoint(new double[3]
+                {
+                    Elements[i].Center.X,
+                    Elements[i].Center.Y,
+                    Elements[i].Center.Z
+                }, i);
+            }
+
+            // Searching
+            var nds = NodeList.ToArray();
+            var result = KDTreeMultiSearch(nds, tree, rmin, 1024);
+
+
+            foreach (var elem in Elements)
+            {
+                List<Hexahedron> adjacentElems = new List<Hexahedron>(result[elem.ID].Count);
+                List<double> weights = new List<double>(result[elem.ID].Count);
+                double sum = 0.0;
+
+                Vector curCentre = nds[elem.ID];
+
+                foreach (var item in result[elem.ID])
+                {
+                    Vector adjCentre = new Vector(nds[item].X, nds[item].Y, nds[item].Z);
+
+                    adjacentElems.Add(Elements[item]);
+                    var weight = rmin - curCentre.DistanceTo(adjCentre);
+                    weights.Add(weight);
+                    sum += weight;
+                }
+
+                // Compute weights
+                for (int i = 0; i < weights.Count; i++)
+                    weights[i] /= sum;
+
+                FME.Add(elem, adjacentElems);
+                FMW.Add(elem, weights);
+            }
+
+
+
+            return ndlSenNums;
+        }
+
+        public void FilteringElements(double rmin)
+        {
+            // Construct KDTree
+            var tree = new KDTree<int>(3);
+
+            // Get centers
+            Vector[] centers = new Vector[Elements.Count];
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                centers[i] = Elements[i].Center;
+                tree.AddPoint(new double[3]
+                {
+                    Elements[i].Center.X,
+                    Elements[i].Center.Y,
+                    Elements[i].Center.Z
+                }, i);
+            }
+                
+
+            // Searching
+            var result = KDTreeMultiSearch(centers, tree, rmin, 1024);
+
+            foreach (var elem in Elements)
+            {
+                List<Hexahedron> adjacentElems = new List<Hexahedron>(result[elem.ID].Count);
+                List<double> weights = new List<double>(result[elem.ID].Count);
+                double sum = 0.0;
+
+                Vector curCentre = centers[elem.ID];
+
+                foreach (var item in result[elem.ID])
+                {
+                    Vector adjCentre = new Vector(centers[item].X, centers[item].Y, centers[item].Z);
+
+                    adjacentElems.Add(Elements[item]);
+                    var weight = rmin - curCentre.DistanceTo(adjCentre);
+                    weights.Add(weight);
+                    sum += weight;
+                }
+
+                // Compute weights
+                for (int i = 0; i < weights.Count; i++)
+                    weights[i] /= sum;
+
+                FME.Add(elem, adjacentElems);
+                FMW.Add(elem, weights);
+            }
+        }
+
+        /// <summary>
         /// Set the parameters for the keeping volume method
         /// </summary>
-        /// <param name="step"></param>
-        /// <param name="maximumIteration"></param>
-        public HexModel(double step, int maximumIteration)
+        public void SetParameters(double initialVolume, double targetVolume, 
+            double isoValue, double tolerance, double step, 
+            int maximumIteration, bool interpolation = true, bool keepVolume = false)
         {
-            this.step = step;
-            this.maximumIteration = maximumIteration;
+            InitialVolume = initialVolume;
+            TargetVolume = targetVolume;
+            Isovalue = isoValue;
+            Tolerance = tolerance;
+            Step = step;
+            MaximumIteration = maximumIteration;
+            Interpolation = interpolation;
+            KeepVolume = keepVolume;
         }
 
         //public Mesh[] Extract()
@@ -266,6 +371,26 @@ namespace PLTP
             return flag;
         }
 
+        private static List<int>[] KDTreeMultiSearch(Vector[] pts, KDTree<int> tree, double radius, int maxReturned)
+        {
+            List<int>[] indices = new List<int>[pts.Length];
+            Parallel.ForEach(Partitioner.Create(0, pts.Length, (int)Math.Ceiling(pts.Length / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
+            {
+                for (int i = rng.Item1; i < rng.Item2; i++)
+                {
+                    Vector point3d = pts[i];
+                    double num = radius;
+                    List<int> list = tree.NearestNeighbors(new double[]
+                    {
+                        point3d.X,
+                        point3d.Y,
+                        point3d.Z
+                    }, maxReturned, num * num).ToList();
+                    indices[i] = list;
+                }
+            });
+            return indices;
+        }
         #endregion
     }
 }

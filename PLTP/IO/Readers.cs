@@ -122,9 +122,8 @@ namespace PLTP
             }
             return elems;
         }
-        public static List<Hexahedron> ReadHex(string path, ref List<int> solidID, ref List<int> nonDesignID)
+        public static List<Hexahedron> ReadHex(string path, ref List<Vector> nodeList, ref List<int> solidID, ref List<int> nonDesignID)
         {
-            List<Vector> nds = new List<Vector>();
             List<Hexahedron> elems = new List<Hexahedron>();
 
             if (File.Exists(path))
@@ -146,7 +145,7 @@ namespace PLTP
                             double b = double.Parse(tokens[2]);
                             double c = double.Parse(tokens[3]);
 
-                            nds.Add(new Vector(a, b, c));
+                            nodeList.Add(new Vector(a, b, c));
                             line = SR.ReadLine();
                         }
                     }
@@ -156,6 +155,7 @@ namespace PLTP
                     // Read Hexahedrons
                     if (line == "*Element, type=C3D10" || line == "*Element, type=C3D8")
                     {
+                        int id = 0;
                         line = SR.ReadLine();
                         while (!line.StartsWith("*"))
                         {
@@ -174,14 +174,14 @@ namespace PLTP
                             int n6 = int.Parse(tokens[7]) - 1;
                             int n7 = int.Parse(tokens[8]) - 1;
 
-                            verts.Add(nds[n0]);
-                            verts.Add(nds[n1]);
-                            verts.Add(nds[n2]);
-                            verts.Add(nds[n3]);
-                            verts.Add(nds[n4]);
-                            verts.Add(nds[n5]);
-                            verts.Add(nds[n6]);
-                            verts.Add(nds[n7]);
+                            verts.Add(nodeList[n0]);
+                            verts.Add(nodeList[n1]);
+                            verts.Add(nodeList[n2]);
+                            verts.Add(nodeList[n3]);
+                            verts.Add(nodeList[n4]);
+                            verts.Add(nodeList[n5]);
+                            verts.Add(nodeList[n6]);
+                            verts.Add(nodeList[n7]);
 
                             faces.Add(new Face(1,0,3,2));
                             faces.Add(new Face(0,1,5,4));
@@ -190,7 +190,11 @@ namespace PLTP
                             faces.Add(new Face(3,0,4,7));
                             faces.Add(new Face(6,7,4,5));
 
-                            elems.Add(new Hexahedron(verts.ToArray(), faces.ToArray()));
+                            var elem = new Hexahedron(verts.ToArray(), faces.ToArray());
+                            elem.SetID(id);
+                            elem.SetNdlID(new int[8] {n0,n1,n2,n3,n4,n5,n6,n7});
+                            elems.Add(elem);
+                            id++;
                             line = SR.ReadLine();
                         }
                     }
