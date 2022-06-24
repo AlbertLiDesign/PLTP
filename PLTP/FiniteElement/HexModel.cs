@@ -15,16 +15,6 @@ namespace PLTP
         public List<double> ElemSenNum = new List<double>();
         private Vector VoxelSize;
 
-        /// <summary>
-        /// A mapping dictionary storing adjacent elements
-        /// </summary>
-        public Dictionary<Hexahedron, List<Hexahedron>> FME;
-
-        /// <summary>
-        /// A mapping dictionary storing the relevant weight factors 
-        /// </summary>
-        public Dictionary<Hexahedron, List<double>> FMW;
-
         private double InitialVolume = 0.0;
         private double TargetVolume = 0.0;
         public double Isovalue = 0.0;
@@ -87,17 +77,15 @@ namespace PLTP
             VoxelSize = voxelSize;
 
             Cases = new int[elements.Count];
-            FME = new Dictionary<Hexahedron, List<Hexahedron>>(Elements.Count);
-            FMW = new Dictionary<Hexahedron, List<double>>(Elements.Count);
         }
         #endregion
 
         /// <summary>
         /// Calculate the nodal sensitivity numbers
         /// </summary>
-        public List<double> CalNdlSenNums(double rmin)
+        public double[] CalNdlSenNums(double rmin)
         {
-            List<double> ndlSenNums = new List<double>();
+            double[] ndlSenNums = new double[NodeList.Count];
 
             // Construct KDTree
             var tree = new KDTree<int>(3);
@@ -117,85 +105,44 @@ namespace PLTP
             var nds = NodeList.ToArray();
             var result = KDTreeMultiSearch(nds, tree, rmin, 1024);
 
-
-            foreach (var elem in Elements)
+            Parallel.For(0, nds.Length, i =>
             {
-                List<Hexahedron> adjacentElems = new List<Hexahedron>(result[elem.ID].Count);
-                List<double> weights = new List<double>(result[elem.ID].Count);
-                double sum = 0.0;
-
-                Vector curCentre = nds[elem.ID];
-
-                foreach (var item in result[elem.ID])
+                var sum = 0.0;
+                foreach (var item in result[i])
                 {
-                    Vector adjCentre = new Vector(nds[item].X, nds[item].Y, nds[item].Z);
-
-                    adjacentElems.Add(Elements[item]);
-                    var weight = rmin - curCentre.DistanceTo(adjCentre);
-                    weights.Add(weight);
+                    var weight = rmin - nds[i].DistanceTo(Elements[item].Center);
+                    ndlSenNums[i] += weight * ElemSenNum[item];
                     sum += weight;
                 }
 
-                // Compute weights
-                for (int i = 0; i < weights.Count; i++)
-                    weights[i] /= sum;
-
-                FME.Add(elem, adjacentElems);
-                FMW.Add(elem, weights);
-            }
-
-
+                ndlSenNums[i] /= sum;
+            });
 
             return ndlSenNums;
         }
-
-        public void FilteringElements(double rmin)
+        public void SortVerts(double[] ndlSenNum)
         {
-            // Construct KDTree
-            var tree = new KDTree<int>(3);
+            // Sort the vertices of each element
+            // according to the order of the first element
 
-            // Get centers
-            Vector[] centers = new Vector[Elements.Count];
-            for (int i = 0; i < Elements.Count; i++)
+            // Get the correct vertex order
+            var idx = Elements[0].SortingVertices();
+            Parallel.For(0, Elements.Count, i =>
             {
-                centers[i] = Elements[i].Center;
-                tree.AddPoint(new double[3]
-                {
-                    Elements[i].Center.X,
-                    Elements[i].Center.Y,
-                    Elements[i].Center.Z
-                }, i);
-            }
-                
+                // Update the order according to the correct order
+                double[] upd_ndlSen = new double[8];
 
-            // Searching
-            var result = KDTreeMultiSearch(centers, tree, rmin, 1024);
+                upd_ndlSen[0] = ndlSenNum[Elements[i].NdlID[idx[0]]];
+                upd_ndlSen[1] = ndlSenNum[Elements[i].NdlID[idx[1]]];
+                upd_ndlSen[2] = ndlSenNum[Elements[i].NdlID[idx[2]]];
+                upd_ndlSen[3] = ndlSenNum[Elements[i].NdlID[idx[3]]];
+                upd_ndlSen[4] = ndlSenNum[Elements[i].NdlID[idx[4]]];
+                upd_ndlSen[5] = ndlSenNum[Elements[i].NdlID[idx[5]]];
+                upd_ndlSen[6] = ndlSenNum[Elements[i].NdlID[idx[6]]];
+                upd_ndlSen[7] = ndlSenNum[Elements[i].NdlID[idx[7]]];
 
-            foreach (var elem in Elements)
-            {
-                List<Hexahedron> adjacentElems = new List<Hexahedron>(result[elem.ID].Count);
-                List<double> weights = new List<double>(result[elem.ID].Count);
-                double sum = 0.0;
-
-                Vector curCentre = centers[elem.ID];
-
-                foreach (var item in result[elem.ID])
-                {
-                    Vector adjCentre = new Vector(centers[item].X, centers[item].Y, centers[item].Z);
-
-                    adjacentElems.Add(Elements[item]);
-                    var weight = rmin - curCentre.DistanceTo(adjCentre);
-                    weights.Add(weight);
-                    sum += weight;
-                }
-
-                // Compute weights
-                for (int i = 0; i < weights.Count; i++)
-                    weights[i] /= sum;
-
-                FME.Add(elem, adjacentElems);
-                FMW.Add(elem, weights);
-            }
+                Elements[i].SetNdlSenNum(upd_ndlSen);
+            });
         }
 
         /// <summary>

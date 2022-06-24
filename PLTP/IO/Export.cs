@@ -9,7 +9,7 @@ namespace PLTP
     /// <summary>
     /// IO class for writting .obj file
     /// </summary>
-    public class OBJ_Writer
+    public class Export
     {
         public static void WriteObj(Mesh mesh, string path)
         {

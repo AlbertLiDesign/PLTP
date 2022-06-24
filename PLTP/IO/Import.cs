@@ -9,7 +9,7 @@ namespace PLTP
     /// <summary>
     /// IO class for reading files
     /// </summary>
-    public class Readers
+    public class Import
     {
         public static List<double> ReadElemSenNum(string path)
         {

@@ -13,25 +13,37 @@ namespace PLTP // Note: actual namespace depends on the project name.
             List<int> solidID = new List<int>();
             List<int> nonDesignID = new List<int>();
             List<Vector> nodeList = new List<Vector>();
-            // Read a FE model
-            var elems = Readers.ReadHex(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
-            // Adjust the vertex order
-            Hexahedron.SortVerts(elems);
-            // Read elemental sensitivity numbers
-            var elemSen = Readers.ReadElemSenNum(sen_path);
+
+            Console.WriteLine("Start");
+            Console.Write("|....................| 0%");
+            Console.WriteLine(" (Import the model...)");
+            // Import a FE model
+            var elems = Import.ReadHex(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
+            // Import elemental sensitivity numbers
+            var elemSen = Import.ReadElemSenNum(sen_path);
 
             // Construct a model
+            Console.Write("|*...................| 5%");
+            Console.WriteLine(" (Construct a FE model...)");
             Vector voxelSize= new Vector(1.0, 1.0, 1.0);
             HexModel model = new HexModel(nodeList, elems, elemSen, voxelSize);
-            model.FilteringElements(3.0);
 
+            Console.Write("|**..................| 10%");
+            Console.WriteLine(" (Calculate nodal sensitivity field...)");
+            double[] ndlSenNum = model.CalNdlSenNums(3.0);
 
+            // Adjust the vertex order
+            Console.Write("|****................| 20%");
+            Console.WriteLine(" (Sorting vertices...)");
+            model.SortVerts(ndlSenNum);
+
+            Console.Write("|******************..| 90%");
+            Console.WriteLine("Export the result...");
             // Combine all hexahedrons into a mesh
             Mesh mesh = Hexahedron.CombineHexahedrons(elems);
             // Write the mesh
-            OBJ_Writer.WriteObj(mesh, "C:/test/model.obj");
-
-            Console.WriteLine(elems.Count);
+            Export.WriteObj(mesh, "C:/test/model.obj");
+            Console.WriteLine("Done");
         }
     }
 }

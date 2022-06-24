@@ -68,44 +68,21 @@ namespace PLTP
             return new Mesh(Vertices, Faces);
         }
 
-        public void SortingVertices()
+        public int[] SortingVertices()
         {
-            double[] x_list = new double[8];
-            double[] y_list = new double[8];
-            double[] z_list = new double[8];
-            for (int i = 0; i < 8; i++)
-            {
-                x_list[i] = Vertices[i].X;
-                y_list[i] = Vertices[i].Y;
-                z_list[i] = Vertices[i].Z;
-            }
+            var sorted = Vertices.Select((p, i) => new KeyValuePair<Vector, int>(p, i))
+                .OrderBy(p => p.Key.X).ThenBy(p => p.Key.Y).ThenBy(p => p.Key.Z).ToList();
 
-            var x_min = x_list.Min();
-            var y_min = y_list.Min();
-            var z_min = z_list.Min();
-            var x_max = x_list.Max();
-            var y_max = y_list.Max();
-            var z_max = z_list.Max();
+            // the correct vertex order
+            int[] idx = sorted.Select(p => p.Value).ToArray();
 
-            Vertices = new Vector[8]
-            {
-                new Vector(x_min, y_min, z_min),
-                new Vector(x_max, y_min, z_min),
-                new Vector(x_max, y_max, z_min),
-                new Vector(x_min, y_max, z_min),
-                
-                new Vector(x_min, y_min, z_max),
-                new Vector(x_max, y_min, z_max),
-                new Vector(x_max, y_max, z_max),
-                new Vector(x_min, y_max, z_max)
-            };
+            // adjust the vertex order
+            Vertices = sorted.Select(p => p.Key).ToArray();
+
+            return idx;
         }
 
         #region Static methods
-        public static void SortVerts(List<Hexahedron> elems)
-        {
-            Parallel.For(0, elems.Count, i =>{elems[i].SortingVertices();});
-        }
         public static Mesh CombineHexahedrons(List<Hexahedron> elems)
         {
             Vector[] vertices = new Vector[elems.Count * 8];
