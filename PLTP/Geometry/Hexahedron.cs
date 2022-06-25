@@ -11,6 +11,8 @@ namespace PLTP
         public Vector[] Vertices;
         public Face[] Faces;
         public Vector Center;
+        public Vector Size;
+        public Vector MinVert;
 
         public int ID;
         public int[] NdlID;
@@ -43,6 +45,15 @@ namespace PLTP
                 Center += vertices[i];
             }
             Center /= 8;
+            Size = new Vector(1.0, 1.0, 1.0);
+        }
+        public void SetSize(Vector size)
+        {
+            Size = size;
+        }
+        public void SetMinimumVertex(Vector miniVert)
+        {
+            MinVert = miniVert;
         }
         public void SetID(int id)
         {
@@ -77,9 +88,11 @@ namespace PLTP
             int[] idx = sorted.Select(p => p.Value).ToArray();
 
             // adjust the vertex order
-            Vertices = sorted.Select(p => p.Key).ToArray();
+            var verts = sorted.Select(p => p.Key).ToArray();
+            Vertices = new Vector[8] {verts[0], verts[4], verts[6], verts[2], verts[1], verts[5], verts[7],verts[3]};
+            MinVert = Vertices[0];
 
-            return idx;
+            return new int[8] { idx[0], idx[4], idx[6], idx[2], idx[1], idx[5], idx[7], idx[3] };
         }
 
         #region Static methods

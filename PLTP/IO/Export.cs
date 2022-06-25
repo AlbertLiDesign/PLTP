@@ -13,40 +13,47 @@ namespace PLTP
     {
         public static void WriteObj(Mesh mesh, string path)
         {
-            StreamWriter sw = new StreamWriter(path);
-            sw.WriteLine("# The table written by Albert Li");
-            var ci = System.Globalization.CultureInfo.InvariantCulture;
-            for (int i = 0; i < mesh.Vertices.Length; i++)
+            if (mesh != null && mesh.Vertices.Length !=0 && mesh.Faces.Length !=0)
             {
-                var v = mesh.Vertices[i];
-                sw.Write("v ");
-                sw.Write(v.X.ToString("r", ci));
-                sw.Write(" ");
-                sw.Write(v.Y.ToString("r", ci));
-                sw.Write(" ");
-                sw.WriteLine(v.Z.ToString("r", ci));
-            }
-            for (int i = 0; i < mesh.Faces.Length; i++)
-            {
-                var f = mesh.Faces[i].Vert_ID;
-                sw.Write("f");
-                if (f.Length == 4)
+                StreamWriter sw = new StreamWriter(path);
+                sw.WriteLine("# The table written by Albert Li");
+                var ci = System.Globalization.CultureInfo.InvariantCulture;
+                for (int i = 0; i < mesh.Vertices.Length; i++)
                 {
-                    sw.Write(' ');
-                    sw.Write((f[0] + 1).ToString(ci) + ' ' + (f[1] + 1).ToString(ci) + ' ' + (f[2] + 1).ToString(ci) + ' ' + (f[3] + 1).ToString(ci));
+                    var v = mesh.Vertices[i];
+                    sw.Write("v ");
+                    sw.Write(v.X.ToString("r", ci));
+                    sw.Write(" ");
+                    sw.Write(v.Y.ToString("r", ci));
+                    sw.Write(" ");
+                    sw.WriteLine(v.Z.ToString("r", ci));
                 }
-                else
+                for (int i = 0; i < mesh.Faces.Length; i++)
                 {
-                    sw.Write(' ');
-                    sw.Write((f[0] + 1).ToString(ci) + ' ' + (f[1] + 1).ToString(ci) + ' ' + (f[2] + 1).ToString(ci));
+                    var f = mesh.Faces[i].Vert_ID;
+                    sw.Write("f");
+                    if (f.Length == 4)
+                    {
+                        sw.Write(' ');
+                        sw.Write((f[0] + 1).ToString(ci) + ' ' + (f[1] + 1).ToString(ci) + ' ' + (f[2] + 1).ToString(ci) + ' ' + (f[3] + 1).ToString(ci));
+                    }
+                    else
+                    {
+                        sw.Write(' ');
+                        sw.Write((f[0] + 1).ToString(ci) + ' ' + (f[1] + 1).ToString(ci) + ' ' + (f[2] + 1).ToString(ci));
+                    }
+                    sw.WriteLine();
                 }
-                sw.WriteLine();
-            }
-            sw.WriteLine("# end of OBJ file");
+                sw.WriteLine("# end of OBJ file");
 
-            sw.Flush();
-            sw.Close();
-            sw.Dispose();
+                sw.Flush();
+                sw.Close();
+                sw.Dispose();
+            }
+            else
+            {
+                throw new Exception("The mesh is an invalid mesh.");
+            }
         }
     }
 }

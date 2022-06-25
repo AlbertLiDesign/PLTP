@@ -30,19 +30,28 @@ namespace PLTP // Note: actual namespace depends on the project name.
 
             Console.Write("|**..................| 10%");
             Console.WriteLine(" (Calculate nodal sensitivity field...)");
-            double[] ndlSenNum = model.CalNdlSenNums(3.0);
+            model.CalNdlSenNums(3.0);
 
             // Adjust the vertex order
             Console.Write("|****................| 20%");
             Console.WriteLine(" (Sorting vertices...)");
-            model.SortVerts(ndlSenNum);
+            model.SortVerts();
+
+            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 50,false,false);
+
+            // Extract iso-sensitivity model...
+            Console.Write("|*****...............| 25%");
+            Console.WriteLine(" (Extract iso-sensitivity model...)");
+            var meshes = model.Extract();
 
             Console.Write("|******************..| 90%");
-            Console.WriteLine("Export the result...");
+            Console.WriteLine(" (Export the result...)");
+            var output = Mesh.CombineMeshes(meshes);
+
             // Combine all hexahedrons into a mesh
-            Mesh mesh = Hexahedron.CombineHexahedrons(elems);
+            //Mesh mesh = Hexahedron.CombineHexahedrons(elems);
             // Write the mesh
-            Export.WriteObj(mesh, "C:/test/model.obj");
+            Export.WriteObj(output, "C:/test/model.obj");
             Console.WriteLine("Done");
         }
     }
