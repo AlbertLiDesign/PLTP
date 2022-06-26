@@ -200,10 +200,10 @@ namespace PLTP
                 {
                     if (flag == 255)
                         meshes[i] = Elements[i].ToMesh();
-                    if (flag != 0)
-                    {
+                    else if (flag != 0)
                         meshes[i] = IsoSenMdl_Hex(Elements[i], flag);
-                    }
+                    else
+                        meshes[i] = null;
                 }
             }
             return meshes;

@@ -39,8 +39,10 @@ namespace PLTP
             {
                 if (meshes[i] != null)
                 {
+                    var id = new int[meshes[i].Vertices.Length];
                     for (int j = 0; j < meshes[i].Vertices.Length; j++)
                     {
+                        id[j] = num;
                         verts.Add(meshes[i].Vertices[j]);
                         num++;
                     }
@@ -49,18 +51,18 @@ namespace PLTP
                         if (meshes[i].Faces[j].Vert_ID.Length == 3)
                         {
                             faces.Add(new Face(
-                            meshes[i].Faces[j].Vert_ID[0] + num,
-                            meshes[i].Faces[j].Vert_ID[1] + num,
-                            meshes[i].Faces[j].Vert_ID[2] + num
+                            id[meshes[i].Faces[j].Vert_ID[0]],
+                            id[meshes[i].Faces[j].Vert_ID[1]],
+                            id[meshes[i].Faces[j].Vert_ID[2]]
                             ));
                         }
                         else if (meshes[i].Faces[j].Vert_ID.Length == 4)
                         {
                             faces.Add(new Face(
-                            meshes[i].Faces[j].Vert_ID[0] + num,
-                            meshes[i].Faces[j].Vert_ID[1] + num,
-                            meshes[i].Faces[j].Vert_ID[2] + num,
-                            meshes[i].Faces[j].Vert_ID[3] + num
+                            id[meshes[i].Faces[j].Vert_ID[0]],
+                            id[meshes[i].Faces[j].Vert_ID[1]],
+                            id[meshes[i].Faces[j].Vert_ID[2]],
+                            id[meshes[i].Faces[j].Vert_ID[3]]
                             ));
                         }
                         else

@@ -48,8 +48,6 @@ namespace PLTP // Note: actual namespace depends on the project name.
             Console.WriteLine(" (Export the result...)");
             var output = Mesh.CombineMeshes(meshes);
 
-            // Combine all hexahedrons into a mesh
-            //Mesh mesh = Hexahedron.CombineHexahedrons(elems);
             // Write the mesh
             Export.WriteObj(output, "C:/test/model.obj");
             Console.WriteLine("Done");
