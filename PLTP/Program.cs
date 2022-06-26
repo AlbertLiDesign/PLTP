@@ -44,9 +44,16 @@ namespace PLTP // Note: actual namespace depends on the project name.
             Console.WriteLine(" (Extract iso-sensitivity model...)");
             var meshes = model.Extract();
 
-            Console.Write("|******************..| 90%");
+            Console.Write("|**************......| 70%");
             Console.WriteLine(" (Export the result...)");
             var output = Mesh.CombineMeshes(meshes);
+
+            Console.Write("|***************.....| 75%");
+            Console.WriteLine(" (Weld the mesh...)");
+
+            Console.Write("|******************..| 90%");
+            Console.WriteLine(" (Remove duplicated faces...)");
+            output.RemoveDuplicatedFaces();
 
             // Write the mesh
             Export.WriteObj(output, "C:/test/model.obj");

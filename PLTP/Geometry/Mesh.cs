@@ -29,6 +29,51 @@ namespace PLTP
         }
         #endregion
 
+        public void RemoveDuplicatedFaces()
+        {
+            Dictionary<string, List<int>> dirFaces = new Dictionary<string, List<int>>();
+            List<int> del = new List<int>();
+            for (int i = 0; i < Faces.Length; i++)
+            {
+                string meshKey = SortKey(Faces[i]);
+                if (!dirFaces.ContainsKey(meshKey))
+                {
+                    var ids = new List<int>();
+                    ids.Add(i);
+                    dirFaces.Add(meshKey, ids);
+                }
+                else
+                {
+                    dirFaces[meshKey].Add(i);
+                    del.Add(dirFaces[meshKey][1]);
+                    del.Add(dirFaces[meshKey][0]);
+                }
+            }
+
+            var upd_faces = Faces.ToList();
+            int num = 0;
+            for (int i = 0; i < del.Count; i++)
+            {
+                upd_faces.RemoveAt(del[i] - num);
+                num++;
+            }
+            Faces = upd_faces.ToArray();
+        }
+        private static string SortKey(Face face)
+        {
+            List<int> list = new List<int>();
+            if (face.Vert_ID.Length==3)
+            {
+                list = new List<int> { face.Vert_ID[0], face.Vert_ID[1], face.Vert_ID[2] };
+                list.Sort();
+            }
+            if (face.Vert_ID.Length == 4)
+            {
+                list = new List<int> { face.Vert_ID[0], face.Vert_ID[1], face.Vert_ID[2], face.Vert_ID[3] };
+                list.Sort();
+            }
+            return string.Join(",", list);
+        }
         public static Mesh CombineMeshes(Mesh[] meshes)
         {
             List<Vector> verts = new List<Vector>();
