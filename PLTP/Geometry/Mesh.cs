@@ -29,12 +29,18 @@ namespace PLTP
             Faces = faces.ToArray();
         }
         #endregion
+
+        /// <summary>
+        /// Weld mesh based on a given tolerance
+        /// </summary>
+        /// <param name="tolerance"></param>
+        /// <exception cref="Exception"></exception>
         public void WeldVertices(double tolerance)
         {
             List<int> newVerts = new List<int>();
             int[] map = new int[Vertices.Length];
 
-            #region Create mapping and filter duplicates.
+            // Create mapping and filter duplicates.
             // Construct KDTree
             var tree = new KDTree<int>(3);
             // Get centers
@@ -48,8 +54,8 @@ namespace PLTP
                 }, i);
             }
             var result = Utils.KDTreeMultiSearch(Vertices, tree, tolerance, 8);
-            bool[] visited = new bool[Vertices.Length];
 
+            bool[] visited = new bool[Vertices.Length];
             int num = 0;
             for (int i = 0; i < result.Length; i++)
             {
@@ -59,17 +65,15 @@ namespace PLTP
                 // If the minimum index has been visited
                 if (!visited[min])
                 {
-                    // Sign all the adjacent points as visitied
+                    // Sign and add the vertex with the minimum index
                     visited[min] = true;
                     newVerts.Add(i);
+                    // All adjacent vertices are indexed
                     for (int j = 0; j < result[i].Count; j++)
                         map[result[i][j]] = num;
                     num++;
                 }
-
             }
-
-            #endregion
 
             // create new vertices
             Vector[] updVerts = new Vector[newVerts.Count];
@@ -107,6 +111,10 @@ namespace PLTP
             Vertices = updVerts;
             Faces = updFaces;
         }
+
+        /// <summary>
+        /// Remove all duplicated faces
+        /// </summary>
         public void RemoveDuplicatedFaces()
         {
             Dictionary<string, List<int>> dirFaces = new Dictionary<string, List<int>>();
@@ -138,10 +146,11 @@ namespace PLTP
             }
             Faces = upd_faces.ToArray();
         }
+
         private static string SortKey(Face face)
         {
             List<int> list = new List<int>();
-            if (face.Vert_ID.Length==3)
+            if (face.Vert_ID.Length == 3)
             {
                 list = new List<int> { face.Vert_ID[0], face.Vert_ID[1], face.Vert_ID[2] };
                 list.Sort();

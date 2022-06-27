@@ -6,59 +6,7 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            // File paths
-            string mdl_path = "C:/test/Cantilever/Job-1_BESO.inp";
-            string sen_path = "C:/test/Cantilever/Sensitivities.txt";
-
-            List<int> solidID = new List<int>();
-            List<int> nonDesignID = new List<int>();
-            List<Vector> nodeList = new List<Vector>();
-
-            Console.WriteLine("Start");
-            Console.Write("|....................| 0%");
-            Console.WriteLine(" (Import the model...)");
-            // Import a FE model
-            var elems = Import.ReadHex(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
-            // Import elemental sensitivity numbers
-            var elemSen = Import.ReadElemSenNum(sen_path);
-
-            // Construct a model
-            Console.Write("|*...................| 5%");
-            Console.WriteLine(" (Construct a FE model...)");
-            Vector voxelSize= new Vector(1.0, 1.0, 1.0);
-            HexModel model = new HexModel(nodeList, elems, elemSen, voxelSize);
-
-            Console.Write("|**..................| 10%");
-            Console.WriteLine(" (Calculate nodal sensitivity field...)");
-            model.CalNdlSenNums(3.0);
-
-            // Adjust the vertex order
-            Console.Write("|****................| 20%");
-            Console.WriteLine(" (Sorting vertices...)");
-            model.SortVerts();
-
-            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 50,false,false);
-
-            // Extract iso-sensitivity model...
-            Console.Write("|*****...............| 25%");
-            Console.WriteLine(" (Extract iso-sensitivity model...)");
-            var meshes = model.Extract();
-
-            Console.Write("|**************......| 70%");
-            Console.WriteLine(" (Export the result...)");
-            var output = Mesh.CombineMeshes(meshes);
-
-            Console.Write("|***************.....| 75%");
-            Console.WriteLine(" (Weld the mesh...)");
-            output.WeldVertices(0.01);
-
-            Console.Write("|******************..| 90%");
-            Console.WriteLine(" (Remove duplicated faces...)");
-            //output.RemoveDuplicatedFaces();
-
-            // Write the mesh
-            Export.WriteObj(output, "C:/test/model.obj");
-            Console.WriteLine("Done");
+            Test.TestHex();
         }
     }
 }
