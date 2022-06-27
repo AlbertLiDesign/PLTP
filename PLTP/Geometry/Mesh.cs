@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KDTree;
 
 namespace PLTP
 {
@@ -28,7 +29,84 @@ namespace PLTP
             Faces = faces.ToArray();
         }
         #endregion
+        public void WeldVertices(double tolerance)
+        {
+            List<int> newVerts = new List<int>();
+            int[] map = new int[Vertices.Length];
 
+            #region Create mapping and filter duplicates.
+            // Construct KDTree
+            var tree = new KDTree<int>(3);
+            // Get centers
+            for (int i = 0; i < Vertices.Length; i++)
+            {
+                tree.AddPoint(new double[3]
+                {
+                    Vertices[i].X,
+                    Vertices[i].Y,
+                    Vertices[i].Z
+                }, i);
+            }
+            var result = Utils.KDTreeMultiSearch(Vertices, tree, tolerance, 8);
+            bool[] visited = new bool[Vertices.Length];
+
+            int num = 0;
+            for (int i = 0; i < result.Length; i++)
+            {
+                // Find the minimum index
+                int min = result[i].Min();
+
+                // If the minimum index has been visited
+                if (!visited[min])
+                {
+                    // Sign all the adjacent points as visitied
+                    visited[min] = true;
+                    newVerts.Add(i);
+                    for (int j = 0; j < result[i].Count; j++)
+                        map[result[i][j]] = num;
+                    num++;
+                }
+
+            }
+
+            #endregion
+
+            // create new vertices
+            Vector[] updVerts = new Vector[newVerts.Count];
+            for (int i = 0; i < newVerts.Count; i++)
+            {
+                updVerts[i] = Vertices[newVerts[i]];
+            }
+            // map the triangle to the new vertices
+            Face[] updFaces = new Face[Faces.Length];
+            for (int i = 0; i < Faces.Length; i++)
+            {
+                if (Faces[i].Vert_ID.Length == 3)
+                {
+                    updFaces[i] = new Face(
+                    map[Faces[i].Vert_ID[0]],
+                    map[Faces[i].Vert_ID[1]],
+                    map[Faces[i].Vert_ID[2]]
+                    );
+                }
+                else if (Faces[i].Vert_ID.Length == 4)
+                {
+                    updFaces[i] = new Face(
+                    map[Faces[i].Vert_ID[0]],
+                    map[Faces[i].Vert_ID[1]],
+                    map[Faces[i].Vert_ID[2]],
+                    map[Faces[i].Vert_ID[3]]
+                    );
+                }
+                else
+                {
+                    throw new Exception("There is a invalid face.");
+                }
+            }
+
+            Vertices = updVerts;
+            Faces = updFaces;
+        }
         public void RemoveDuplicatedFaces()
         {
             Dictionary<string, List<int>> dirFaces = new Dictionary<string, List<int>>();
@@ -52,6 +130,7 @@ namespace PLTP
 
             var upd_faces = Faces.ToList();
             int num = 0;
+            del.Sort();
             for (int i = 0; i < del.Count; i++)
             {
                 upd_faces.RemoveAt(del[i] - num);
@@ -117,9 +196,8 @@ namespace PLTP
                     }
                 }
             }
-
-
             return new Mesh(verts.ToArray(), faces.ToArray());
         }
+
     }
 }

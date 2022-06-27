@@ -50,10 +50,11 @@ namespace PLTP // Note: actual namespace depends on the project name.
 
             Console.Write("|***************.....| 75%");
             Console.WriteLine(" (Weld the mesh...)");
+            output.WeldVertices(0.01);
 
             Console.Write("|******************..| 90%");
             Console.WriteLine(" (Remove duplicated faces...)");
-            output.RemoveDuplicatedFaces();
+            //output.RemoveDuplicatedFaces();
 
             // Write the mesh
             Export.WriteObj(output, "C:/test/model.obj");
