@@ -32,10 +32,11 @@ namespace PLTP
             // Import elemental sensitivity numbers
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model
-            Vector voxelSize = new Vector(1.0, 1.0, 1.0);
-            HexModel model = new HexModel(nodeList, elems, elemSen, voxelSize);
+            HexModel model = new HexModel(nodeList, elems, elemSen);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+            //Export.WriteObj(Mesh.CombineMeshes(model.ToMeshes()), "C:/test/origin.obj");
+
 
             // Calculate nodal sensitivity field
             sw.Restart();
@@ -53,7 +54,7 @@ namespace PLTP
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
-            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 50, false, false);
+            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 50, true, false);
 
             // Apply pre-built lookup tables
             sw.Restart();
@@ -75,7 +76,7 @@ namespace PLTP
             sw.Restart();
             Console.Write("|***************.....| 75%");
             Console.Write("\t(Weld mesh... ");
-            output.WeldVertices(0.01);
+            output.WeldVertices(1e-6);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
@@ -91,7 +92,7 @@ namespace PLTP
             sw.Restart();
             Console.Write("|********************| 100%");
             Console.Write("\t(Write mesh... ");
-            Export.WriteObj(output, "C:/test/model.obj");
+            Export.WriteObj(output, "C:/test/smooth.obj");
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             Console.WriteLine("Done");

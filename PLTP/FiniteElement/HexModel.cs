@@ -14,7 +14,6 @@ namespace PLTP
         public List<Hexahedron> Elements = new List<Hexahedron>();
         public List<double> ElemSenNum = new List<double>();
         public double[] NdlSenNum;
-        private Vector VoxelSize;
 
         private double InitialVolume = 0.0;
         private double TargetVolume = 0.0;
@@ -70,12 +69,11 @@ namespace PLTP
         /// <summary>
         /// Post-processing method for hexahedron model without keeping volume
         /// </summary>
-        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, Vector voxelSize)
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum)
         {
             NodeList = nodeList;
             Elements = elements;
             ElemSenNum = elemSenNum;
-            VoxelSize = voxelSize;
 
             Cases = new int[elements.Count];
         }
@@ -209,8 +207,6 @@ namespace PLTP
             return meshes;
         }
 
-        #region Private Methods
-
         public Mesh IsoSenMdl_Hex(Hexahedron elem, int flag)
         {
             var values = elem.ndlSen;
@@ -236,10 +232,11 @@ namespace PLTP
                     //    Vertices[EdgeConnection[i, 0], 1] + EdgeDirection[i, 1], Vertices[EdgeConnection[i, 0], 2] + EdgeDirection[i, 2]);
                     //Line line = new Line(vert0, vert1);
 
-                    var computeV = new Vector(
-                        (Vertices[EdgeConnection[i, 0], 0] + Offset * EdgeDirection[i, 0]),
-                        (Vertices[EdgeConnection[i, 0], 1] + Offset * EdgeDirection[i, 1]),
-                        (Vertices[EdgeConnection[i, 0], 2] + Offset * EdgeDirection[i, 2]));
+                    EdgeVertex[i] = new Vector(
+                        (Vertices[EdgeConnection[i, 0], 0] + Offset * EdgeDirection[i, 0] + elem.MinVert.X),
+                        (Vertices[EdgeConnection[i, 0], 1] + Offset * EdgeDirection[i, 1] + elem.MinVert.Y),
+                        (Vertices[EdgeConnection[i, 0], 2] + Offset * EdgeDirection[i, 2] + elem.MinVert.Z));
+
 
                     //EdgeVertex[i] = line.ClosestPoint(computeV, true);
                 }
@@ -266,8 +263,17 @@ namespace PLTP
             return mesh;
         }
 
+        public Mesh[] ToMeshes()
+        {
+            Mesh[] meshes = new Mesh[Elements.Count];
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                meshes[i] = Elements[i].ToMesh();
+            }
+            return meshes;
+        }
 
-
+        #region Private Methods
         /// <summary>
         /// To compute interpolated points.
         /// </summary>
@@ -287,7 +293,6 @@ namespace PLTP
             }
             return (isovalue - value1) / (value2 - value1);
         }
-
 
         private Mesh ApplyLookUpTable(Hexahedron elem, int flag)
         {
