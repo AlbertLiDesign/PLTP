@@ -16,12 +16,14 @@ namespace PLTP
         public double[] NdlSenNum;
 
         private double InitialVolume = 0.0;
-        private double TargetVolume = 0.0;
-        public double Isovalue = 0.0;
-        public double Tolerance = 0.01;
+        private double VolumeFraction = 0.0;
+        private double Isovalue = 0.0;
+        private double Tolerance = 0.01;
+        private double FilterRadius = 0.0;
 
         public bool Interpolation = true;
         public bool KeepVolume = false;
+        private bool UnitiseSensitivityNumber = true;
 
         #region Parameters for keeping volume
         private double Step = 0.01;
@@ -82,7 +84,7 @@ namespace PLTP
         /// <summary>
         /// Calculate the nodal sensitivity numbers
         /// </summary>
-        public void CalNdlSenNums(double rmin)
+        public void CalNdlSenNums()
         {
             NdlSenNum = new double[NodeList.Count];
 
@@ -102,14 +104,14 @@ namespace PLTP
 
             // Searching
             var nds = NodeList.ToArray();
-            var result = Utils.KDTreeMultiSearch(nds, tree, rmin, 1024);
+            var result = Utils.KDTreeMultiSearch(nds, tree, FilterRadius, 1024);
 
             Parallel.For(0, nds.Length, i =>
             {
                 var sum = 0.0;
                 foreach (var item in result[i])
                 {
-                    var weight = rmin - nds[i].DistanceTo(Elements[item].Center);
+                    var weight = FilterRadius - nds[i].DistanceTo(Elements[item].Center);
                     NdlSenNum[i] += weight * ElemSenNum[item];
                     sum += weight;
                 }
@@ -117,12 +119,12 @@ namespace PLTP
                 NdlSenNum[i] /= sum;
             });
         }
-        public void SortVerts(bool unitisation = true)
+        public void SortVerts()
         {
             // Sort the vertices of each element
             // according to the order of the first element
 
-            if (unitisation)
+            if (UnitiseSensitivityNumber)
             {
                 double min = NdlSenNum.Min();
                 double max = NdlSenNum.Max();
@@ -167,18 +169,30 @@ namespace PLTP
         /// <summary>
         /// Set the parameters for the keeping volume method
         /// </summary>
-        public void SetParameters(double initialVolume, double targetVolume, 
-            double isoValue, double tolerance, double step, 
-            int maximumIteration, bool interpolation = true, bool keepVolume = false)
+        public void SetParameters(double volumeFraction, 
+            double isoValue, double tolerance, double step, double rmin,
+            int maximumIteration, bool interpolation = true, 
+            bool keepVolume = false, bool unitiseSensitivityNumber = true)
         {
-            InitialVolume = initialVolume;
-            TargetVolume = targetVolume;
+            VolumeFraction = volumeFraction;
             Isovalue = isoValue;
             Tolerance = tolerance;
             Step = step;
+            FilterRadius = rmin;
             MaximumIteration = maximumIteration;
             Interpolation = interpolation;
             KeepVolume = keepVolume;
+            UnitiseSensitivityNumber = unitiseSensitivityNumber;
+        }
+
+        public double GetVolume()
+        {
+            double[] vols = new double[Elements.Count];
+            Parallel.For(0, Elements.Count, i =>
+            {
+                vols[i] = Elements[i].ToMesh().GetVolume();
+            });
+            return vols.Sum();
         }
 
         public Mesh[] Extract()
@@ -273,6 +287,24 @@ namespace PLTP
             return meshes;
         }
 
+        public Mesh[] ExtractIsoSensitivityModel()
+        {
+            Mesh[] meshes;
+            if (KeepVolume)
+            {
+                while (true)
+                {
+
+                }
+            }
+            else
+            {
+                meshes = Extract();
+            }
+            var vol = Mesh.GetVolumeFromMeshes(meshes);
+            Console.WriteLine("Volume is " + vol.ToString());
+            return meshes;
+        }
         #region Private Methods
         /// <summary>
         /// To compute interpolated points.

@@ -175,7 +175,7 @@ namespace PLTP
         public double GetVolume()
         {
             double[] volume = new double[Faces.Length];
-            Parallel.For(0, Faces.Length, i =>
+            for (int i = 0; i < Faces.Length; i++)
             {
                 var verts = Vertices;
                 int a = Faces[i].Vert_ID[0];
@@ -183,29 +183,30 @@ namespace PLTP
                 int c = Faces[i].Vert_ID[2];
                 
                 if (Faces[i].Vert_ID.Length == 3)
-                    volume[i] = SignedVolumeOfTriangle(verts[a], verts[b], verts[c]);
+                    volume[i] = Utils.SignedVolumeOfTriangle(verts[a], verts[b], verts[c]);
                 else if (Faces[i].Vert_ID.Length == 4)
                 {
                     int d = Faces[i].Vert_ID[3];
-                    var vol1 = SignedVolumeOfTriangle(verts[a], verts[b], verts[d]);
-                    var vol2 = SignedVolumeOfTriangle(verts[d], verts[b], verts[c]);
+                    var vol1 = Utils.SignedVolumeOfTriangle(verts[a], verts[b], verts[d]);
+                    var vol2 = Utils.SignedVolumeOfTriangle(verts[d], verts[b], verts[c]);
                     volume[i] = vol1 + vol2;
                 }
                 else throw new Exception("Faces only have 3 or 4 vertices.");
-            });
+            }
             return Math.Abs(volume.Sum());
         }
 
-        private double SignedVolumeOfTriangle(Vector p1, Vector p2, Vector p3)
+        public static double GetVolumeFromMeshes(Mesh[] meshes)
         {
-            var v321 = p3.X * p2.Y * p1.Z;
-            var v231 = p2.X * p3.Y * p1.Z;
-            var v312 = p3.X * p1.Y * p2.Z;
-            var v132 = p1.X * p3.Y * p2.Z;
-            var v213 = p2.X * p1.Y * p3.Z;
-            var v123 = p1.X * p2.Y * p3.Z;
-            return (1.0f / 6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
+            double[] vols = new double[meshes.Length];
+            Parallel.For(0, meshes.Length, i =>
+            {
+                if (meshes[i] != null)
+                    vols[i] = meshes[i].GetVolume();
+            });
+            return vols.Sum();
         }
+
         private static string SortKey(Face face)
         {
             List<int> list = new List<int>();

@@ -24,6 +24,7 @@ namespace PLTP
             List<int> nonDesignID = new List<int>();
             List<Vector> nodeList = new List<Vector>();
 
+            #region Preparation
             Console.Write("|....................| 0%");
             Console.Write("\t(Import model... ");
             sw.Start();
@@ -33,16 +34,15 @@ namespace PLTP
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model
             HexModel model = new HexModel(nodeList, elems, elemSen);
+            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 3.0, 50, true, false, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-            //Export.WriteObj(Mesh.CombineMeshes(model.ToMeshes()), "C:/test/origin.obj");
-
 
             // Calculate nodal sensitivity field
             sw.Restart();
             Console.Write("|**..................| 10%");
             Console.Write("\t(Calculate nodal sensitivity field... ");
-            model.CalNdlSenNums(3.0);
+            model.CalNdlSenNums();
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
@@ -53,17 +53,19 @@ namespace PLTP
             model.SortVerts();
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+            #endregion
 
-            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 50, true, false);
-
+            #region Extract iso-sensitivity model
             // Apply pre-built lookup tables
             sw.Restart();
             Console.Write("|*****...............| 25%");
-            Console.Write("\t(Apply pre-built lookup tables... ");
-            var meshes = model.Extract();
+            Console.Write("\t(Extract iso-sensitivity model... ");
+            var meshes = model.ExtractIsoSensitivityModel();
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+            #endregion
 
+            #region Clean mesh
             // Combine mesh
             sw.Restart();
             Console.Write("|**************......| 70%");
@@ -87,15 +89,7 @@ namespace PLTP
             output.RemoveDuplicatedFaces();
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-
-            // Calculate volume
-            sw.Restart();
-            Console.Write("|*******************.| 95%");
-            Console.Write("\t(Calculate volume... ");
-            //output.Triangulation();
-            var vol = output.GetVolume();
-            sw.Stop();
-            Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+            #endregion
 
             // Write mesh
             sw.Restart();
@@ -105,8 +99,6 @@ namespace PLTP
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             Console.WriteLine("Done");
-
-            Console.WriteLine("The volume is " + vol.ToString());
         }
     }
 }
