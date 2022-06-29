@@ -88,6 +88,15 @@ namespace PLTP
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
+            // Calculate volume
+            sw.Restart();
+            Console.Write("|*******************.| 95%");
+            Console.Write("\t(Calculate volume... ");
+            //output.Triangulation();
+            var vol = output.GetVolume();
+            sw.Stop();
+            Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+
             // Write mesh
             sw.Restart();
             Console.Write("|********************| 100%");
@@ -96,6 +105,8 @@ namespace PLTP
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             Console.WriteLine("Done");
+
+            Console.WriteLine("The volume is " + vol.ToString());
         }
     }
 }
