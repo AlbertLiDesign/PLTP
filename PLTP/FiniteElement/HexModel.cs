@@ -17,7 +17,6 @@ namespace PLTP
 
         private double InitialVolume = 0.0;
         private double VolumeFraction = 0.0;
-        private double Isovalue = 0.0;
         private double Tolerance = 0.01;
         private double FilterRadius = 0.0;
 
@@ -170,12 +169,11 @@ namespace PLTP
         /// Set the parameters for the keeping volume method
         /// </summary>
         public void SetParameters(double volumeFraction, 
-            double isoValue, double tolerance, double step, double rmin,
+            double tolerance, double step, double rmin,
             int maximumIteration, bool interpolation = true, 
             bool keepVolume = false, bool unitiseSensitivityNumber = true)
         {
             VolumeFraction = volumeFraction;
-            Isovalue = isoValue;
             Tolerance = tolerance;
             Step = step;
             FilterRadius = rmin;
@@ -195,13 +193,13 @@ namespace PLTP
             return vols.Sum();
         }
 
-        public Mesh[] Extract()
+        public Mesh[] Extract(double isovalue)
         {
             Mesh[] meshes = new Mesh[Elements.Count];
 
             for (int i = 0; i < Elements.Count; i++)
             {
-                int flag = ComputeFlag(i, Elements[i].ndlSen, Isovalue);
+                int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
 
                 if (Elements[i].isNonDesign)
                 {
@@ -213,7 +211,7 @@ namespace PLTP
                     if (flag == 255)
                         meshes[i] = Elements[i].ToMesh();
                     else if (flag != 0)
-                        meshes[i] = IsoSenMdl_Hex(Elements[i], flag);
+                        meshes[i] = IsoSenMdl_Hex(Elements[i], flag, isovalue);
                     else
                         meshes[i] = null;
                 }
@@ -221,7 +219,7 @@ namespace PLTP
             return meshes;
         }
 
-        public Mesh IsoSenMdl_Hex(Hexahedron elem, int flag)
+        public Mesh IsoSenMdl_Hex(Hexahedron elem, int flag, double isovalue)
         {
             var values = elem.ndlSen;
             // applying the proposed lookup tables
@@ -240,7 +238,7 @@ namespace PLTP
             {
                 if ((EdgeFlag & (1 << i)) != 0)
                 {
-                    var Offset = GetOffset(values[EdgeConnection[i, 0]], values[EdgeConnection[i, 1]], Isovalue, Interpolation);
+                    var Offset = GetOffset(values[EdgeConnection[i, 0]], values[EdgeConnection[i, 1]], isovalue, Interpolation);
                     //var vert0 = new Vector(Vertices[EdgeConnection[i, 0], 0], Vertices[EdgeConnection[i, 0], 1], Vertices[EdgeConnection[i, 0], 2]);
                     //var vert1 = new Vector(Vertices[EdgeConnection[i, 0], 0] + EdgeDirection[i, 0],
                     //    Vertices[EdgeConnection[i, 0], 1] + EdgeDirection[i, 1], Vertices[EdgeConnection[i, 0], 2] + EdgeDirection[i, 2]);
@@ -287,22 +285,38 @@ namespace PLTP
             return meshes;
         }
 
-        public Mesh[] ExtractIsoSensitivityModel()
+        public Mesh[] ExtractIsoSensitivityModel(double isovalue)
         {
-            Mesh[] meshes;
+            Mesh[] meshes = new Mesh[Elements.Count];
             if (KeepVolume)
             {
-                while (true)
-                {
+                int iter = 0;
+                var lowest = 0.0;
+                var highest = 1.0;
 
+                var cur_vol = 0.0;
+                var tar_vol = VolumeFraction;
+                var ini_vol = GetVolume();
+
+                while (Math.Abs(cur_vol - tar_vol) > Tolerance && iter < MaximumIteration)
+                {
+                    isovalue = (highest + lowest) * 0.5;
+                    meshes = Extract(isovalue);
+                    cur_vol = Mesh.GetVolumeFromMeshes(meshes) / ini_vol;
+
+                    if (cur_vol - tar_vol > 0.0) lowest = isovalue;
+                    else highest = isovalue;
+                    iter++;
                 }
+                Console.WriteLine("Volume is " + (cur_vol * ini_vol).ToString());
             }
             else
             {
-                meshes = Extract();
+                meshes = Extract(isovalue);
+                var vol = Mesh.GetVolumeFromMeshes(meshes);
+                Console.WriteLine("Volume is " + vol.ToString());
             }
-            var vol = Mesh.GetVolumeFromMeshes(meshes);
-            Console.WriteLine("Volume is " + vol.ToString());
+
             return meshes;
         }
         #region Private Methods

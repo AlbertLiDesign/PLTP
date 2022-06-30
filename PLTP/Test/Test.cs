@@ -34,7 +34,7 @@ namespace PLTP
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model
             HexModel model = new HexModel(nodeList, elems, elemSen);
-            model.SetParameters(24000, 0.15, 0.044, 0.01, 2.0, 3.0, 50, true, false, true);
+            model.SetParameters(0.15, 0.01, 2.0, 3.0, 50, true, true, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
@@ -60,7 +60,7 @@ namespace PLTP
             sw.Restart();
             Console.Write("|*****...............| 25%");
             Console.Write("\t(Extract iso-sensitivity model... ");
-            var meshes = model.ExtractIsoSensitivityModel();
+            var meshes = model.ExtractIsoSensitivityModel(0.044);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             #endregion
