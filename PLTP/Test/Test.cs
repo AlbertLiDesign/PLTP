@@ -9,7 +9,8 @@ namespace PLTP
 {
     public static class Test
     {
-        public static void TestHex()
+        public static void TestHex(string mdl_path, string sen_path, double volumeFraction,
+            double filterRadius, double tolerance, int maximumIteration, bool interpolation, bool keepVolume, string outputPath)
         {
             Console.WriteLine("====================");
             Console.WriteLine("Welcome to use PLTP.");
@@ -17,9 +18,6 @@ namespace PLTP
             Stopwatch sw = Stopwatch.StartNew();
 
             // File paths
-            string mdl_path = "C:/test/Cantilever/Job-1_BESO.inp";
-            string sen_path = "C:/test/Cantilever/Sensitivities.txt";
-
             List<int> solidID = new List<int>();
             List<int> nonDesignID = new List<int>();
             List<Vector> nodeList = new List<Vector>();
@@ -34,7 +32,7 @@ namespace PLTP
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model
             HexModel model = new HexModel(nodeList, elems, elemSen);
-            model.SetParameters(0.15, 0.01, 2.0, 3.0, 50, true, true, true);
+            model.SetParameters(volumeFraction, tolerance, filterRadius, maximumIteration, interpolation, keepVolume, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
@@ -73,7 +71,6 @@ namespace PLTP
             var output = Mesh.CombineMeshes(meshes);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-
             // Weld mesh
             sw.Restart();
             Console.Write("|***************.....| 75%");
@@ -89,13 +86,14 @@ namespace PLTP
             output.RemoveDuplicatedFaces();
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+
             #endregion
 
             // Write mesh
             sw.Restart();
             Console.Write("|********************| 100%");
             Console.Write("\t(Write mesh... ");
-            Export.WriteObj(output, "C:/test/smooth.obj");
+            Export.WriteObj(output, outputPath);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             Console.WriteLine("Done");

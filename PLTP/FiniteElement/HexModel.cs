@@ -14,8 +14,8 @@ namespace PLTP
         public List<Hexahedron> Elements = new List<Hexahedron>();
         public List<double> ElemSenNum = new List<double>();
         public double[] NdlSenNum;
+        public Vector Size;
 
-        private double InitialVolume = 0.0;
         private double VolumeFraction = 0.0;
         private double Tolerance = 0.01;
         private double FilterRadius = 0.0;
@@ -25,7 +25,6 @@ namespace PLTP
         private bool UnitiseSensitivityNumber = true;
 
         #region Parameters for keeping volume
-        private double Step = 0.01;
         private int MaximumIteration = 20;
         #endregion
 
@@ -75,6 +74,20 @@ namespace PLTP
             NodeList = nodeList;
             Elements = elements;
             ElemSenNum = elemSenNum;
+
+            Cases = new int[elements.Count];
+        }
+
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, List<int> NonDesign)
+        {
+            NodeList = nodeList;
+            Elements = elements;
+            ElemSenNum = elemSenNum;
+
+            for (int i = 0; i < NonDesign.Count; i++)
+            {
+                elements[NonDesign[i]].SetNonDesign(true); 
+            }
 
             Cases = new int[elements.Count];
         }
@@ -135,6 +148,13 @@ namespace PLTP
 
             // Get the correct vertex order
             var idx = Elements[0].SortingVertices();
+
+            var vert_0 = NodeList[Elements[0].NdlID[idx[0]]];
+            var vert_6 = NodeList[Elements[0].NdlID[idx[6]]];
+
+            Size = new Vector(Math.Abs(vert_6.X-vert_0.X), Math.Abs(vert_6.Y - vert_0.Y), Math.Abs(vert_6.Z-vert_0.Z));
+
+            // Unify all the vertex older
             Parallel.For(0, Elements.Count, i =>
             {
                 // Update the order according to the correct order
@@ -163,19 +183,20 @@ namespace PLTP
                 Elements[i].Vertices = verts;
                 Elements[i].MinVert = verts[0];
             });
+
+
         }
 
         /// <summary>
         /// Set the parameters for the keeping volume method
         /// </summary>
         public void SetParameters(double volumeFraction, 
-            double tolerance, double step, double rmin,
+            double tolerance, double rmin,
             int maximumIteration, bool interpolation = true, 
             bool keepVolume = false, bool unitiseSensitivityNumber = true)
         {
             VolumeFraction = volumeFraction;
             Tolerance = tolerance;
-            Step = step;
             FilterRadius = rmin;
             MaximumIteration = maximumIteration;
             Interpolation = interpolation;
@@ -200,7 +221,7 @@ namespace PLTP
             for (int i = 0; i < Elements.Count; i++)
             {
                 int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
-
+;
                 if (Elements[i].isNonDesign)
                 {
                     // output the original hexahedron
@@ -209,7 +230,9 @@ namespace PLTP
                 else
                 {
                     if (flag == 255)
+                    {
                         meshes[i] = Elements[i].ToMesh();
+                    }
                     else if (flag != 0)
                         meshes[i] = IsoSenMdl_Hex(Elements[i], flag, isovalue);
                     else
@@ -230,7 +253,8 @@ namespace PLTP
             // This voxel is in the boundary.
             if (EdgeFlag == 0) return null;
 
-            if (!Interpolation) return mesh;
+            if (!Interpolation)
+                return mesh;
 
             List<Vector> pts = new List<Vector>();
             Vector[] EdgeVertex = new Vector[12];
@@ -239,18 +263,10 @@ namespace PLTP
                 if ((EdgeFlag & (1 << i)) != 0)
                 {
                     var Offset = GetOffset(values[EdgeConnection[i, 0]], values[EdgeConnection[i, 1]], isovalue, Interpolation);
-                    //var vert0 = new Vector(Vertices[EdgeConnection[i, 0], 0], Vertices[EdgeConnection[i, 0], 1], Vertices[EdgeConnection[i, 0], 2]);
-                    //var vert1 = new Vector(Vertices[EdgeConnection[i, 0], 0] + EdgeDirection[i, 0],
-                    //    Vertices[EdgeConnection[i, 0], 1] + EdgeDirection[i, 1], Vertices[EdgeConnection[i, 0], 2] + EdgeDirection[i, 2]);
-                    //Line line = new Line(vert0, vert1);
-
                     EdgeVertex[i] = new Vector(
-                        (Vertices[EdgeConnection[i, 0], 0] + Offset * EdgeDirection[i, 0] + elem.MinVert.X),
-                        (Vertices[EdgeConnection[i, 0], 1] + Offset * EdgeDirection[i, 1] + elem.MinVert.Y),
-                        (Vertices[EdgeConnection[i, 0], 2] + Offset * EdgeDirection[i, 2] + elem.MinVert.Z));
-
-
-                    //EdgeVertex[i] = line.ClosestPoint(computeV, true);
+                        (Vertices[EdgeConnection[i, 0], 0] + Offset * EdgeDirection[i, 0]) * Size.X + elem.MinVert.X,
+                        (Vertices[EdgeConnection[i, 0], 1] + Offset * EdgeDirection[i, 1]) * Size.Y + elem.MinVert.Y,
+                        (Vertices[EdgeConnection[i, 0], 2] + Offset * EdgeDirection[i, 2]) * Size.Z + elem.MinVert.Z);
                 }
             }
 
@@ -348,9 +364,9 @@ namespace PLTP
             for (int v = 0; v < Table.VertTable_Hex[flag].Count / 3; v++)
             {
                 vertices.Add(new Vector(
-                        Table.VertTable_Hex[flag][3 * v] * elem.Size.X + elem.MinVert.X, 
-                        Table.VertTable_Hex[flag][3 * v + 1] * elem.Size.Y + elem.MinVert.Y, 
-                        Table.VertTable_Hex[flag][3 * v + 2] * elem.Size.Z + elem.MinVert.Z));
+                        Table.VertTable_Hex[flag][3 * v] * Size.X + elem.MinVert.X, 
+                        Table.VertTable_Hex[flag][3 * v + 1] * Size.Y + elem.MinVert.Y, 
+                        Table.VertTable_Hex[flag][3 * v + 2] * Size.Z + elem.MinVert.Z));
             }
 
             // Add faces

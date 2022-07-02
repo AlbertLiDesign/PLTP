@@ -11,7 +11,6 @@ namespace PLTP
         public Vector[] Vertices;
         public Face[] Faces;
         public Vector Center;
-        public Vector Size;
         public Vector MinVert;
 
         public int ID;
@@ -45,11 +44,6 @@ namespace PLTP
                 Center += vertices[i];
             }
             Center /= 8;
-            Size = new Vector(1.0, 1.0, 1.0);
-        }
-        public void SetSize(Vector size)
-        {
-            Size = size;
         }
         public void SetMinimumVertex(Vector miniVert)
         {
