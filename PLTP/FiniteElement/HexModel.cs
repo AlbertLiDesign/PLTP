@@ -25,7 +25,7 @@ namespace PLTP
         private bool UnitiseSensitivityNumber = true;
 
         #region Parameters for keeping volume
-        private int MaximumIteration = 20;
+        private int MaximumIteration = 50;
         #endregion
 
         /// <summary>
