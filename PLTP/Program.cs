@@ -6,7 +6,7 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            TableExample();
+            GetCantileverSenMdl();
         }
 
         public static void CanteileverExample()
@@ -22,6 +22,13 @@ namespace PLTP // Note: actual namespace depends on the project name.
             string sen_path = "../../../../../data/Table/Sensitivities.txt";
             string output_path = "../../../../../data/Table/Smoothing.obj";
             Test.TestHex(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, true, output_path);
+        }
+        public static void GetCantileverSenMdl()
+        {
+            string mdl_path = "../../../../../data/Cantilever/Job-1_BESO.inp";
+            string sen_path = "../../../../../data/Cantilever/Sensitivities.txt";
+            string output_path = "../../../../../data/Cantilever/Smoothing.obj";
+            Test.ObtainSensitivityMdl(mdl_path, sen_path, 0.15, 3.0, 0.01, 50, true, output_path);
         }
     }
 }
