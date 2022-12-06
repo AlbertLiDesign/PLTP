@@ -6,7 +6,7 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            GetCantileverSenMdl();
+            CanteileverExample();
         }
 
         public static void CanteileverExample()
