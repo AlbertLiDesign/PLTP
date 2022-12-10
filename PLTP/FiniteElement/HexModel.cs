@@ -22,7 +22,8 @@ namespace PLTP
 
         public bool Interpolation = true;
         public bool KeepVolume = false;
-        private bool UnitiseSensitivityNumber = true;
+        public bool UnitiseSensitivityNumber = true;
+        public bool ReverseValues = false;
 
         #region Parameters for keeping volume
         private int MaximumIteration = 50;
@@ -66,14 +67,23 @@ namespace PLTP
 
         #region Constructors
         public HexModel() { }
+
         /// <summary>
         /// Post-processing method for hexahedron model without keeping volume
         /// </summary>
-        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum)
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements)
         {
             NodeList = nodeList;
             Elements = elements;
-            ElemSenNum = elemSenNum;
+            Cases = new int[elements.Count];
+        }
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> senNum, bool elemSen = true)
+        {
+            NodeList = nodeList;
+            Elements = elements;
+            if (elemSen) ElemSenNum = senNum;
+            else NdlSenNum = senNum.ToArray();
+
 
             Cases = new int[elements.Count];
         }
@@ -140,10 +150,21 @@ namespace PLTP
             {
                 double min = NdlSenNum.Min();
                 double max = NdlSenNum.Max();
-                Parallel.For(0, NdlSenNum.Length, i =>
+                if (ReverseValues)
                 {
-                    NdlSenNum[i] = (NdlSenNum[i] - min) / (max- min);
-                });
+                    Parallel.For(0, NdlSenNum.Length, i =>
+                    {
+                        NdlSenNum[i] = Math.Abs(NdlSenNum[i] - max) / (max - min);
+                    });
+                }
+                else
+                {
+                    Parallel.For(0, NdlSenNum.Length, i =>
+                    {
+                        NdlSenNum[i] = (NdlSenNum[i] - min) / (max - min);
+                    });
+                }
+
             }
 
             // Get the correct vertex order
@@ -242,6 +263,25 @@ namespace PLTP
             return meshes;
         }
 
+        public Mesh[] ExtractAllCases()
+        {
+            Mesh[] meshes = new Mesh[256];
+
+            for (int i = 0; i < 256; i++)
+            {
+                int flag = i;
+                if (flag == 255)
+                {
+                    meshes[i] = Elements[0].ToMesh();
+                }
+                else if (flag != 0)
+                    meshes[i] = IsoSenMdl_Hex(Elements[0], flag, 0.5);
+                else
+                    meshes[i] = null;
+
+            }
+            return meshes;
+        }
         public Mesh IsoSenMdl_Hex(Hexahedron elem, int flag, double isovalue)
         {
             var values = elem.ndlSen;

@@ -52,7 +52,7 @@ namespace PLTP
             }
             else
             {
-                throw new Exception("The mesh is an invalid mesh.");
+                //throw new Exception("The mesh is an invalid mesh.");
             }
         }
     }

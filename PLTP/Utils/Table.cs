@@ -552,29 +552,35 @@ namespace PLTP
         };
         public static List<List<List<int>>> FaceTable_Hex = new List<List<List<int>>>(256)
 {
+            //0
     new List<List<int>>(6){  new List<int>(4){0,3,2,1},
   new List<int>(4){4,5,6,7},
   new List<int>(4){3,0,4,7},
   new List<int>(4){2,3,7,6},
   new List<int>(4){5,1,2,6},
   new List<int>(4){4,0,1,5}},
+    //1
     new List<List<int>>(4){  new List<int>(3){2,3,1},
   new List<int>(3){2,1,0},
   new List<int>(3){1,3,0},
   new List<int>(3){2,0,3}},
+    //2
     new List<List<int>>(4){  new List<int>(3){2,1,3},
   new List<int>(3){1,2,0},
   new List<int>(3){3,1,0},
   new List<int>(3){0,2,3}},
+    //3
     new List<List<int>>(5){  new List<int>(4){4,5,3,2},
   new List<int>(4){3,0,1,2},
   new List<int>(3){4,2,1},
   new List<int>(3){3,5,0},
   new List<int>(4){1,0,5,4}},
+    //4
     new List<List<int>>(4){  new List<int>(3){2,1,3},
   new List<int>(3){1,2,0},
   new List<int>(3){1,0,3},
   new List<int>(3){2,3,0}},
+    //5
     new List<List<int>>(8){  new List<int>(3){5,4,6},
   new List<int>(3){3,7,2},
   new List<int>(3){3,2,0},
@@ -583,11 +589,13 @@ namespace PLTP
   new List<int>(3){2,7,0},
   new List<int>(3){5,6,1},
   new List<int>(3){7,3,0}},
+    //6
     new List<List<int>>(5){  new List<int>(4){2,4,5,3},
   new List<int>(3){2,3,0},
   new List<int>(4){2,0,1,4},
   new List<int>(3){4,1,5},
   new List<int>(4){1,0,3,5}},
+    //7
     new List<List<int>>(10){  new List<int>(3){5,4,3},
   new List<int>(3){6,4,5},
   new List<int>(3){6,7,4},
@@ -598,15 +606,18 @@ namespace PLTP
   new List<int>(3){7,6,1},
   new List<int>(3){2,1,6},
   new List<int>(3){1,0,7}},
+    //8
     new List<List<int>>(4){  new List<int>(3){3,2,1},
   new List<int>(3){1,2,0},
   new List<int>(3){1,0,3},
   new List<int>(3){2,3,0}},
+    //9
     new List<List<int>>(5){  new List<int>(4){3,5,4,2},
   new List<int>(3){3,2,0},
   new List<int>(3){4,5,1},
   new List<int>(4){4,1,0,2},
   new List<int>(4){3,0,1,5}},
+    //10
     new List<List<int>>(8){  new List<int>(3){6,5,7},
   new List<int>(3){4,3,2},
   new List<int>(3){2,3,0},
@@ -615,6 +626,7 @@ namespace PLTP
   new List<int>(3){5,1,7},
   new List<int>(3){4,0,3},
   new List<int>(3){6,7,1}},
+    //11
     new List<List<int>>(10){  new List<int>(3){3,6,4},
   new List<int>(3){5,6,3},
   new List<int>(3){5,7,6},
@@ -625,11 +637,13 @@ namespace PLTP
   new List<int>(3){0,7,5},
   new List<int>(3){2,7,0},
   new List<int>(3){5,1,0}},
+    //12
     new List<List<int>>(5){  new List<int>(4){5,3,2,4},
   new List<int>(3){2,3,0},
   new List<int>(4){2,0,1,4},
   new List<int>(3){4,1,5},
   new List<int>(4){5,1,0,3}},
+    //13
     new List<List<int>>(10){  new List<int>(3){3,5,7},
   new List<int>(3){4,5,3},
   new List<int>(3){4,6,5},
@@ -640,6 +654,7 @@ namespace PLTP
   new List<int>(3){1,6,2},
   new List<int>(3){6,4,2},
   new List<int>(3){4,0,2}},
+    //14
     new List<List<int>>(10){  new List<int>(3){6,3,5},
   new List<int>(3){7,3,6},
   new List<int>(3){7,4,3},
@@ -650,21 +665,25 @@ namespace PLTP
   new List<int>(3){2,1,7},
   new List<int>(3){4,1,0},
   new List<int>(3){1,4,7}},
+    //15
     new List<List<int>>(6){  new List<int>(4){5,4,6,7},
   new List<int>(4){5,0,1,4},
   new List<int>(4){4,1,2,6},
   new List<int>(4){6,2,3,7},
   new List<int>(4){7,3,0,5},
   new List<int>(4){0,3,2,1}},
+    //16
     new List<List<int>>(4){  new List<int>(3){1,2,3},
   new List<int>(3){1,0,2},
   new List<int>(3){3,2,0},
   new List<int>(3){3,0,1}},
+    //17
     new List<List<int>>(5){  new List<int>(4){2,3,5,4},
   new List<int>(4){2,1,0,3},
   new List<int>(4){5,0,1,4},
   new List<int>(3){4,1,2},
   new List<int>(3){3,0,5}},
+    //18
     new List<List<int>>(8){  new List<int>(3){4,7,2},
   new List<int>(3){5,3,6},
   new List<int>(3){3,5,0},
@@ -673,6 +692,7 @@ namespace PLTP
   new List<int>(3){7,4,1},
   new List<int>(3){7,1,2},
   new List<int>(3){0,5,6}},
+    //19
     new List<List<int>>(10){  new List<int>(3){6,5,7},
   new List<int>(3){3,5,6},
   new List<int>(3){3,4,5},
@@ -683,6 +703,7 @@ namespace PLTP
   new List<int>(4){7,0,2,6},
   new List<int>(3){6,2,3},
   new List<int>(4){1,0,7,5}},
+    //20
     new List<List<int>>(8){  new List<int>(3){3,7,2},
   new List<int>(3){5,4,6},
   new List<int>(3){2,1,3},
@@ -691,6 +712,7 @@ namespace PLTP
   new List<int>(3){7,3,1},
   new List<int>(3){7,1,2},
   new List<int>(3){5,6,0}},
+    //21
     new List<List<int>>(10){
   new List<int>(3){6,5,7},
   new List<int>(4){9,8,3,4},
@@ -701,6 +723,7 @@ namespace PLTP
   new List<int>(3){8,2,3},
   new List<int>(3){6,7,1},
   new List<int>(3){9,4,0}},
+    //22
     new List<List<int>>(9){  new List<int>(3){5,9,3},
   new List<int>(4){4,7,8,6},
   new List<int>(3){4,6,0},
@@ -710,6 +733,7 @@ namespace PLTP
   new List<int>(3){9,5,2},
   new List<int>(3){9,2,3},
   new List<int>(4){1,0,6,8}},
+    //23
     new List<List<int>>(14){  new List<int>(3){8,4,5},
   new List<int>(3){7,9,8},
   new List<int>(3){7,5,6},
@@ -724,6 +748,7 @@ namespace PLTP
   new List<int>(3){9,7,1},
   new List<int>(3){2,1,7},
   new List<int>(3){1,0,9}},
+    //24
     new List<List<int>>(8){  new List<int>(3){7,5,4},
   new List<int>(3){3,6,2},
   new List<int>(3){2,1,3},
@@ -732,6 +757,7 @@ namespace PLTP
   new List<int>(3){7,4,0},
   new List<int>(3){6,1,2},
   new List<int>(3){5,7,0}},
+    //25
     new List<List<int>>(10){  new List<int>(3){6,3,4},
   new List<int>(3){5,3,6},
   new List<int>(3){5,7,3},
@@ -742,6 +768,7 @@ namespace PLTP
   new List<int>(3){5,1,0},
   new List<int>(3){7,2,3},
   new List<int>(4){4,0,1,6}},
+    //26
     new List<List<int>>(12){  new List<int>(3){9,8,11},
   new List<int>(3){5,10,3},
   new List<int>(3){4,7,6},
@@ -754,6 +781,7 @@ namespace PLTP
   new List<int>(3){10,2,3},
   new List<int>(3){7,0,6},
   new List<int>(3){9,11,1}},
+    //27
     new List<List<int>>(15){  new List<int>(3){5,6,8},
   new List<int>(4){7,4,5,8},
   new List<int>(3){4,7,9},
@@ -769,6 +797,7 @@ namespace PLTP
   new List<int>(3){0,8,6},
   new List<int>(3){2,8,0},
   new List<int>(3){6,1,0}},
+    //28
     new List<List<int>>(9){  new List<int>(3){8,3,4},
   new List<int>(4){9,6,5,7},
   new List<int>(3){3,2,4},
@@ -778,6 +807,7 @@ namespace PLTP
   new List<int>(3){9,7,1},
   new List<int>(3){8,2,3},
   new List<int>(4){9,1,0,6}},
+    //29
     new List<List<int>>(14){  new List<int>(3){9,4,8},
   new List<int>(3){7,4,5},
   new List<int>(3){7,6,8},
@@ -792,6 +822,7 @@ namespace PLTP
   new List<int>(3){1,7,2},
   new List<int>(3){7,5,2},
   new List<int>(3){5,0,2}},
+    //30
     new List<List<int>>(14){  new List<int>(3){9,10,7},
   new List<int>(3){5,8,9},
   new List<int>(3){5,9,7},
@@ -806,6 +837,7 @@ namespace PLTP
   new List<int>(3){2,1,10},
   new List<int>(3){7,1,0},
   new List<int>(3){1,7,10}},
+    //31
     new List<List<int>>(13){  new List<int>(3){6,7,8},
   new List<int>(3){5,6,8},
   new List<int>(3){5,8,9},
@@ -819,10 +851,12 @@ namespace PLTP
   new List<int>(3){8,3,0},
   new List<int>(3){9,4,5},
   new List<int>(4){0,3,2,1}},
+    //32
     new List<List<int>>(4){  new List<int>(3){2,1,3},
   new List<int>(3){0,1,2},
   new List<int>(3){3,0,2},
   new List<int>(3){3,1,0}},
+    //33
     new List<List<int>>(8){  new List<int>(3){5,7,4},
   new List<int>(3){3,2,6},
   new List<int>(3){3,1,2},
@@ -831,11 +865,13 @@ namespace PLTP
   new List<int>(3){4,7,0},
   new List<int>(3){6,2,1},
   new List<int>(3){5,0,7}},
+    //34
     new List<List<int>>(5){  new List<int>(4){3,2,4,5},
   new List<int>(4){0,1,2,3},
   new List<int>(4){4,1,0,5},
   new List<int>(3){4,2,1},
   new List<int>(3){0,3,5}},
+    //35
     new List<List<int>>(10){  new List<int>(3){7,5,6},
   new List<int>(3){4,5,7},
   new List<int>(3){4,3,5},
@@ -846,6 +882,7 @@ namespace PLTP
   new List<int>(3){4,7,0},
   new List<int>(3){5,3,2},
   new List<int>(4){1,0,7,6}},
+    //36
     new List<List<int>>(8){  new List<int>(3){3,2,4},
   new List<int>(3){6,5,7},
   new List<int>(3){1,2,3},
@@ -854,6 +891,7 @@ namespace PLTP
   new List<int>(3){5,0,7},
   new List<int>(3){4,2,1},
   new List<int>(3){6,7,0}},
+    //37
     new List<List<int>>(12){  new List<int>(3){3,7,4},
   new List<int>(3){9,8,10},
   new List<int>(3){11,5,6},
@@ -866,6 +904,7 @@ namespace PLTP
   new List<int>(3){7,3,2},
   new List<int>(3){9,10,1},
   new List<int>(3){11,6,0}},
+    //38
     new List<List<int>>(10){  new List<int>(3){3,7,4},
   new List<int>(3){5,7,3},
   new List<int>(3){5,6,7},
@@ -876,6 +915,7 @@ namespace PLTP
   new List<int>(3){6,1,7},
   new List<int>(3){5,3,2},
   new List<int>(4){1,0,4,7}},
+    //39
     new List<List<int>>(15){  new List<int>(3){9,5,4},
   new List<int>(4){6,8,9,4},
   new List<int>(3){8,6,7},
@@ -891,6 +931,7 @@ namespace PLTP
   new List<int>(3){9,8,1},
   new List<int>(3){2,1,8},
   new List<int>(3){1,0,9}},
+    //40
     new List<List<int>>(8){  new List<int>(3){6,5,7},
   new List<int>(3){3,2,4},
   new List<int>(3){1,2,3},
@@ -899,15 +940,17 @@ namespace PLTP
   new List<int>(3){5,0,7},
   new List<int>(3){4,2,1},
   new List<int>(3){6,7,0}},
+    //41
     new List<List<int>>(9){  new List<int>(3){3,7,4},
   new List<int>(4){6,9,8,5},
   new List<int>(3){4,2,3},
-  new List<int>(3){6,0,5},
+  new List<int>(3){5,0,6},
   new List<int>(3){7,2,4},
   new List<int>(3){8,9,1},
   new List<int>(4){8,1,0,5},
   new List<int>(3){7,3,2},
   new List<int>(4){6,0,1,9}},
+    //42
     new List<List<int>>(9){  new List<int>(3){8,7,9},
   new List<int>(4){4,3,5,6},
   new List<int>(4){0,2,3,4},
@@ -917,6 +960,7 @@ namespace PLTP
   new List<int>(3){5,3,2},
   new List<int>(3){6,0,4},
   new List<int>(3){8,9,1}},
+    //43
     new List<List<int>>(14){  new List<int>(3){4,6,5},
   new List<int>(3){9,8,5},
   new List<int>(3){9,6,7},
@@ -931,7 +975,8 @@ namespace PLTP
   new List<int>(3){0,9,7},
   new List<int>(3){2,9,0},
   new List<int>(3){7,1,0}},
-    new List<List<int>>(10){  new List<int>(3){4,3,5},
+    //44
+    new List<List<int>>(9){  new List<int>(3){4,3,5},
   new List<int>(4){6,8,9,7},
   new List<int>(3){2,3,4},
   new List<int>(3){6,7,0},
@@ -939,8 +984,8 @@ namespace PLTP
   new List<int>(4){6,0,1,8},
   new List<int>(3){8,1,9},
   new List<int>(3){5,3,2},
-  new List<int>(3){0,9,7},
-  new List<int>(3){0,9,1}},
+  new List<int>(4){1,0,7,9} },
+    //45
     new List<List<int>>(14){  new List<int>(3){6,9,11},
   new List<int>(3){6,10,9},
   new List<int>(3){7,10,6},
@@ -955,6 +1000,7 @@ namespace PLTP
   new List<int>(3){1,10,2},
   new List<int>(3){10,7,2},
   new List<int>(3){7,0,2}},
+    //46
     new List<List<int>>(14){  new List<int>(3){8,9,5},
   new List<int>(3){6,7,8},
   new List<int>(3){6,5,4},
@@ -969,6 +1015,7 @@ namespace PLTP
   new List<int>(3){2,1,9},
   new List<int>(3){5,1,0},
   new List<int>(3){1,5,9}},
+    //47
     new List<List<int>>(13){  new List<int>(3){8,9,6},
   new List<int>(3){7,8,6},
   new List<int>(3){7,6,5},
@@ -982,11 +1029,13 @@ namespace PLTP
   new List<int>(4){9,3,0,6},
   new List<int>(3){7,5,4},
   new List<int>(4){0,3,2,1}},
+    //48
     new List<List<int>>(5){  new List<int>(4){2,3,5,4},
   new List<int>(4){1,0,3,2},
   new List<int>(3){4,1,2},
   new List<int>(3){5,3,0},
   new List<int>(4){5,0,1,4}},
+    //49
     new List<List<int>>(10){  new List<int>(3){5,7,6},
   new List<int>(3){3,7,5},
   new List<int>(3){3,4,7},
@@ -997,6 +1046,7 @@ namespace PLTP
   new List<int>(4){7,0,1,6},
   new List<int>(4){6,1,2,5},
   new List<int>(3){4,0,7}},
+    //50
     new List<List<int>>(10){  new List<int>(3){6,7,5},
   new List<int>(3){4,7,6},
   new List<int>(3){4,3,7},
@@ -1007,21 +1057,24 @@ namespace PLTP
   new List<int>(3){7,3,1},
   new List<int>(4){7,1,2,5},
   new List<int>(3){0,4,6}},
+    //51
     new List<List<int>>(6){  new List<int>(4){4,5,7,6},
   new List<int>(4){4,3,1,5},
   new List<int>(4){7,0,2,6},
   new List<int>(4){6,2,3,4},
   new List<int>(4){1,0,7,5},
   new List<int>(4){2,0,1,3}},
+    //52
     new List<List<int>>(9){  new List<int>(3){6,8,7},
   new List<int>(4){3,4,9,5},
   new List<int>(4){2,1,4,3},
   new List<int>(3){6,7,0},
   new List<int>(3){3,5,2},
   new List<int>(3){6,0,8},
-  new List<int>(3){9,1,4},
+  new List<int>(3){9,4,1},
   new List<int>(4){9,1,2,5},
   new List<int>(3){7,8,0}},
+    //53
     new List<List<int>>(14){  new List<int>(3){6,11,10},
   new List<int>(3){6,5,11},
   new List<int>(3){4,5,6},
@@ -1036,6 +1089,7 @@ namespace PLTP
   new List<int>(4){10,2,3,6},
   new List<int>(3){8,9,1},
   new List<int>(3){11,5,0}},
+    //54
     new List<List<int>>(14){  new List<int>(3){7,8,6},
   new List<int>(3){4,9,6},
   new List<int>(3){4,8,5},
@@ -1050,6 +1104,7 @@ namespace PLTP
   new List<int>(3){9,4,2},
   new List<int>(4){9,2,3,6},
   new List<int>(4){1,0,5,8}},
+    //55
     new List<List<int>>(13){  new List<int>(3){9,8,5},
   new List<int>(3){7,9,5},
   new List<int>(3){7,5,6},
@@ -1063,6 +1118,7 @@ namespace PLTP
   new List<int>(3){2,1,7},
   new List<int>(3){1,0,9},
   new List<int>(4){3,0,1,4}},
+    //56
     new List<List<int>>(9){  new List<int>(3){9,7,6},
   new List<int>(4){8,5,3,4},
   new List<int>(4){2,1,4,3},
@@ -1072,6 +1128,7 @@ namespace PLTP
   new List<int>(3){9,6,0},
   new List<int>(4){8,1,2,5},
   new List<int>(3){7,9,0}},
+    //57
     new List<List<int>>(14){  new List<int>(3){8,7,9},
   new List<int>(3){4,5,8},
   new List<int>(3){4,9,6},
@@ -1086,6 +1143,7 @@ namespace PLTP
   new List<int>(3){7,1,0},
   new List<int>(4){9,2,3,6},
   new List<int>(4){5,0,1,8}},
+    //58
     new List<List<int>>(14){  new List<int>(3){7,10,6},
   new List<int>(3){7,4,10},
   new List<int>(3){5,4,7},
@@ -1100,6 +1158,7 @@ namespace PLTP
   new List<int>(4){10,2,3,6},
   new List<int>(3){7,0,5},
   new List<int>(3){9,11,1}},
+    //59
     new List<List<int>>(13){  new List<int>(3){9,5,6},
   new List<int>(3){7,9,6},
   new List<int>(3){7,6,8},
@@ -1113,16 +1172,18 @@ namespace PLTP
   new List<int>(3){2,8,0},
   new List<int>(3){6,1,0},
   new List<int>(4){3,0,1,4}},
+    //60
     new List<List<int>>(10){  new List<int>(4){10,8,7,9},
   new List<int>(4){6,4,5,11},
   new List<int>(4){3,2,5,4},
   new List<int>(3){7,8,0},
-  new List<int>(3){4,3,6},
+  new List<int>(3){3,4,6},
   new List<int>(4){7,0,1,9},
   new List<int>(3){11,5,2},
   new List<int>(3){10,9,1},
   new List<int>(4){11,2,3,6},
   new List<int>(4){10,1,0,8}},
+    //61
     new List<List<int>>(18){  new List<int>(3){10,6,8},
   new List<int>(3){9,8,6},
   new List<int>(3){11,6,10},
@@ -1141,6 +1202,7 @@ namespace PLTP
   new List<int>(3){1,9,2},
   new List<int>(3){9,6,2},
   new List<int>(3){6,0,2}},
+    //62
     new List<List<int>>(18){  new List<int>(3){7,6,9},
   new List<int>(3){5,9,6},
   new List<int>(3){8,6,7},
@@ -1159,6 +1221,7 @@ namespace PLTP
   new List<int>(3){2,1,11},
   new List<int>(3){6,1,0},
   new List<int>(3){1,6,11}},
+    //63
     new List<List<int>>(11){  new List<int>(4){6,7,8,9},
   new List<int>(3){2,7,1},
   new List<int>(3){7,6,1},
@@ -1170,10 +1233,12 @@ namespace PLTP
   new List<int>(4){9,4,5,6},
   new List<int>(4){4,0,1,5},
   new List<int>(4){0,3,2,1}},
+    //64
     new List<List<int>>(4){  new List<int>(3){2,1,3},
   new List<int>(3){0,1,2},
   new List<int>(3){0,2,3},
   new List<int>(3){3,1,0}},
+    //65
     new List<List<int>>(8){  new List<int>(3){4,6,5},
   new List<int>(3){3,7,2},
   new List<int>(3){3,2,0},
@@ -1182,6 +1247,7 @@ namespace PLTP
   new List<int>(3){2,7,0},
   new List<int>(3){6,4,1},
   new List<int>(3){3,0,7}},
+    //66
     new List<List<int>>(8){  new List<int>(3){4,7,5},
   new List<int>(3){2,6,3},
   new List<int>(3){2,3,0},
@@ -1190,20 +1256,23 @@ namespace PLTP
   new List<int>(3){1,5,7},
   new List<int>(3){7,4,1},
   new List<int>(3){0,3,6}},
+    //67
     new List<List<int>>(9){  new List<int>(3){5,8,6},
   new List<int>(4){7,9,4,3},
   new List<int>(4){4,0,1,3},
   new List<int>(3){6,2,5},
   new List<int>(3){7,3,1},
   new List<int>(3){2,6,8},
-  new List<int>(3){4,0,9},
+  new List<int>(3){0,4,9},
   new List<int>(3){8,5,2},
   new List<int>(4){1,0,9,7}},
+    //68
     new List<List<int>>(5){  new List<int>(4){3,2,4,5},
   new List<int>(4){0,1,2,3},
   new List<int>(4){1,0,5,4},
   new List<int>(3){4,2,1},
   new List<int>(3){3,5,0}},
+    //69
     new List<List<int>>(9){  new List<int>(3){9,3,4},
   new List<int>(4){6,5,7,8},
   new List<int>(3){4,3,0},
@@ -1213,6 +1282,7 @@ namespace PLTP
   new List<int>(3){7,5,2},
   new List<int>(3){6,8,1},
   new List<int>(3){9,4,0}},
+    //70
     new List<List<int>>(10){  new List<int>(3){4,6,7},
   new List<int>(3){3,6,4},
   new List<int>(3){3,5,6},
@@ -1223,6 +1293,7 @@ namespace PLTP
   new List<int>(4){2,1,7,6},
   new List<int>(3){6,5,2},
   new List<int>(4){1,0,4,7}},
+    //71
     new List<List<int>>(14){  new List<int>(3){9,5,8},
   new List<int>(3){6,7,8},
   new List<int>(3){6,5,4},
@@ -1237,6 +1308,7 @@ namespace PLTP
   new List<int>(3){9,8,1},
   new List<int>(3){2,1,8},
   new List<int>(3){1,0,9}},
+    //72
     new List<List<int>>(8){  new List<int>(3){3,2,4},
   new List<int>(3){6,5,7},
   new List<int>(3){1,2,3},
@@ -1245,15 +1317,17 @@ namespace PLTP
   new List<int>(3){5,0,7},
   new List<int>(3){4,2,1},
   new List<int>(3){6,7,0}},
+    //73
     new List<List<int>>(9){  new List<int>(3){6,5,7},
   new List<int>(4){8,3,4,9},
-  new List<int>(3){4,0,3},
+  new List<int>(3){0,4,3},
   new List<int>(3){2,5,6},
   new List<int>(3){7,2,6},
   new List<int>(3){8,9,1},
   new List<int>(4){8,1,0,3},
   new List<int>(3){7,5,2},
   new List<int>(4){4,0,1,9}},
+    //74
     new List<List<int>>(12){  new List<int>(3){5,8,6},
   new List<int>(3){10,9,11},
   new List<int>(3){4,3,7},
@@ -1266,6 +1340,7 @@ namespace PLTP
   new List<int>(3){8,5,2},
   new List<int>(3){7,0,4},
   new List<int>(3){10,11,1}},
+    //75
     new List<List<int>>(14){  new List<int>(3){4,10,5},
   new List<int>(3){4,11,10},
   new List<int>(3){8,11,4},
@@ -1280,6 +1355,7 @@ namespace PLTP
   new List<int>(3){0,11,8},
   new List<int>(3){2,11,0},
   new List<int>(3){8,1,0}},
+    //76
     new List<List<int>>(10){  new List<int>(3){3,7,4},
   new List<int>(3){5,7,3},
   new List<int>(3){5,6,7},
@@ -1290,6 +1366,7 @@ namespace PLTP
   new List<int>(3){6,1,7},
   new List<int>(3){5,3,2},
   new List<int>(4){7,1,0,4}},
+    //77
     new List<List<int>>(14){  new List<int>(3){6,8,9},
   new List<int>(3){5,7,6},
   new List<int>(3){5,9,4},
@@ -1304,6 +1381,7 @@ namespace PLTP
   new List<int>(3){1,7,2},
   new List<int>(3){7,5,2},
   new List<int>(3){5,0,2}},
+    //78
     new List<List<int>>(15){  new List<int>(3){5,4,6},
   new List<int>(4){7,9,5,6},
   new List<int>(3){9,7,8},
@@ -1319,6 +1397,7 @@ namespace PLTP
   new List<int>(3){2,1,9},
   new List<int>(3){5,1,0},
   new List<int>(3){1,5,9}},
+    //79
     new List<List<int>>(13){  new List<int>(3){9,6,5},
   new List<int>(3){8,9,5},
   new List<int>(3){8,5,7},
@@ -1332,6 +1411,7 @@ namespace PLTP
   new List<int>(4){9,3,0,6},
   new List<int>(3){8,7,4},
   new List<int>(4){0,3,2,1}},
+    //80
     new List<List<int>>(8){  new List<int>(3){2,3,7},
   new List<int>(3){4,6,5},
   new List<int>(3){2,0,3},
@@ -1340,6 +1420,7 @@ namespace PLTP
   new List<int>(3){7,3,0},
   new List<int>(3){6,4,1},
   new List<int>(3){2,7,0}},
+    //81
     new List<List<int>>(9){  new List<int>(3){7,6,5},
   new List<int>(4){3,4,9,8},
   new List<int>(4){3,1,0,4},
@@ -1349,6 +1430,7 @@ namespace PLTP
   new List<int>(3){7,5,2},
   new List<int>(3){3,8,1},
   new List<int>(3){4,0,9}},
+    //82
     new List<List<int>>(12){  new List<int>(3){5,11,3},
   new List<int>(3){7,10,8},
   new List<int>(3){9,6,4},
@@ -1361,6 +1443,7 @@ namespace PLTP
   new List<int>(3){10,7,2},
   new List<int>(3){3,11,1},
   new List<int>(3){0,6,9}},
+    //83
     new List<List<int>>(14){  new List<int>(3){10,4,5},
   new List<int>(3){8,11,10},
   new List<int>(3){8,10,5},
@@ -1375,6 +1458,7 @@ namespace PLTP
   new List<int>(3){9,6,3},
   new List<int>(3){4,10,2},
   new List<int>(4){1,0,11,8}},
+    //84
     new List<List<int>>(9){  new List<int>(3){3,4,9},
   new List<int>(4){7,8,6,5},
   new List<int>(3){3,1,4},
@@ -1384,6 +1468,7 @@ namespace PLTP
   new List<int>(3){7,5,2},
   new List<int>(3){3,9,1},
   new List<int>(3){6,8,0}},
+    //85
     new List<List<int>>(10){  new List<int>(4){4,5,11,10},
   new List<int>(4){9,7,6,8},
   new List<int>(4){4,2,0,5},
@@ -1394,6 +1479,7 @@ namespace PLTP
   new List<int>(3){4,10,2},
   new List<int>(3){7,9,1},
   new List<int>(3){11,5,0}},
+    //86
     new List<List<int>>(14){  new List<int>(3){7,9,10},
   new List<int>(3){7,8,9},
   new List<int>(3){5,8,7},
@@ -1408,6 +1494,7 @@ namespace PLTP
   new List<int>(3){9,8,3},
   new List<int>(3){4,11,2},
   new List<int>(4){1,0,7,10}},
+    //87
     new List<List<int>>(18){  new List<int>(3){9,6,8},
   new List<int>(3){7,8,6},
   new List<int>(3){11,6,9},
@@ -1426,6 +1513,7 @@ namespace PLTP
   new List<int>(3){11,9,1},
   new List<int>(3){2,1,9},
   new List<int>(3){1,0,11}},
+    //88
     new List<List<int>>(12){  new List<int>(3){6,5,7},
   new List<int>(3){10,3,4},
   new List<int>(3){11,9,8},
@@ -1438,6 +1526,7 @@ namespace PLTP
   new List<int>(3){7,5,2},
   new List<int>(3){3,10,1},
   new List<int>(3){9,11,0}},
+    //89
     new List<List<int>>(14){  new List<int>(3){10,9,11},
   new List<int>(3){4,5,10},
   new List<int>(3){4,10,11},
@@ -1452,6 +1541,7 @@ namespace PLTP
   new List<int>(3){8,3,6},
   new List<int>(3){4,11,2},
   new List<int>(4){5,0,1,10}},
+    //90
     new List<List<int>>(16){  new List<int>(3){8,11,9},
   new List<int>(3){13,12,15},
   new List<int>(3){4,6,14},
@@ -1468,6 +1558,7 @@ namespace PLTP
   new List<int>(3){4,14,2},
   new List<int>(3){10,0,7},
   new List<int>(3){13,15,1}},
+    //91
     new List<List<int>>(19){  new List<int>(3){7,10,8},
   new List<int>(3){13,5,11},
   new List<int>(4){6,12,11,5},
@@ -1487,6 +1578,7 @@ namespace PLTP
   new List<int>(3){0,12,9},
   new List<int>(3){2,12,0},
   new List<int>(3){9,1,0}},
+    //92
     new List<List<int>>(14){  new List<int>(3){6,8,9},
   new List<int>(3){11,7,6},
   new List<int>(3){11,6,9},
@@ -1501,6 +1593,7 @@ namespace PLTP
   new List<int>(3){8,6,3},
   new List<int>(3){4,10,2},
   new List<int>(4){11,1,0,7}},
+    //93
     new List<List<int>>(18){  new List<int>(3){6,10,5},
   new List<int>(3){11,5,10},
   new List<int>(3){8,10,6},
@@ -1519,6 +1612,7 @@ namespace PLTP
   new List<int>(3){1,8,2},
   new List<int>(3){8,6,2},
   new List<int>(3){6,0,2}},
+    //94
     new List<List<int>>(19){  new List<int>(3){7,10,5},
   new List<int>(3){12,13,11},
   new List<int>(4){8,9,11,13},
@@ -1538,6 +1632,7 @@ namespace PLTP
   new List<int>(3){2,1,13},
   new List<int>(3){8,1,0},
   new List<int>(3){1,8,13}},
+    //95
     new List<List<int>>(19){  new List<int>(3){11,7,10},
   new List<int>(3){6,7,11},
   new List<int>(3){9,10,7},
@@ -1557,11 +1652,13 @@ namespace PLTP
   new List<int>(3){9,8,5},
   new List<int>(3){6,11,4},
   new List<int>(4){0,3,2,1}},
+    //96
     new List<List<int>>(5){  new List<int>(4){4,3,2,5},
   new List<int>(3){0,2,3},
   new List<int>(4){1,0,3,4},
   new List<int>(3){1,4,5},
   new List<int>(4){2,0,1,5}},
+    //97
     new List<List<int>>(9){  new List<int>(3){6,9,5},
   new List<int>(4){3,8,7,4},
   new List<int>(3){4,1,3},
@@ -1571,6 +1668,7 @@ namespace PLTP
   new List<int>(3){5,9,0},
   new List<int>(4){3,1,2,8},
   new List<int>(3){6,0,9}},
+    //98
     new List<List<int>>(10){  new List<int>(3){7,4,3},
   new List<int>(3){5,4,7},
   new List<int>(3){5,6,4},
@@ -1581,6 +1679,7 @@ namespace PLTP
   new List<int>(3){2,5,7},
   new List<int>(4){3,1,2,7},
   new List<int>(3){0,4,6}},
+    //99
     new List<List<int>>(14){  new List<int>(3){8,6,7},
   new List<int>(3){5,4,8},
   new List<int>(3){5,7,9},
@@ -1595,6 +1694,7 @@ namespace PLTP
   new List<int>(3){5,9,0},
   new List<int>(4){4,2,3,8},
   new List<int>(4){1,0,9,7}},
+    //100
     new List<List<int>>(10){  new List<int>(3){7,3,6},
   new List<int>(3){5,3,7},
   new List<int>(3){5,4,3},
@@ -1605,6 +1705,7 @@ namespace PLTP
   new List<int>(4){2,0,7,6},
   new List<int>(4){3,1,2,6},
   new List<int>(3){5,7,0}},
+    //101
     new List<List<int>>(14){  new List<int>(3){10,4,9},
   new List<int>(3){10,5,4},
   new List<int>(3){8,5,10},
@@ -1619,12 +1720,14 @@ namespace PLTP
   new List<int>(4){4,2,3,9},
   new List<int>(3){8,10,1},
   new List<int>(3){11,7,0}},
+    //102
     new List<List<int>>(6){  new List<int>(4){7,5,4,6},
   new List<int>(4){0,2,4,5},
   new List<int>(4){3,1,7,6},
   new List<int>(4){4,2,3,6},
   new List<int>(4){1,0,5,7},
   new List<int>(4){2,0,1,3}},
+    //103
     new List<List<int>>(13){  new List<int>(3){5,7,8},
   new List<int>(3){6,5,8},
   new List<int>(3){6,8,9},
@@ -1638,6 +1741,7 @@ namespace PLTP
   new List<int>(3){2,1,8},
   new List<int>(3){1,0,9},
   new List<int>(4){3,1,2,4}},
+    //104
     new List<List<int>>(9){  new List<int>(3){7,9,8},
   new List<int>(4){5,4,3,6},
   new List<int>(3){1,3,4},
@@ -1647,6 +1751,7 @@ namespace PLTP
   new List<int>(3){7,0,9},
   new List<int>(4){3,1,2,6},
   new List<int>(3){8,9,0}},
+    //105
     new List<List<int>>(10){  new List<int>(4){8,5,4,9},
   new List<int>(4){6,7,11,10},
   new List<int>(3){5,2,4},
@@ -1657,6 +1762,7 @@ namespace PLTP
   new List<int>(4){10,1,0,6},
   new List<int>(4){4,2,3,9},
   new List<int>(4){7,0,1,11}},
+    //106
     new List<List<int>>(14){  new List<int>(3){8,6,7},
   new List<int>(3){5,4,8},
   new List<int>(3){5,8,7},
@@ -1671,6 +1777,7 @@ namespace PLTP
   new List<int>(4){4,2,3,8},
   new List<int>(3){7,0,5},
   new List<int>(3){10,11,1}},
+    //107
     new List<List<int>>(18){  new List<int>(3){6,8,9},
   new List<int>(3){11,9,8},
   new List<int>(3){5,8,6},
@@ -1689,6 +1796,7 @@ namespace PLTP
   new List<int>(3){0,11,8},
   new List<int>(3){2,11,0},
   new List<int>(3){8,1,0}},
+    //108
     new List<List<int>>(14){  new List<int>(3){8,9,7},
   new List<int>(3){5,9,6},
   new List<int>(3){5,4,7},
@@ -1703,6 +1811,7 @@ namespace PLTP
   new List<int>(3){8,1,9},
   new List<int>(4){7,4,2,3},
   new List<int>(4){9,1,0,6}},
+    //109
     new List<List<int>>(18){  new List<int>(3){10,9,5},
   new List<int>(3){6,5,9},
   new List<int>(3){11,9,10},
@@ -1721,6 +1830,7 @@ namespace PLTP
   new List<int>(3){2,1,9},
   new List<int>(3){9,8,2},
   new List<int>(3){8,0,2}},
+    //110
     new List<List<int>>(13){  new List<int>(3){6,5,7},
   new List<int>(3){9,6,7},
   new List<int>(3){9,7,8},
@@ -1734,6 +1844,7 @@ namespace PLTP
   new List<int>(3){6,1,0},
   new List<int>(3){1,6,9},
   new List<int>(4){3,0,1,4}},
+    //111
     new List<List<int>>(11){  new List<int>(4){7,6,8,9},
   new List<int>(3){0,1,7},
   new List<int>(3){6,1,4},
@@ -1745,6 +1856,7 @@ namespace PLTP
   new List<int>(4){6,4,5,8},
   new List<int>(4){4,1,2,5},
   new List<int>(4){0,3,2,1}},
+    //112
     new List<List<int>>(10){  new List<int>(3){4,5,3},
   new List<int>(3){7,5,4},
   new List<int>(3){7,6,5},
@@ -1755,6 +1867,7 @@ namespace PLTP
   new List<int>(3){2,6,1},
   new List<int>(3){6,7,1},
   new List<int>(3){7,0,1}},
+    //113
     new List<List<int>>(14){  new List<int>(3){7,6,8},
   new List<int>(3){5,6,4},
   new List<int>(3){5,9,8},
@@ -1769,6 +1882,7 @@ namespace PLTP
   new List<int>(3){7,8,2},
   new List<int>(3){8,1,2},
   new List<int>(3){5,0,9}},
+    //114
     new List<List<int>>(15){  new List<int>(3){7,5,4},
   new List<int>(4){9,6,7,4},
   new List<int>(3){6,9,8},
@@ -1784,6 +1898,7 @@ namespace PLTP
   new List<int>(3){8,9,2},
   new List<int>(3){9,1,2},
   new List<int>(3){0,5,7}},
+    //115
     new List<List<int>>(13){  new List<int>(3){6,9,8},
   new List<int>(3){5,6,8},
   new List<int>(3){5,8,7},
@@ -1797,6 +1912,7 @@ namespace PLTP
   new List<int>(3){8,2,3},
   new List<int>(4){1,0,9,6},
   new List<int>(4){2,0,1,3}},
+    //116
     new List<List<int>>(14){  new List<int>(3){5,9,7},
   new List<int>(3){6,4,5},
   new List<int>(3){6,7,8},
@@ -1811,6 +1927,7 @@ namespace PLTP
   new List<int>(3){7,9,2},
   new List<int>(3){9,1,2},
   new List<int>(3){6,8,0}},
+    //117
     new List<List<int>>(18){  new List<int>(3){9,5,8},
   new List<int>(3){6,8,5},
   new List<int>(3){10,5,9},
@@ -1829,6 +1946,7 @@ namespace PLTP
   new List<int>(3){9,2,3},
   new List<int>(3){7,11,1},
   new List<int>(3){8,6,0}},
+    //118
     new List<List<int>>(13){  new List<int>(3){7,8,6},
   new List<int>(3){9,7,6},
   new List<int>(3){9,6,5},
@@ -1842,6 +1960,7 @@ namespace PLTP
   new List<int>(3){9,2,3},
   new List<int>(4){1,0,6,8},
   new List<int>(4){3,0,1,4}},
+    //119
     new List<List<int>>(11){  new List<int>(4){7,9,8,6},
   new List<int>(4){5,2,7,6},
   new List<int>(4){9,0,3,8},
@@ -1853,6 +1972,7 @@ namespace PLTP
   new List<int>(3){1,0,9},
   new List<int>(4){3,0,1,4},
   new List<int>(4){4,1,2,5}},
+    //120
     new List<List<int>>(14){  new List<int>(3){5,10,7},
   new List<int>(3){6,4,5},
   new List<int>(3){6,5,7},
@@ -1867,6 +1987,7 @@ namespace PLTP
   new List<int>(3){7,10,2},
   new List<int>(3){10,1,2},
   new List<int>(3){9,11,0}},
+    //121
     new List<List<int>>(18){  new List<int>(3){5,11,7},
   new List<int>(3){8,7,11},
   new List<int>(3){6,11,5},
@@ -1885,6 +2006,7 @@ namespace PLTP
   new List<int>(3){8,11,3},
   new List<int>(3){11,2,3},
   new List<int>(4){6,0,1,10}},
+    //122
     new List<List<int>>(19){  new List<int>(3){11,9,10},
   new List<int>(3){12,7,13},
   new List<int>(4){8,5,13,7},
@@ -1904,6 +2026,7 @@ namespace PLTP
   new List<int>(3){13,2,3},
   new List<int>(3){8,0,6},
   new List<int>(3){11,10,1}},
+    //123
     new List<List<int>>(19){  new List<int>(3){8,7,11},
   new List<int>(3){6,7,8},
   new List<int>(3){9,11,7},
@@ -1923,6 +2046,7 @@ namespace PLTP
   new List<int>(3){2,10,0},
   new List<int>(3){7,1,0},
   new List<int>(4){3,0,1,4}},
+    //124
     new List<List<int>>(18){  new List<int>(3){7,9,8},
   new List<int>(3){10,8,9},
   new List<int>(3){5,9,7},
@@ -1941,6 +2065,7 @@ namespace PLTP
   new List<int>(3){9,11,3},
   new List<int>(3){11,2,3},
   new List<int>(4){8,1,0,7}},
+    //125
     new List<List<int>>(20){  new List<int>(3){10,11,9},
   new List<int>(3){7,8,6},
   new List<int>(3){3,7,6},
@@ -1961,6 +2086,7 @@ namespace PLTP
   new List<int>(3){1,8,2},
   new List<int>(3){8,7,2},
   new List<int>(3){7,0,2}},
+    //126
     new List<List<int>>(19){  new List<int>(3){9,7,8},
   new List<int>(3){11,7,9},
   new List<int>(3){10,8,7},
@@ -1980,6 +2106,7 @@ namespace PLTP
   new List<int>(3){7,1,0},
   new List<int>(3){1,7,11},
   new List<int>(4){4,0,1,5}},
+    //127
     new List<List<int>>(13){  new List<int>(3){9,7,8},
   new List<int>(3){2,8,7},
   new List<int>(3){3,8,2},
@@ -1993,10 +2120,12 @@ namespace PLTP
   new List<int>(4){4,0,1,5},
   new List<int>(4){5,1,2,6},
   new List<int>(4){0,3,2,1}},
+    //128
     new List<List<int>>(4){  new List<int>(3){3,2,1},
   new List<int>(3){1,2,0},
   new List<int>(3){0,2,3},
   new List<int>(3){0,3,1}},
+    //129
     new List<List<int>>(8){  new List<int>(3){5,4,6},
   new List<int>(3){7,2,3},
   new List<int>(3){3,2,0},
@@ -2005,6 +2134,7 @@ namespace PLTP
   new List<int>(3){2,7,0},
   new List<int>(3){1,6,4},
   new List<int>(3){3,0,7}},
+    //130
     new List<List<int>>(8){  new List<int>(3){6,5,7},
   new List<int>(3){3,2,4},
   new List<int>(3){2,3,0},
@@ -2013,6 +2143,7 @@ namespace PLTP
   new List<int>(3){1,6,7},
   new List<int>(3){1,7,5},
   new List<int>(3){0,3,4}},
+    //131
     new List<List<int>>(9){  new List<int>(3){7,6,8},
   new List<int>(4){4,3,5,9},
   new List<int>(4){4,0,1,3},
@@ -2022,6 +2153,7 @@ namespace PLTP
   new List<int>(3){4,9,0},
   new List<int>(3){2,8,6},
   new List<int>(4){1,0,9,5}},
+    //132
     new List<List<int>>(8){  new List<int>(3){4,7,5},
   new List<int>(3){2,6,3},
   new List<int>(3){2,3,0},
@@ -2030,6 +2162,7 @@ namespace PLTP
   new List<int>(3){1,5,7},
   new List<int>(3){1,7,4},
   new List<int>(3){3,6,0}},
+    //133
     new List<List<int>>(12){  new List<int>(3){7,10,8},
   new List<int>(3){11,3,4},
   new List<int>(3){6,5,9},
@@ -2042,6 +2175,7 @@ namespace PLTP
   new List<int>(3){2,10,7},
   new List<int>(3){6,9,1},
   new List<int>(3){11,4,0}},
+    //134
     new List<List<int>>(9){  new List<int>(3){6,9,7},
   new List<int>(4){8,4,3,5},
   new List<int>(3){3,4,0},
@@ -2051,6 +2185,7 @@ namespace PLTP
   new List<int>(3){2,7,9},
   new List<int>(3){2,9,6},
   new List<int>(4){8,1,0,4}},
+    //135
     new List<List<int>>(14){  new List<int>(3){6,5,4},
   new List<int>(3){6,11,5},
   new List<int>(3){9,11,6},
@@ -2065,11 +2200,13 @@ namespace PLTP
   new List<int>(3){11,9,1},
   new List<int>(3){2,1,9},
   new List<int>(3){1,0,11}},
+    //136
     new List<List<int>>(5){  new List<int>(4){4,5,3,2},
   new List<int>(4){3,0,1,2},
   new List<int>(4){1,0,5,4},
   new List<int>(3){1,4,2},
   new List<int>(3){3,5,0}},
+    //137
     new List<List<int>>(10){  new List<int>(3){5,4,6},
   new List<int>(3){7,4,5},
   new List<int>(3){7,3,4},
@@ -2080,6 +2217,7 @@ namespace PLTP
   new List<int>(3){7,2,1},
   new List<int>(3){2,7,5},
   new List<int>(4){4,0,1,6}},
+    //138
     new List<List<int>>(9){  new List<int>(3){4,3,5},
   new List<int>(4){7,6,8,9},
   new List<int>(3){3,4,0},
@@ -2089,6 +2227,7 @@ namespace PLTP
   new List<int>(3){2,8,6},
   new List<int>(3){5,0,4},
   new List<int>(3){7,9,1}},
+    //139
     new List<List<int>>(14){  new List<int>(3){5,7,9},
   new List<int>(3){6,5,4},
   new List<int>(3){6,8,7},
@@ -2103,6 +2242,7 @@ namespace PLTP
   new List<int>(3){0,8,6},
   new List<int>(3){2,8,0},
   new List<int>(3){6,1,0}},
+    //140
     new List<List<int>>(10){  new List<int>(3){4,6,7},
   new List<int>(3){3,6,4},
   new List<int>(3){3,5,6},
@@ -2113,6 +2253,7 @@ namespace PLTP
   new List<int>(4){2,1,7,6},
   new List<int>(3){2,6,5},
   new List<int>(4){7,1,0,4}},
+    //141
     new List<List<int>>(15){  new List<int>(3){7,4,5},
   new List<int>(4){7,6,9,4},
   new List<int>(3){6,8,9},
@@ -2128,6 +2269,7 @@ namespace PLTP
   new List<int>(3){1,7,2},
   new List<int>(3){7,5,2},
   new List<int>(3){5,0,2}},
+    //142
     new List<List<int>>(14){  new List<int>(3){7,8,6},
   new List<int>(3){5,4,6},
   new List<int>(3){5,8,9},
@@ -2142,6 +2284,7 @@ namespace PLTP
   new List<int>(3){2,1,9},
   new List<int>(3){5,1,0},
   new List<int>(3){1,5,9}},
+    //143
     new List<List<int>>(13){  new List<int>(3){6,5,7},
   new List<int>(3){9,6,7},
   new List<int>(3){9,7,8},
@@ -2155,11 +2298,13 @@ namespace PLTP
   new List<int>(3){9,4,3},
   new List<int>(3){4,9,8},
   new List<int>(4){0,3,2,1}},
+    //144
     new List<List<int>>(5){  new List<int>(4){4,2,3,5},
   new List<int>(3){2,0,3},
   new List<int>(3){4,5,1},
   new List<int>(4){0,1,5,3},
   new List<int>(4){1,0,2,4}},
+    //145
     new List<List<int>>(10){  new List<int>(3){4,5,3},
   new List<int>(3){7,5,4},
   new List<int>(3){7,6,5},
@@ -2170,15 +2315,17 @@ namespace PLTP
   new List<int>(3){1,6,7},
   new List<int>(4){2,1,3,5},
   new List<int>(3){4,0,7}},
+    //146
     new List<List<int>>(9){  new List<int>(3){4,7,6},
   new List<int>(4){5,9,8,3},
   new List<int>(3){4,6,0},
-  new List<int>(3){5,1,3},
+  new List<int>(3){1,5,3},
   new List<int>(3){7,4,0},
   new List<int>(3){8,9,2},
   new List<int>(4){1,2,9,5},
   new List<int>(4){2,1,3,8},
   new List<int>(3){0,6,7}},
+    //147
     new List<List<int>>(14){  new List<int>(3){8,7,9},
   new List<int>(3){5,6,9},
   new List<int>(3){5,7,4},
@@ -2193,6 +2340,7 @@ namespace PLTP
   new List<int>(3){2,8,9},
   new List<int>(4){3,2,4,7},
   new List<int>(4){1,0,9,6}},
+    //148
     new List<List<int>>(9){  new List<int>(3){9,6,5},
   new List<int>(4){7,3,4,8},
   new List<int>(3){3,1,4},
@@ -2202,6 +2350,7 @@ namespace PLTP
   new List<int>(4){1,2,8,4},
   new List<int>(4){2,1,3,7},
   new List<int>(3){6,9,0}},
+    //149
     new List<List<int>>(14){  new List<int>(3){5,8,4},
   new List<int>(3){5,9,8},
   new List<int>(3){11,9,5},
@@ -2216,6 +2365,7 @@ namespace PLTP
   new List<int>(4){3,2,4,8},
   new List<int>(3){7,10,1},
   new List<int>(3){11,5,0}},
+    //150
     new List<List<int>>(10){  new List<int>(4){11,7,5,8},
   new List<int>(4){4,6,10,9},
   new List<int>(3){5,7,0},
@@ -2226,6 +2376,7 @@ namespace PLTP
   new List<int>(4){2,3,10,6},
   new List<int>(4){3,2,4,9},
   new List<int>(4){1,0,7,11}},
+    //151
     new List<List<int>>(18){  new List<int>(3){5,11,8},
   new List<int>(3){9,8,11},
   new List<int>(3){6,11,5},
@@ -2244,6 +2395,7 @@ namespace PLTP
   new List<int>(3){11,10,1},
   new List<int>(3){2,1,10},
   new List<int>(3){1,0,11}},
+    //152
     new List<List<int>>(10){  new List<int>(3){3,6,5},
   new List<int>(3){4,6,3},
   new List<int>(3){4,7,6},
@@ -2254,12 +2406,14 @@ namespace PLTP
   new List<int>(3){2,0,7},
   new List<int>(4){2,1,3,5},
   new List<int>(3){6,7,0}},
+    //153
     new List<List<int>>(6){  new List<int>(4){4,5,7,6},
   new List<int>(4){4,2,0,5},
   new List<int>(4){7,1,3,6},
   new List<int>(4){3,2,4,6},
   new List<int>(4){5,0,1,7},
   new List<int>(4){1,0,2,3}},
+    //154
     new List<List<int>>(14){  new List<int>(3){4,6,11},
   new List<int>(3){10,9,4},
   new List<int>(3){10,4,11},
@@ -2274,6 +2428,7 @@ namespace PLTP
   new List<int>(4){3,2,4,9},
   new List<int>(3){8,0,7},
   new List<int>(3){10,11,1}},
+    //155
     new List<List<int>>(13){  new List<int>(3){9,8,5},
   new List<int>(3){7,9,5},
   new List<int>(3){7,5,6},
@@ -2287,6 +2442,7 @@ namespace PLTP
   new List<int>(3){2,9,0},
   new List<int>(3){7,1,0},
   new List<int>(4){2,0,3,4}},
+    //156
     new List<List<int>>(14){  new List<int>(3){8,7,6},
   new List<int>(3){5,8,4},
   new List<int>(3){5,9,7},
@@ -2301,6 +2457,7 @@ namespace PLTP
   new List<int>(3){3,1,9},
   new List<int>(4){3,2,4,8},
   new List<int>(4){9,1,0,7}},
+    //157
     new List<List<int>>(13){  new List<int>(3){9,5,6},
   new List<int>(3){7,9,6},
   new List<int>(3){7,6,8},
@@ -2314,6 +2471,7 @@ namespace PLTP
   new List<int>(3){8,6,2},
   new List<int>(3){6,0,2},
   new List<int>(4){2,0,3,4}},
+    //158
     new List<List<int>>(18){  new List<int>(3){9,11,6},
   new List<int>(3){8,6,11},
   new List<int>(3){10,11,9},
@@ -2332,6 +2490,7 @@ namespace PLTP
   new List<int>(3){2,1,11},
   new List<int>(3){8,1,0},
   new List<int>(3){1,8,11}},
+    //159
     new List<List<int>>(11){  new List<int>(4){6,7,8,9},
   new List<int>(3){1,7,0},
   new List<int>(3){7,6,0},
@@ -2343,6 +2502,7 @@ namespace PLTP
   new List<int>(4){5,4,6,9},
   new List<int>(4){3,0,4,5},
   new List<int>(4){0,3,2,1}},
+    //160
     new List<List<int>>(8){  new List<int>(3){7,6,5},
   new List<int>(3){2,4,3},
   new List<int>(3){0,2,3},
@@ -2351,6 +2511,7 @@ namespace PLTP
   new List<int>(3){1,6,7},
   new List<int>(3){5,1,7},
   new List<int>(3){4,2,0}},
+    //161
     new List<List<int>>(12){  new List<int>(3){9,8,10},
   new List<int>(3){3,7,4},
   new List<int>(3){6,11,5},
@@ -2363,6 +2524,7 @@ namespace PLTP
   new List<int>(3){8,2,10},
   new List<int>(3){7,3,1},
   new List<int>(3){6,0,11}},
+    //162
     new List<List<int>>(9){  new List<int>(3){9,8,7},
   new List<int>(4){5,6,4,3},
   new List<int>(4){0,1,3,4},
@@ -2372,6 +2534,7 @@ namespace PLTP
   new List<int>(3){7,2,9},
   new List<int>(3){5,3,1},
   new List<int>(3){0,4,6}},
+    //163
     new List<List<int>>(14){  new List<int>(3){10,6,7},
   new List<int>(3){10,4,6},
   new List<int>(3){5,4,10},
@@ -2386,6 +2549,7 @@ namespace PLTP
   new List<int>(3){8,3,11},
   new List<int>(3){6,4,2},
   new List<int>(4){1,0,10,7}},
+    //164
     new List<List<int>>(12){  new List<int>(3){11,9,8},
   new List<int>(3){6,10,7},
   new List<int>(3){4,3,5},
@@ -2398,6 +2562,7 @@ namespace PLTP
   new List<int>(3){8,2,11},
   new List<int>(3){5,3,1},
   new List<int>(3){7,10,0}},
+    //165
     new List<List<int>>(16){  new List<int>(3){4,8,5},
   new List<int>(3){7,15,6},
   new List<int>(3){10,9,13},
@@ -2414,6 +2579,7 @@ namespace PLTP
   new List<int>(3){8,4,2},
   new List<int>(3){10,13,1},
   new List<int>(3){15,7,0}},
+    //166
     new List<List<int>>(14){  new List<int>(3){4,10,5},
   new List<int>(3){4,7,10},
   new List<int>(3){6,7,4},
@@ -2428,6 +2594,7 @@ namespace PLTP
   new List<int>(3){8,11,3},
   new List<int>(3){6,4,2},
   new List<int>(4){1,0,5,10}},
+    //167
     new List<List<int>>(19){  new List<int>(3){11,9,10},
   new List<int>(3){8,12,7},
   new List<int>(4){13,5,7,12},
@@ -2447,6 +2614,7 @@ namespace PLTP
   new List<int>(3){13,12,1},
   new List<int>(3){2,1,12},
   new List<int>(3){1,0,13}},
+    //168
     new List<List<int>>(9){  new List<int>(3){5,4,3},
   new List<int>(4){8,9,7,6},
   new List<int>(3){1,3,4},
@@ -2456,6 +2624,7 @@ namespace PLTP
   new List<int>(3){6,2,8},
   new List<int>(3){5,3,1},
   new List<int>(3){7,9,0}},
+    //169
     new List<List<int>>(14){  new List<int>(3){9,11,6},
   new List<int>(3){7,10,9},
   new List<int>(3){7,9,6},
@@ -2470,6 +2639,7 @@ namespace PLTP
   new List<int>(3){9,3,11},
   new List<int>(3){8,4,2},
   new List<int>(4){7,0,1,10}},
+    //170
     new List<List<int>>(10){  new List<int>(4){6,7,5,4},
   new List<int>(4){11,9,8,10},
   new List<int>(4){5,0,2,4},
@@ -2480,6 +2650,7 @@ namespace PLTP
   new List<int>(3){6,4,2},
   new List<int>(3){7,0,5},
   new List<int>(3){9,11,1}},
+    //171
     new List<List<int>>(18){  new List<int>(3){8,6,7},
   new List<int>(3){5,7,6},
   new List<int>(3){10,6,8},
@@ -2498,6 +2669,7 @@ namespace PLTP
   new List<int>(3){0,10,8},
   new List<int>(3){2,10,0},
   new List<int>(3){8,1,0}},
+    //172
     new List<List<int>>(14){  new List<int>(3){8,11,10},
   new List<int>(3){8,9,11},
   new List<int>(3){7,9,8},
@@ -2512,6 +2684,7 @@ namespace PLTP
   new List<int>(3){9,3,11},
   new List<int>(3){6,4,2},
   new List<int>(4){10,1,0,8}},
+    //173
     new List<List<int>>(19){  new List<int>(3){6,5,9},
   new List<int>(3){7,8,13},
   new List<int>(4){11,12,13,8},
@@ -2521,7 +2694,7 @@ namespace PLTP
   new List<int>(3){10,11,1},
   new List<int>(3){6,9,3},
   new List<int>(3){4,12,2},
-  new List<int>(3){12,2,10},
+  new List<int>(3){2,12,10},
   new List<int>(3){10,1,2},
   new List<int>(3){2,7,13},
   new List<int>(3){0,7,2},
@@ -2531,6 +2704,7 @@ namespace PLTP
   new List<int>(3){1,11,2},
   new List<int>(3){11,8,2},
   new List<int>(3){8,0,2}},
+    //174
     new List<List<int>>(18){  new List<int>(3){10,8,9},
   new List<int>(3){11,9,8},
   new List<int>(3){6,8,10},
@@ -2549,6 +2723,7 @@ namespace PLTP
   new List<int>(3){2,1,10},
   new List<int>(3){6,1,0},
   new List<int>(3){1,6,10}},
+    //175
     new List<List<int>>(19){  new List<int>(3){6,9,7},
   new List<int>(3){8,9,6},
   new List<int>(3){11,7,9},
@@ -2568,6 +2743,7 @@ namespace PLTP
   new List<int>(3){10,5,11},
   new List<int>(3){8,6,4},
   new List<int>(4){0,3,2,1}},
+    //176
     new List<List<int>>(10){  new List<int>(3){7,3,4},
   new List<int>(3){6,3,7},
   new List<int>(3){6,5,3},
@@ -2578,6 +2754,7 @@ namespace PLTP
   new List<int>(3){0,5,6},
   new List<int>(3){1,5,0},
   new List<int>(3){6,2,0}},
+    //177
     new List<List<int>>(15){  new List<int>(3){5,6,4},
   new List<int>(4){5,9,7,6},
   new List<int>(3){9,8,7},
@@ -2593,6 +2770,7 @@ namespace PLTP
   new List<int>(3){2,6,1},
   new List<int>(3){7,3,1},
   new List<int>(3){5,0,9}},
+    //178
     new List<List<int>>(14){  new List<int>(3){6,9,8},
   new List<int>(3){5,6,7},
   new List<int>(3){5,4,9},
@@ -2607,6 +2785,7 @@ namespace PLTP
   new List<int>(3){2,6,1},
   new List<int>(3){8,3,1},
   new List<int>(3){0,5,7}},
+    //179
     new List<List<int>>(13){  new List<int>(3){5,6,9},
   new List<int>(3){7,5,9},
   new List<int>(3){7,9,8},
@@ -2620,6 +2799,7 @@ namespace PLTP
   new List<int>(3){7,4,2},
   new List<int>(4){1,0,9,6},
   new List<int>(4){2,0,1,3}},
+    //180
     new List<List<int>>(14){  new List<int>(3){10,9,6},
   new List<int>(3){4,5,10},
   new List<int>(3){4,10,6},
@@ -2634,6 +2814,7 @@ namespace PLTP
   new List<int>(3){2,6,1},
   new List<int>(3){9,3,1},
   new List<int>(3){8,11,0}},
+    //181
     new List<List<int>>(19){  new List<int>(3){9,8,10},
   new List<int>(3){7,5,11},
   new List<int>(4){6,12,11,5},
@@ -2653,7 +2834,8 @@ namespace PLTP
   new List<int>(3){11,4,2},
   new List<int>(3){9,10,1},
   new List<int>(3){13,6,0}},
-    new List<List<int>>(20){  new List<int>(3){6,7,9},
+    //182
+    new List<List<int>>(18){  new List<int>(3){6,7,9},
   new List<int>(3){8,9,7},
   new List<int>(3){5,7,6},
   new List<int>(3){11,10,7},
@@ -2666,13 +2848,12 @@ namespace PLTP
   new List<int>(3){7,3,0},
   new List<int>(3){10,11,4},
   new List<int>(3){9,8,1},
-  new List<int>(3){5,2,11},
-  new List<int>(3){4,11,2},
+  new List<int>(4){4,11,5,2},
   new List<int>(3){2,7,10},
   new List<int>(3){3,7,2},
   new List<int>(3){10,4,2},
-  new List<int>(3){6,9,0},
-  new List<int>(3){1,0,9}},
+  new List<int>(4){1,0, 6, 9}},
+    //183
     new List<List<int>>(19){  new List<int>(3){7,11,6},
   new List<int>(3){10,11,7},
   new List<int>(3){8,6,11},
@@ -2692,6 +2873,7 @@ namespace PLTP
   new List<int>(3){2,1,10},
   new List<int>(3){1,0,11},
   new List<int>(4){3,0,1,4}},
+    //184
     new List<List<int>>(14){  new List<int>(3){9,8,5},
   new List<int>(3){6,8,7},
   new List<int>(3){6,4,5},
@@ -2706,6 +2888,7 @@ namespace PLTP
   new List<int>(3){2,6,1},
   new List<int>(3){7,3,1},
   new List<int>(3){8,9,0}},
+    //185
     new List<List<int>>(13){  new List<int>(3){6,9,8},
   new List<int>(3){5,6,8},
   new List<int>(3){5,8,7},
@@ -2719,6 +2902,7 @@ namespace PLTP
   new List<int>(3){8,4,2},
   new List<int>(4){6,0,1,9},
   new List<int>(4){1,0,2,4}},
+    //186
     new List<List<int>>(18){  new List<int>(3){10,5,9},
   new List<int>(3){11,9,5},
   new List<int>(3){7,5,10},
@@ -2737,6 +2921,7 @@ namespace PLTP
   new List<int>(3){10,4,2},
   new List<int>(3){8,0,6},
   new List<int>(3){9,11,1}},
+    //187
     new List<List<int>>(11){  new List<int>(4){8,6,7,9},
   new List<int>(4){6,4,1,7},
   new List<int>(4){9,2,5,8},
@@ -2748,6 +2933,7 @@ namespace PLTP
   new List<int>(3){7,1,0},
   new List<int>(4){3,0,1,4},
   new List<int>(4){2,0,3,5}},
+    //188
     new List<List<int>>(18){  new List<int>(3){6,10,5},
   new List<int>(3){7,5,10},
   new List<int>(3){11,10,6},
@@ -2766,6 +2952,7 @@ namespace PLTP
   new List<int>(3){3,7,2},
   new List<int>(3){10,4,2},
   new List<int>(4){11,1,0,9}},
+    //189
     new List<List<int>>(19){  new List<int>(3){8,7,11},
   new List<int>(3){6,7,8},
   new List<int>(3){9,11,7},
@@ -2785,6 +2972,7 @@ namespace PLTP
   new List<int>(3){10,7,2},
   new List<int>(3){7,0,2},
   new List<int>(4){2,0,3,5}},
+    //190
     new List<List<int>>(20){  new List<int>(3){8,9,10},
   new List<int>(3){7,6,11},
   new List<int>(3){6,7,4},
@@ -2805,6 +2993,7 @@ namespace PLTP
   new List<int>(3){2,1,11},
   new List<int>(3){7,1,0},
   new List<int>(3){1,7,11}},
+    //191
     new List<List<int>>(13){  new List<int>(3){8,9,7},
   new List<int>(3){2,8,1},
   new List<int>(3){8,7,1},
@@ -2818,11 +3007,13 @@ namespace PLTP
   new List<int>(4){4,0,1,5},
   new List<int>(4){3,0,4,6},
   new List<int>(4){0,3,2,1}},
+    //192
     new List<List<int>>(5){  new List<int>(4){4,3,2,5},
   new List<int>(3){0,2,3},
   new List<int>(4){4,1,0,3},
   new List<int>(3){1,4,5},
   new List<int>(4){0,1,5,2}},
+    //193
     new List<List<int>>(9){  new List<int>(3){3,4,9},
   new List<int>(4){7,6,5,8},
   new List<int>(3){4,3,0},
@@ -2832,6 +3023,7 @@ namespace PLTP
   new List<int>(3){3,9,0},
   new List<int>(4){5,1,2,8},
   new List<int>(3){4,0,9}},
+    //194
     new List<List<int>>(9){  new List<int>(3){7,4,3},
   new List<int>(4){5,9,8,6},
   new List<int>(3){3,4,0},
@@ -2841,6 +3033,7 @@ namespace PLTP
   new List<int>(3){2,8,9},
   new List<int>(4){1,2,9,5},
   new List<int>(3){0,4,7}},
+    //195
     new List<List<int>>(10){  new List<int>(4){5,4,8,10},
   new List<int>(4){7,6,11,9},
   new List<int>(4){5,0,1,4},
@@ -2851,6 +3044,7 @@ namespace PLTP
   new List<int>(3){5,10,0},
   new List<int>(4){2,3,11,6},
   new List<int>(4){1,0,10,8}},
+    //196
     new List<List<int>>(10){  new List<int>(3){7,4,3},
   new List<int>(3){5,4,7},
   new List<int>(3){5,6,4},
@@ -2861,6 +3055,7 @@ namespace PLTP
   new List<int>(3){2,5,7},
   new List<int>(4){1,2,7,3},
   new List<int>(3){4,6,0}},
+    //197
     new List<List<int>>(14){  new List<int>(3){10,8,9},
   new List<int>(3){7,6,10},
   new List<int>(3){7,10,9},
@@ -2875,6 +3070,7 @@ namespace PLTP
   new List<int>(4){2,3,10,6},
   new List<int>(3){7,9,1},
   new List<int>(3){11,5,0}},
+    //198
     new List<List<int>>(14){  new List<int>(3){8,9,7},
   new List<int>(3){4,8,5},
   new List<int>(3){4,6,9},
@@ -2889,6 +3085,7 @@ namespace PLTP
   new List<int>(3){3,7,9},
   new List<int>(4){2,3,9,6},
   new List<int>(4){8,1,0,5}},
+    //199
     new List<List<int>>(18){  new List<int>(3){5,9,6},
   new List<int>(3){10,6,9},
   new List<int>(3){7,9,5},
@@ -2907,6 +3104,7 @@ namespace PLTP
   new List<int>(3){10,9,1},
   new List<int>(3){2,1,9},
   new List<int>(3){1,0,10}},
+    //200
     new List<List<int>>(10){  new List<int>(3){7,3,6},
   new List<int>(3){5,3,7},
   new List<int>(3){5,4,3},
@@ -2917,6 +3115,7 @@ namespace PLTP
   new List<int>(4){2,0,7,6},
   new List<int>(4){1,2,6,3},
   new List<int>(3){5,7,0}},
+    //201
     new List<List<int>>(14){  new List<int>(3){7,6,8},
   new List<int>(3){4,6,9},
   new List<int>(3){4,5,8},
@@ -2931,6 +3130,7 @@ namespace PLTP
   new List<int>(3){9,3,1},
   new List<int>(4){2,3,9,6},
   new List<int>(4){5,0,1,8}},
+    //202
     new List<List<int>>(14){  new List<int>(3){10,9,7},
   new List<int>(3){6,11,10},
   new List<int>(3){6,10,7},
@@ -2945,6 +3145,7 @@ namespace PLTP
   new List<int>(4){2,3,11,6},
   new List<int>(3){8,0,5},
   new List<int>(3){9,10,1}},
+    //203
     new List<List<int>>(18){  new List<int>(3){10,11,7},
   new List<int>(3){8,7,11},
   new List<int>(3){6,11,10},
@@ -2963,12 +3164,14 @@ namespace PLTP
   new List<int>(3){0,11,9},
   new List<int>(3){2,11,0},
   new List<int>(3){9,1,0}},
+    //204
     new List<List<int>>(6){  new List<int>(4){7,5,4,6},
   new List<int>(4){0,2,4,5},
   new List<int>(4){3,1,7,6},
   new List<int>(4){2,3,6,4},
   new List<int>(4){7,1,0,5},
   new List<int>(4){0,1,3,2}},
+    //205
     new List<List<int>>(13){  new List<int>(3){8,7,9},
   new List<int>(3){6,8,9},
   new List<int>(3){6,9,5},
@@ -2982,6 +3185,7 @@ namespace PLTP
   new List<int>(3){8,6,2},
   new List<int>(3){6,0,2},
   new List<int>(4){1,2,4,3}},
+    //206
     new List<List<int>>(13){  new List<int>(3){7,8,9},
   new List<int>(3){5,7,9},
   new List<int>(3){5,9,6},
@@ -2995,6 +3199,7 @@ namespace PLTP
   new List<int>(3){6,1,0},
   new List<int>(3){1,6,9},
   new List<int>(4){1,2,4,3}},
+    //207
     new List<List<int>>(11){  new List<int>(4){9,7,6,8},
   new List<int>(4){7,0,1,6},
   new List<int>(3){1,2,6},
@@ -3006,6 +3211,7 @@ namespace PLTP
   new List<int>(4){4,5,9,8},
   new List<int>(4){2,3,5,4},
   new List<int>(4){0,3,2,1}},
+    //208
     new List<List<int>>(10){  new List<int>(3){6,4,7},
   new List<int>(3){5,4,6},
   new List<int>(3){5,3,4},
@@ -3016,6 +3222,7 @@ namespace PLTP
   new List<int>(3){3,5,2},
   new List<int>(3){1,2,5},
   new List<int>(3){2,0,3}},
+    //209
     new List<List<int>>(14){  new List<int>(3){8,5,9},
   new List<int>(3){6,8,7},
   new List<int>(3){6,4,5},
@@ -3030,6 +3237,7 @@ namespace PLTP
   new List<int>(3){2,3,6},
   new List<int>(3){3,1,4},
   new List<int>(3){5,0,9}},
+    //210
     new List<List<int>>(14){  new List<int>(3){9,8,4},
   new List<int>(3){6,11,9},
   new List<int>(3){6,9,4},
@@ -3044,6 +3252,7 @@ namespace PLTP
   new List<int>(3){2,3,8},
   new List<int>(3){3,1,4},
   new List<int>(3){0,7,10}},
+    //211
     new List<List<int>>(18){  new List<int>(3){10,5,9},
   new List<int>(3){6,9,5},
   new List<int>(3){11,5,10},
@@ -3062,6 +3271,7 @@ namespace PLTP
   new List<int>(3){3,4,7},
   new List<int>(3){4,2,5},
   new List<int>(4){1,0,10,9}},
+    //212
     new List<List<int>>(14){  new List<int>(3){4,5,6},
   new List<int>(3){9,5,8},
   new List<int>(3){9,7,6},
@@ -3076,6 +3286,7 @@ namespace PLTP
   new List<int>(3){2,3,6},
   new List<int>(3){3,1,4},
   new List<int>(3){7,9,0}},
+    //213
     new List<List<int>>(18){  new List<int>(3){7,9,8},
   new List<int>(3){10,8,9},
   new List<int>(3){5,9,7},
@@ -3094,6 +3305,7 @@ namespace PLTP
   new List<int>(3){4,2,5},
   new List<int>(3){8,10,1},
   new List<int>(3){11,6,0}},
+    //214
     new List<List<int>>(18){  new List<int>(3){10,9,7},
   new List<int>(3){5,7,9},
   new List<int>(3){11,9,10},
@@ -3112,6 +3324,7 @@ namespace PLTP
   new List<int>(3){3,4,9},
   new List<int>(3){4,2,5},
   new List<int>(4){1,0,8,11}},
+    //215
     new List<List<int>>(20){  new List<int>(3){10,11,9},
   new List<int>(3){7,8,6},
   new List<int>(3){1,7,0},
@@ -3132,6 +3345,7 @@ namespace PLTP
   new List<int>(3){11,10,1},
   new List<int>(3){2,1,10},
   new List<int>(3){1,0,11}},
+    //216
     new List<List<int>>(15){  new List<int>(3){9,4,5},
   new List<int>(4){9,8,6,4},
   new List<int>(3){8,7,6},
@@ -3147,6 +3361,7 @@ namespace PLTP
   new List<int>(3){2,3,6},
   new List<int>(3){3,1,4},
   new List<int>(3){8,9,0}},
+    //217
     new List<List<int>>(13){  new List<int>(3){5,6,9},
   new List<int>(3){7,5,9},
   new List<int>(3){7,9,8},
@@ -3160,6 +3375,7 @@ namespace PLTP
   new List<int>(3){4,2,5},
   new List<int>(4){6,0,1,9},
   new List<int>(4){1,0,2,4}},
+    //218
     new List<List<int>>(19){  new List<int>(3){8,6,11},
   new List<int>(3){5,7,9},
   new List<int>(4){13,10,9,7},
@@ -3170,7 +3386,7 @@ namespace PLTP
   new List<int>(3){11,6,0},
   new List<int>(3){1,4,12},
   new List<int>(3){10,4,3},
-  new List<int>(3){4,12,10},
+  new List<int>(3){4,10,12},
   new List<int>(3){13,7,4},
   new List<int>(3){2,4,7},
   new List<int>(3){4,1,13},
@@ -3701,6 +3917,7 @@ namespace PLTP
   new List<int>(4){5,1,2,6},
   new List<int>(4){4,0,1,5}},
 };
+
         public static List<List<int>> ActiveTable_Hex = new List<List<int>>(256)
 {
     new List<int>(0){},

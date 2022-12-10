@@ -27,7 +27,7 @@ namespace PLTP
             Console.Write("\t(Import model... ");
             sw.Start();
             // Import a FE model
-            var elems = Import.ReadHex(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
+            var elems = Import.ReadHex_Abaqus(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
             // Import elemental sensitivity numbers
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model
@@ -100,7 +100,7 @@ namespace PLTP
             Console.Write("\t(Import model... ");
             sw.Start();
             // Import a FE model
-            var elems = Import.ReadHex(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
+            var elems = Import.ReadHex_Abaqus(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
             // Import elemental sensitivity numbers
             var elemSen = Import.ReadElemSenNum(sen_path);
             // Construct a FE model

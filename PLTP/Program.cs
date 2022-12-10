@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PLTP;
+using System;
 
 namespace PLTP // Note: actual namespace depends on the project name.
 {
@@ -6,7 +7,9 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            CanteileverExample();
+            string path = "C:\\Users\\alber\\OneDrive - RMIT University\\Work\\AResearch\\BuildingBlocksForTopOptMdl\\Mdl\\AllCases";
+            MCCTest.OuputAllCases(path);
+            //testMCC();
         }
 
         public static void CanteileverExample()
@@ -30,5 +33,12 @@ namespace PLTP // Note: actual namespace depends on the project name.
             string output_path = "../../../../../data/Cantilever/Smoothing.obj";
             Test.ObtainSensitivityMdl(mdl_path, sen_path, 0.15, 3.0, 0.01, 50, true, output_path);
         }
+
+        public static void testMCC()
+        {
+            string mdl_path = "C:\\Users\\alber\\OneDrive - RMIT University\\Work\\AResearch\\BuildingBlocksForTopOptMdl\\Mdl";
+            MCCTest.MCC(mdl_path, true);
+        }
+        
     }
 }
