@@ -199,6 +199,11 @@ namespace PLTP
         public static double GetVolumeFromMeshes(Mesh[] meshes)
         {
             double[] vols = new double[meshes.Length];
+            for (int i = 0; i < meshes.Length; i++)
+            {
+                if (meshes[i] != null)
+                    vols[i] = meshes[i].GetVolume();
+            }
             Parallel.For(0, meshes.Length, i =>
             {
                 if (meshes[i] != null)

@@ -77,10 +77,10 @@ namespace PLTP
                             verts.Add(nds[n2]);
                             verts.Add(nds[n3]);
 
-                            faces.Add(new Face(0, 1, 2));
-                            faces.Add(new Face(0, 1, 3));
-                            faces.Add(new Face(0, 2, 3));
+                            faces.Add(new Face(2, 1, 0));
                             faces.Add(new Face(1, 2, 3));
+                            faces.Add(new Face(3, 2, 0));
+                            faces.Add(new Face(1, 3, 0));
 
                             var elem = new Tetrahedron(verts.ToArray(), faces.ToArray());
                             elem.SetID(id);

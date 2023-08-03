@@ -36,7 +36,6 @@ namespace PLTP
             model.SetParameters(volumeFraction, tolerance, filterRadius, maximumIteration, interpolation, keepVolume, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-
             // Calculate nodal sensitivity field
             sw.Restart();
             Console.Write("|**..................| 10%");
@@ -51,7 +50,7 @@ namespace PLTP
             sw.Restart();
             Console.Write("|*****...............| 25%");
             Console.Write("\t(Extract iso-sensitivity model... ");
-            var meshes = model.ExtractIsoSensitivityModel(0.044);
+            var meshes = model.ExtractIsoSensitivityModel(0.5);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             #endregion
@@ -64,22 +63,21 @@ namespace PLTP
             var output = Mesh.CombineMeshes(meshes);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-            // Weld mesh
-            sw.Restart();
-            Console.Write("|***************.....| 75%");
-            Console.Write("\t(Weld mesh... ");
-            output.WeldVertices(1e-6);
-            sw.Stop();
-            Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
+            //// Weld mesh
+            //sw.Restart();
+            //Console.Write("|***************.....| 75%");
+            //Console.Write("\t(Weld mesh... ");
+            //output.WeldVertices(1e-6);
+            //sw.Stop();
+            //Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
-            // Remove duplicated faces
-            sw.Restart();
-            Console.Write("|******************..| 90%");
-            Console.Write("\t(Remove duplicated faces... ");
-            output.RemoveDuplicatedFaces();
-            sw.Stop();
-            Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
-
+            //// Remove duplicated faces
+            //sw.Restart();
+            //Console.Write("|******************..| 90%");
+            //Console.Write("\t(Remove duplicated faces... ");
+            //output.RemoveDuplicatedFaces();
+            //sw.Stop();
+            //Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             #endregion
 
             // Write mesh

@@ -108,9 +108,9 @@ namespace PLTP
                 NdlSenNum[i] /= sum;
             });
 
-            var upd_ndlSen = new double[4];
             for (int i = 0; i < Elements.Count; i++)
             {
+                var upd_ndlSen = new double[4];
                 upd_ndlSen[0] = NdlSenNum[Elements[i].NdlID[0]];
                 upd_ndlSen[1] = NdlSenNum[Elements[i].NdlID[1]];
                 upd_ndlSen[2] = NdlSenNum[Elements[i].NdlID[2]];
@@ -153,7 +153,6 @@ namespace PLTP
             for (int i = 0; i < Elements.Count; i++)
             {
                 int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
-                ;
                 if (Elements[i].isNonDesign)
                 {
                     // output the original hexahedron
@@ -161,14 +160,7 @@ namespace PLTP
                 }
                 else
                 {
-                    if (flag == 255)
-                    {
-                        meshes[i] = Elements[i].ToMesh();
-                    }
-                    else if (flag != 0)
-                        meshes[i] = IsoSenMdl_Tetra(Elements[i], flag, isovalue);
-                    else
-                        meshes[i] = null;
+                    meshes[i] = IsoSenMdl_Tetra(Elements[i], flag, isovalue);
                 }
             }
             return meshes;
@@ -178,18 +170,10 @@ namespace PLTP
         {
             Mesh[] meshes = new Mesh[256];
 
-            for (int i = 0; i < 256; i++)
+            for (int i = 0; i < 16; i++)
             {
                 int flag = i;
-                if (flag == 255)
-                {
-                    meshes[i] = Elements[0].ToMesh();
-                }
-                else if (flag != 0)
-                    meshes[i] = IsoSenMdl_Tetra(Elements[0], flag, 0.5);
-                else
-                    meshes[i] = null;
-
+                meshes[i] = IsoSenMdl_Tetra(Elements[0], flag, 0.5);
             }
             return meshes;
         }
@@ -208,162 +192,229 @@ namespace PLTP
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
                     pt2 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
+                    vertices.Add(pts[0]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(0, 1, 3));
+                    faces.Add(new Face(0, 3, 2));
+                    faces.Add(new Face(1, 2, 3));
                     break;
                 case 2:
                     pt0 = VertexInterp(isovalue, pts[1], pts[0], values[1], values[0]);
                     pt1 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt2 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[1]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(0, 3, 2));
+                    faces.Add(new Face(2, 3, 1));
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(0, 1, 3));
                     break;
                 case 3:
                     pt0 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
                     pt1 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
                     pt2 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt3 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[1]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
-                    if (pt3 != pt0 && pt3 != pt1 && pt3 != pt2)
-                    {
-                        vertices.Add(pt3);
-                        faces.Add(new Face(1, 3, 2));
-                    }
+                    vertices.Add(pt3);
+                    faces.Add(new Face(0, 1, 4, 2));
+                    faces.Add(new Face(0, 1, 5, 3));
+                    faces.Add(new Face(3, 5, 4, 2));
+                    faces.Add(new Face(1, 4, 5));
+                    faces.Add(new Face(0, 3, 2));
                     break;
                 case 4:
                     pt0 = VertexInterp(isovalue, pts[2], pts[0], values[2], values[0]);
                     pt1 = VertexInterp(isovalue, pts[2], pts[1], values[2], values[1]);
                     pt2 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
+                    vertices.Add(pts[2]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(2, 3, 1));
+                    faces.Add(new Face(3, 0, 1));
+                    faces.Add(new Face(2, 3, 0));
                     break;
                 case 5:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
                     pt2 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
                     pt3 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[2]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
-                    if (pt3 != pt0 && pt3 != pt1 && pt3 != pt2)
-                    {
-                        vertices.Add(pt3);
-                        faces.Add(new Face(0, 3, 1));
-                    }
+                    vertices.Add(pt3);
+                    faces.Add(new Face(0, 1, 5, 2));
+                    faces.Add(new Face(1, 0, 4, 3));
+                    faces.Add(new Face(0, 2, 4));
+                    faces.Add(new Face(1, 3, 5));
+                    faces.Add(new Face(2, 5, 3, 4));
                     break;
                 case 6:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt2 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
                     pt3 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
+                    vertices.Add(pts[1]);
+                    vertices.Add(pts[2]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
                     vertices.Add(pt3);
-                    faces.Add(new Face(0, 1, 2));
-                    faces.Add(new Face(2, 3, 0));
+                    faces.Add(new Face(0, 1, 4, 3));
+                    faces.Add(new Face(2, 5, 1, 0));
+                    faces.Add(new Face(2, 3, 4, 5));
+                    faces.Add(new Face(2, 0, 3));
+                    faces.Add(new Face(4, 1, 5));
                     break;
                 case 7:
                     pt0 = VertexInterp(isovalue, pts[3], pts[0], values[3], values[0]);
                     pt1 = VertexInterp(isovalue, pts[3], pts[2], values[3], values[2]);
                     pt2 = VertexInterp(isovalue, pts[3], pts[1], values[3], values[1]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[1]);
+                    vertices.Add(pts[2]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(5, 4, 3));
+                    faces.Add(new Face(0, 1, 5, 3));
+                    faces.Add(new Face(0, 2, 4, 3));
+                    faces.Add(new Face(1, 2, 4, 5));
                     break;
                 case 8:
                     pt0 = VertexInterp(isovalue, pts[3], pts[0], values[3], values[0]);
                     pt1 = VertexInterp(isovalue, pts[3], pts[2], values[3], values[2]);
                     pt2 = VertexInterp(isovalue, pts[3], pts[1], values[3], values[1]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(1, 3, 0));
+                    faces.Add(new Face(1, 0, 2));
+                    faces.Add(new Face(3, 2, 0));
+                    faces.Add(new Face(1, 2, 3));
                     break;
                 case 9:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt2 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
                     pt3 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
-                    if (pt3 != pt0 && pt3 != pt1 && pt3 != pt2)
-                    {
-                        vertices.Add(pt3);
-                        faces.Add(new Face(2, 3, 0));
-                    }
+                    vertices.Add(pt3);
+                    faces.Add(new Face(0, 2, 3, 1));
+                    faces.Add(new Face(0, 1, 4, 5));
+                    faces.Add(new Face(2, 5, 4, 3));
+                    faces.Add(new Face(0, 5, 2));
+                    faces.Add(new Face(1, 3, 4));
                     break;
                 case 10:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
                     pt2 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
                     pt3 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
-                    if (pt3 != pt0 && pt3 != pt1 && pt3 != pt2)
-                    {
-                        vertices.Add(pt3);
-                        faces.Add(new Face(0, 3, 1));
-                    }
+                    vertices.Add(pt3);
+                    faces.Add(new Face(0, 1, 4, 2));
+                    faces.Add(new Face(0, 5, 3, 1));
+                    faces.Add(new Face(1, 3, 4));
+                    faces.Add(new Face(2, 5, 0));
+                    faces.Add(new Face(2, 4, 3, 5));
                     break;
                 case 11:
                     pt0 = VertexInterp(isovalue, pts[2], pts[0], values[2], values[0]);
                     pt1 = VertexInterp(isovalue, pts[2], pts[1], values[2], values[1]);
                     pt2 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[1]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
                     faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(3, 5, 4));
+                    faces.Add(new Face(1, 4, 5, 2));
+                    faces.Add(new Face(2, 5, 3, 0));
+                    faces.Add(new Face(0, 3, 4, 1));
                     break;
                 case 12:
                     pt0 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
                     pt1 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
                     pt2 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt3 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[2]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
-                    if (pt3 != pt0 && pt3 != pt1 && pt3 != pt2)
-                    {
-                        vertices.Add(pt3);
-                        faces.Add(new Face(1, 3, 2 ));
-                    }
+                    vertices.Add(pt3);
+                    faces.Add(new Face(3, 5, 4, 2));
+                    faces.Add(new Face(4, 5, 0, 1));
+                    faces.Add(new Face(2, 1, 0, 3));
+                    faces.Add(new Face(2, 4, 1));
+                    faces.Add(new Face(3, 0, 5));
                     break;
                 case 13:
                     pt0 = VertexInterp(isovalue, pts[1], pts[0], values[1], values[0]);
                     pt1 = VertexInterp(isovalue, pts[1], pts[3], values[1], values[3]);
                     pt2 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[2]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
-                    faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(3, 5, 4));
+                    faces.Add(new Face(0, 3, 4, 2));
+                    faces.Add(new Face(4, 5, 1, 2));
+                    faces.Add(new Face(0, 1, 5, 3));
                     break;
                 case 14:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
                     pt1 = VertexInterp(isovalue, pts[0], pts[2], values[0], values[2]);
                     pt2 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
+                    vertices.Add(pts[1]);
+                    vertices.Add(pts[2]);
+                    vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
                     vertices.Add(pt2);
                     faces.Add(new Face(0, 1, 2));
+                    faces.Add(new Face(5, 4, 3));
+                    faces.Add(new Face(3, 0, 2, 5));
+                    faces.Add(new Face(5, 2, 1, 4));
+                    faces.Add(new Face(3, 4, 1, 0));
                     break;
                 case 15:
+                    vertices.Add(pts[0]);
+                    vertices.Add(pts[1]);
+                    vertices.Add(pts[2]);
+                    vertices.Add(pts[3]);
+                    faces.Add(new Face(0, 2, 1));
+                    faces.Add(new Face(0, 1, 3));
+                    faces.Add(new Face(0, 3, 2));
+                    faces.Add(new Face(1, 2, 3));
                     break;
                 default:
                     break;
@@ -424,7 +475,7 @@ namespace PLTP
             for (int i = 0; i < 4; i++)
             {
                 // check the state of each vertice.
-                if (isovalue > values[i])
+                if (values[i] > isovalue)
                 {
                     flag |= 1 << i;
                 }
