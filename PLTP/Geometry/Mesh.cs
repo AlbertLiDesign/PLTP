@@ -35,7 +35,7 @@ namespace PLTP
         /// </summary>
         /// <param name="tolerance"></param>
         /// <exception cref="Exception"></exception>
-        public void WeldVertices(double tolerance)
+        public void WeldVertices(double tolerance, int maximumReturned=8)
         {
             List<int> newVerts = new List<int>();
             int[] map = new int[Vertices.Length];
@@ -53,7 +53,7 @@ namespace PLTP
                     Vertices[i].Z
                 }, i);
             }
-            var result = Utils.KDTreeMultiSearch(Vertices, tree, tolerance, 8);
+            var result = Utils.KDTreeMultiSearch(Vertices, tree, tolerance, maximumReturned);
 
             bool[] visited = new bool[Vertices.Length];
             int num = 0;

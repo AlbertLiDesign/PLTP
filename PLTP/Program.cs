@@ -15,7 +15,7 @@ namespace PLTP // Note: actual namespace depends on the project name.
             string mdl_path = "../../../../../data/YuLi_4/Job-2_BESO_96.inp";
             string sen_path = "../../../../../data/YuLi_4/Sensitivities.txt";
             string output_path = "../../../../../data/YuLi_4/Smoothing.obj";
-            Test.TestTetra(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, true, output_path);
+            Test.TestTetra(mdl_path, sen_path, 0.2, 3, 0.01, 50, true, true, output_path);
         }
         public static void YuLiExample()
         {

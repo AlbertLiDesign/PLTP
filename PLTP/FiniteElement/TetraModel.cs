@@ -226,10 +226,10 @@ namespace PLTP
                     vertices.Add(pt2);
                     vertices.Add(pt3);
                     faces.Add(new Face(0, 1, 4, 2));
-                    faces.Add(new Face(0, 1, 5, 3));
-                    faces.Add(new Face(3, 5, 4, 2));
-                    faces.Add(new Face(1, 4, 5));
-                    faces.Add(new Face(0, 3, 2));
+                    faces.Add(new Face(0, 3, 5, 1));
+                    faces.Add(new Face(4, 5, 3, 2));
+                    faces.Add(new Face(1, 5, 4));
+                    faces.Add(new Face(0, 2, 3));
                     break;
                 case 4:
                     pt0 = VertexInterp(isovalue, pts[2], pts[0], values[2], values[0]);
@@ -240,9 +240,9 @@ namespace PLTP
                     vertices.Add(pt1);
                     vertices.Add(pt2);
                     faces.Add(new Face(0, 2, 1));
-                    faces.Add(new Face(2, 3, 1));
+                    faces.Add(new Face(1, 2, 3));
                     faces.Add(new Face(3, 0, 1));
-                    faces.Add(new Face(2, 3, 0));
+                    faces.Add(new Face(2, 0, 3));
                     break;
                 case 5:
                     pt0 = VertexInterp(isovalue, pts[0], pts[1], values[0], values[1]);
@@ -291,7 +291,7 @@ namespace PLTP
                     faces.Add(new Face(0, 2, 1));
                     faces.Add(new Face(5, 4, 3));
                     faces.Add(new Face(0, 1, 5, 3));
-                    faces.Add(new Face(0, 2, 4, 3));
+                    faces.Add(new Face(0, 3, 4, 2));
                     faces.Add(new Face(1, 2, 4, 5));
                     break;
                 case 8:
@@ -329,7 +329,7 @@ namespace PLTP
                     pt1 = VertexInterp(isovalue, pts[2], pts[3], values[2], values[3]);
                     pt2 = VertexInterp(isovalue, pts[0], pts[3], values[0], values[3]);
                     pt3 = VertexInterp(isovalue, pts[1], pts[2], values[1], values[2]);
-                    vertices.Add(pts[0]);
+                    vertices.Add(pts[1]);
                     vertices.Add(pts[3]);
                     vertices.Add(pt0);
                     vertices.Add(pt1);
@@ -445,16 +445,20 @@ namespace PLTP
                 var cur_vol = 0.0;
                 var tar_vol = VolumeFraction;
                 var ini_vol = GetVolume();
-
+                string output_path = "../../../../../data/YuLi_4/Smoothing.obj";
                 while (Math.Abs(cur_vol - tar_vol) > Tolerance && iter < MaximumIteration)
                 {
                     isovalue = (highest + lowest) * 0.5;
                     meshes = Extract(isovalue);
-                    cur_vol = Mesh.GetVolumeFromMeshes(meshes) / ini_vol;
+                    var v = Mesh.GetVolumeFromMeshes(meshes);
+                    cur_vol = v / ini_vol;
 
                     if (cur_vol - tar_vol > 0.0) lowest = isovalue;
                     else highest = isovalue;
                     iter++;
+
+                    var output = Mesh.CombineMeshes(meshes);
+                    Export.WriteObj(output, output_path);
                 }
                 Console.WriteLine("Volume is " + (cur_vol * ini_vol).ToString());
             }
