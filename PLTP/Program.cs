@@ -7,11 +7,23 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            string path = "C:\\Users\\alber\\OneDrive - RMIT University\\Work\\AResearch\\BuildingBlocksForTopOptMdl\\Mdl\\AllCases";
-            MCCTest.OuputAllCases(path);
-            //testMCC();
+            YuLiExample_4();
         }
 
+        public static void YuLiExample_4()
+        {
+            string mdl_path = "../../../../../data/YuLi_4/Job-2_BESO_96.inp";
+            string sen_path = "../../../../../data/YuLi_4/Sensitivities.txt";
+            string output_path = "../../../../../data/YuLi_4/Smoothing.obj";
+            Test.TestTetra(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, false, output_path);
+        }
+        public static void YuLiExample()
+        {
+            string mdl_path = "../../../../../data/YuLi/Job-1_BESO_111.inp";
+            string sen_path = "../../../../../data/YuLi/Sensitivities.txt";
+            string output_path = "../../../../../data/YuLi/Smoothing.obj";
+            Test.TestHex(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, true, output_path);
+        }
         public static void CanteileverExample()
         {
             string mdl_path = "../../../../../data/Cantilever/Job-1_BESO.inp";

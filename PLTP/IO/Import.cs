@@ -25,9 +25,8 @@ namespace PLTP
             }
             return ndlSens;
         }
-        public static List<Tetrahedron> ReadTet_Abaqus(string path, ref List<int> solidID, ref List<int> nonDesignID)
+        public static List<Tetrahedron> ReadTet_Abaqus(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> nonDesignID)
         {
-            List<Vector> nds = new List<Vector>();
             List<Tetrahedron> elems = new List<Tetrahedron>();
             if (File.Exists(path))
             {
@@ -56,9 +55,11 @@ namespace PLTP
 
                     #region Read Elements
                     // Read Tetrahedra
-                    if (line == "*Element, type=C3D4")
+                    if (line == "*Element, type=C3D4" ||
+                        line == "*Element, type=C3D4R")
                     {
                         line = SR.ReadLine();
+                        int id = 0;
                         while (!line.StartsWith("*"))
                         {
                             line = line.Replace(" ", "");
@@ -81,7 +82,11 @@ namespace PLTP
                             faces.Add(new Face(0, 2, 3));
                             faces.Add(new Face(1, 2, 3));
 
-                            elems.Add(new Tetrahedron(verts.ToArray(), faces.ToArray()));
+                            var elem = new Tetrahedron(verts.ToArray(), faces.ToArray());
+                            elem.SetID(id);
+                            elem.SetNdlID(new int[4] { n0, n1, n2, n3});
+                            elems.Add(elem);
+                            id++;
                             line = SR.ReadLine();
                         }
                     }
@@ -153,7 +158,10 @@ namespace PLTP
 
                     #region Read Elements
                     // Read Hexahedrons
-                    if (line == "*Element, type=C3D10" || line == "*Element, type=C3D8")
+                    if (line == "*Element, type=C3D10" ||
+                        line == "*Element, type=C3D10R" ||
+                        line == "*Element, type=C3D8R" || 
+                        line == "*Element, type=C3D8")
                     {
                         int id = 0;
                         line = SR.ReadLine();

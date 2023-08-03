@@ -10,11 +10,14 @@ namespace PLTP
     {
         public Vector[] vertices;
         public Face[] faces;
-
+        public Vector Center;
         /// <summary>
         /// Nodal sensitivity number
         /// </summary>
         public double[] ndlSen;
+
+        public int ID;
+        public int[] NdlID;
 
         /// <summary>
         /// If the element is in a non-design domain
@@ -25,12 +28,19 @@ namespace PLTP
         {
             vertices = new Vector[4];
             faces = new Face[4];
+            Center = Vector.Origin(3);
         }
         public Tetrahedron(Vector[] vertices, Face[] faces)
         {
             if (vertices.Length != 4) throw new ArgumentException("The number of vertices must be 4!");
             if (faces.Length != 4) throw new ArgumentException("The number of faces must be 4!");
             this.vertices = vertices;
+            Center = Vector.Origin(3);
+            for (int i = 0; i < 4; i++)
+            {
+                Center += vertices[i];
+            }
+            Center *= 0.25;
             this.faces = faces;
         }
         public Tetrahedron(Vector[] vertices, Face[] faces, double[] nodalSensitivityNumbers, bool isNonDesign)
@@ -42,6 +52,22 @@ namespace PLTP
             this.faces = faces;
             ndlSen = nodalSensitivityNumbers;
             this.isNonDesign = isNonDesign;
+
+            Center = Vector.Origin(3);
+            for (int i = 0; i < 4; i++)
+            {
+                Center += vertices[i];
+            }
+            Center *= 0.25;
+        }
+        public void SetID(int id)
+        {
+            ID = id;
+        }
+        public void SetNdlID(int[] ndlID)
+        {
+            if (ndlID.Length != 4) throw new ArgumentException("The number of nodal sensitivity numbers must be 4!");
+            NdlID = ndlID;
         }
         public void SetNdlSenNum(double[] nodalSensitivityNumbers)
         {
