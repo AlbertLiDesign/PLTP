@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using KDTree;
 
 namespace PLTP
@@ -147,6 +149,49 @@ namespace PLTP
             Faces = upd_faces.ToArray();
         }
 
+        public Box GetBoundingBox()
+        {
+            double[] xlist = new double[Vertices.Length];
+            double[] ylist = new double[Vertices.Length];
+            double[] zlist = new double[Vertices.Length];
+            for (int i = 0; i < Vertices.Length; i++)
+            {
+                xlist[i] = Vertices[i].X;
+                ylist[i] = Vertices[i].Y;
+                zlist[i] = Vertices[i].Z;
+            }
+
+            double xmax = xlist.Max();
+            double xmin = xlist.Min();
+            double ymax = ylist.Max();
+            double ymin = ylist.Min();
+            double zmax = zlist.Max();
+            double zmin = zlist.Min();
+
+            Vector[] vertices = new Vector[8]
+            {
+               new Vector(xmin,ymin,zmin),
+               new Vector(xmax,ymin,zmin),
+               new Vector(xmax,ymax,zmin),
+               new Vector(xmin,ymax,zmin),
+               new Vector(xmin,ymin,zmax),
+               new Vector(xmax,ymin,zmax),
+               new Vector(xmax,ymax,zmax),
+               new Vector(xmin,ymax,zmax)
+            };
+            Face[] faces = new Face[6]
+            {
+                new Face(0,3,2,1),
+                new Face(0,1,5,4),
+                new Face(1,2,6,5),
+                new Face(2,3,7,6),
+                new Face(3,0,4,7),
+                new Face(4,5,6,7)
+            };
+
+            var mesh = new Mesh(vertices, faces);
+            return new Box(mesh, vertices[0], vertices[6]);
+        }
         public void Triangulation()
         {
             List<Face> faces = new List<Face>();

@@ -67,7 +67,8 @@ namespace PLTP
             sw.Restart();
             Console.Write("|***************.....| 75%");
             Console.Write("\t(Weld mesh... ");
-            output.WeldVertices(1e-6, 1024);
+            output = MeshWeld.Weld(output, 1e-10);
+            //output.WeldVertices(1e-6, 2048);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
@@ -229,7 +230,8 @@ namespace PLTP
             sw.Restart();
             Console.Write("|***************.....| 75%");
             Console.Write("\t(Weld mesh... ");
-            output.WeldVertices(1e-6);
+            output = MeshWeld.Weld(output, 1e-10);
+            //output.WeldVertices(1e-6);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 

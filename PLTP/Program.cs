@@ -7,9 +7,15 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            YuLiExample_4();
+            Tetra_3();
         }
-
+        public static void Tetra_3()
+        {
+            string mdl_path = "../../../../../data/tetra_3/Job-4_BESO_88.inp";
+            string sen_path = "../../../../../data/tetra_3/Sensitivities.txt";
+            string output_path = "../../../../../data/tetra_3/Smoothing.obj";
+            Test.TestTetra(mdl_path, sen_path, 0.2, 1.5, 0.01, 50, true, true, output_path);
+        }
         public static void YuLiExample_4()
         {
             string mdl_path = "../../../../../data/YuLi_4/Job-2_BESO_96.inp";
