@@ -7,56 +7,105 @@ namespace PLTP // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            Tetra_3();
-        }
-        public static void Tetra_3()
-        {
-            string mdl_path = "../../../../../data/tetra_3/Job-4_BESO_88.inp";
-            string sen_path = "../../../../../data/tetra_3/Sensitivities.txt";
-            string output_path = "../../../../../data/tetra_3/Smoothing.obj";
-            Test.TestTetra(mdl_path, sen_path, 0.2, 1.5, 0.01, 50, true, true, output_path);
-        }
-        public static void YuLiExample_4()
-        {
-            string mdl_path = "../../../../../data/YuLi_4/Job-2_BESO_96.inp";
-            string sen_path = "../../../../../data/YuLi_4/Sensitivities.txt";
-            string output_path = "../../../../../data/YuLi_4/Smoothing.obj";
-            Test.TestTetra(mdl_path, sen_path, 0.2, 3, 0.01, 50, true, true, output_path);
-        }
-        public static void YuLiExample()
-        {
-            string mdl_path = "../../../../../data/YuLi/Job-1_BESO_111.inp";
-            string sen_path = "../../../../../data/YuLi/Sensitivities.txt";
-            string output_path = "../../../../../data/YuLi/Smoothing.obj";
-            Test.TestHex(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, true, output_path);
-        }
-        public static void CanteileverExample()
-        {
-            string mdl_path = "../../../../../data/Cantilever/Job-1_BESO.inp";
-            string sen_path = "../../../../../data/Cantilever/Sensitivities.txt";
-            string output_path = "../../../../../data/Cantilever/Smoothing.obj";
-            Test.TestHex(mdl_path, sen_path, 0.15, 3.0, 0.01, 50, true, true, output_path);
-        }
-        public static void TableExample()
-        {
-            string mdl_path = "../../../../../data/Table/Job-1_BESO.inp";
-            string sen_path = "../../../../../data/Table/Sensitivities.txt";
-            string output_path = "../../../../../data/Table/Smoothing.obj";
-            Test.TestHex(mdl_path, sen_path, 0.2, 3.0, 0.01, 50, true, true, output_path);
-        }
-        public static void GetCantileverSenMdl()
-        {
-            string mdl_path = "../../../../../data/Cantilever/Job-1_BESO.inp";
-            string sen_path = "../../../../../data/Cantilever/Sensitivities.txt";
-            string output_path = "../../../../../data/Cantilever/Smoothing.obj";
-            Test.ObtainSensitivityMdl(mdl_path, sen_path, 0.15, 3.0, 0.01, 50, true, output_path);
-        }
+            string mdl_path = null;
+            string sen_path = null;
+            string output_path = null;
+            double volumeFraction = 0.2;
+            double filterRadius = 3.0;
+            double tolerance = 0.01;
+            int maximumIteration = 50;
+            bool interpolation = true;
+            bool keepVolume = true;
+            bool isHex = true;
 
-        public static void testMCC()
-        {
-            string mdl_path = "C:\\Users\\alber\\OneDrive - RMIT University\\Work\\AResearch\\BuildingBlocksForTopOptMdl\\Mdl";
-            MCCTest.MCC(mdl_path, true);
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "-h":
+                    case "--help":
+                        PrintHelp();
+                        return;
+                    case "-type":
+                        isHex = Convert.ToBoolean(args[++i]);
+                        break;
+                    case "-v":
+                        volumeFraction = Convert.ToDouble(args[++i]);
+                        break;
+                    case "-r":
+                        filterRadius = Convert.ToDouble(args[++i]);
+                        break;
+                    case "-t":
+                        tolerance = Convert.ToDouble(args[++i]);
+                        break;
+                    case "-i":
+                        maximumIteration = Convert.ToInt32(args[++i]);
+                        break;
+                    case "-k":
+                        keepVolume = Convert.ToBoolean(args[++i]);
+                        break;
+                    case "-p":
+                        interpolation = Convert.ToBoolean(args[++i]);
+                        break;
+                    case "-m":
+                        mdl_path = args[++i];
+                        break;
+                    case "-s":
+                        sen_path = args[++i];
+                        break;
+                    case "-o":
+                        output_path = args[++i];
+                        break;
+                }
+            }
+
+            if (mdl_path != null && sen_path != null && output_path != null)
+            {
+                if (isHex)
+                {
+                    Test.TestHex(mdl_path, sen_path, volumeFraction, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
+                }
+                else
+                {
+                    Test.TestTetra(mdl_path, sen_path, volumeFraction, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid number of arguments provided.");
+                Console.WriteLine("Expected usage: Program.exe -m <mdl_path> -s <sen_path> -o <output_path> [-v <volumeFraction>] [-r <filterRadius>] [-t <tolerance>] [-i <maximumIteration>] [-p <interpolation>] [-k <keepVolume>]");
+            }
         }
+        static void PrintHelp()
+        {
+            Console.WriteLine("Usage: Program.exe -type <elem_type> -m <mdl_path> -s <sen_path> -o <output_path> [-v <volumeFraction>] [-r <filterRadius>] [-t <tolerance>] [-i <maximumIteration>] [-p <interpolation>] [-k <keepVolume>]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            Console.WriteLine("  -h, --help           Show this help message");
+            Console.WriteLine("  -type <elem_type>           The element type is hexahedron (True) or tetrahedra (False)（default: True)");
+            Console.WriteLine("  -m <mdl_path>        Path to the model file");
+            Console.WriteLine("  -s <sen_path>        Path to the sensitivities file");
+            Console.WriteLine("  -o <output_path>     Path for the output file");
+            Console.WriteLine("  -v <volumeFraction>  Volume fraction (default: 0.2)");
+            Console.WriteLine("  -r <filterRadius>    Filter radius (default: 3.0)");
+            Console.WriteLine("  -t <tolerance>       Volume tolerance (default: 0.01)");
+            Console.WriteLine("  -i <maximumIteration> Maximum iterations (default: 50)");
+            Console.WriteLine("  -p <interpolation>  Apply interpolation or not (default: true)");
+            Console.WriteLine("  -k <keepVolume>     Keep volume or not (default: true)");
+        }
+        //public static void GetCantileverSenMdl()
+        //{
+        //    string mdl_path = "../../../../../data/Cantilever/Job-1_BESO.inp";
+        //    string sen_path = "../../../../../data/Cantilever/Sensitivities.txt";
+        //    string output_path = "../../../../../data/Cantilever/Smoothing.obj";
+        //    Test.ObtainSensitivityMdl(mdl_path, sen_path, 0.15, 3.0, 0.01, 50, true, output_path);
+        //}
+
+        //public static void testMCC()
+        //{
+        //    string mdl_path = "C:\\Users\\alber\\OneDrive - RMIT University\\Work\\AResearch\\BuildingBlocksForTopOptMdl\\Mdl";
+        //    MCCTest.MCC(mdl_path, true);
+        //}
         
     }
 }
