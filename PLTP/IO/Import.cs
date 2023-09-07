@@ -25,7 +25,7 @@ namespace PLTP
             }
             return ndlSens;
         }
-        public static List<Tetrahedron> ReadTet_Abaqus(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> nonDesignID)
+        public static List<Tetrahedron> ReadTet_Abaqus(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> voidID)
         {
             List<Tetrahedron> elems = new List<Tetrahedron>();
             if (File.Exists(path))
@@ -115,7 +115,7 @@ namespace PLTP
                             var tokens = line.Split(',');
                             foreach (var item in tokens)
                             {
-                                nonDesignID.Add(int.Parse(item) - 1);
+                                voidID.Add(int.Parse(item) - 1);
                             }
                             line = SR.ReadLine();
                         }
@@ -127,7 +127,7 @@ namespace PLTP
             }
             return elems;
         }
-        public static List<Hexahedron> ReadHex_Abaqus(string path, ref List<Vector> nodeList, ref List<int> solidID, ref List<int> nonDesignID)
+        public static List<Hexahedron> ReadHex_Abaqus(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> voidID)
         {
             List<Hexahedron> elems = new List<Hexahedron>();
 
@@ -150,7 +150,7 @@ namespace PLTP
                             double b = double.Parse(tokens[2]);
                             double c = double.Parse(tokens[3]);
 
-                            nodeList.Add(new Vector(a, b, c));
+                            nds.Add(new Vector(a, b, c));
                             line = SR.ReadLine();
                         }
                     }
@@ -182,14 +182,14 @@ namespace PLTP
                             int n6 = int.Parse(tokens[7]) - 1;
                             int n7 = int.Parse(tokens[8]) - 1;
 
-                            verts.Add(nodeList[n0]);
-                            verts.Add(nodeList[n1]);
-                            verts.Add(nodeList[n2]);
-                            verts.Add(nodeList[n3]);
-                            verts.Add(nodeList[n4]);
-                            verts.Add(nodeList[n5]);
-                            verts.Add(nodeList[n6]);
-                            verts.Add(nodeList[n7]);
+                            verts.Add(nds[n0]);
+                            verts.Add(nds[n1]);
+                            verts.Add(nds[n2]);
+                            verts.Add(nds[n3]);
+                            verts.Add(nds[n4]);
+                            verts.Add(nds[n5]);
+                            verts.Add(nds[n6]);
+                            verts.Add(nds[n7]);
 
                             faces.Add(new Face(1,0,3,2));
                             faces.Add(new Face(0,1,5,4));
@@ -231,10 +231,167 @@ namespace PLTP
                             var tokens = line.Split(',');
                             foreach (var item in tokens)
                             {
-                                nonDesignID.Add(int.Parse(item) - 1);
+                                voidID.Add(int.Parse(item) - 1);
                             }
                             line = SR.ReadLine();
                         }
+                    }
+                    #endregion
+                }
+                SR.Close();
+                SR.Dispose();
+            }
+            return elems;
+        }
+        public static List<Tetrahedron> ReadTet_ALFE(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> voidID)
+        {
+            List<Tetrahedron> elems = new List<Tetrahedron>();
+
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
+                int id = 0;
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();
+
+                    #region Read Nodes
+                    var tokens = line.Split(',');
+                    if (tokens[0] == "N")
+                    {
+                        double a = double.Parse(tokens[1]);
+                        double b = double.Parse(tokens[2]);
+                        double c = double.Parse(tokens[3]);
+
+                        nds.Add(new Vector(a, b, c));
+                    }
+                    #endregion
+
+                    #region Read Elements
+                    // Read Hexahedrons
+                    if (tokens[0] == "E")
+                    {
+                        List<Vector> verts = new List<Vector>();
+                        List<Face> faces = new List<Face>();
+
+                        int n0 = int.Parse(tokens[1]) - 1;
+                        int n1 = int.Parse(tokens[2]) - 1;
+                        int n2 = int.Parse(tokens[3]) - 1;
+                        int n3 = int.Parse(tokens[4]) - 1;
+
+                        verts.Add(nds[n0]);
+                        verts.Add(nds[n1]);
+                        verts.Add(nds[n2]);
+                        verts.Add(nds[n3]);
+
+                        faces.Add(new Face(2, 1, 0));
+                        faces.Add(new Face(1, 2, 3));
+                        faces.Add(new Face(3, 2, 0));
+                        faces.Add(new Face(1, 3, 0));
+
+                        var elem = new Tetrahedron(verts.ToArray(), faces.ToArray());
+                        elem.SetID(id);
+                        elem.SetNdlID(new int[4] { n0, n1, n2, n3 });
+                        elems.Add(elem);
+                        id++;
+                    }
+                    #endregion
+
+                    #region Read solid elements
+                    if (tokens[0] == "SD")
+                    {
+                        solidID.Add(int.Parse(tokens[1]) - 1);
+                    }
+                    #endregion
+
+                    #region Read void elements
+                    if (tokens[0] == "VD")
+                    {
+                        voidID.Add(int.Parse(tokens[1]) - 1);
+                    }
+                    #endregion
+                }
+                SR.Close();
+                SR.Dispose();
+            }
+
+            return elems;
+        }
+        public static List<Hexahedron> ReadHex_ALFE(string path, ref List<Vector> nds, ref List<int> solidID, ref List<int> voidID)
+        {
+            List<Hexahedron> elems = new List<Hexahedron>();
+
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
+                int id = 0;
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();
+
+                    #region Read Nodes
+                    var tokens = line.Split(',');
+                    if (tokens[0] == "N")
+                    {
+                        double a = double.Parse(tokens[1]);
+                        double b = double.Parse(tokens[2]);
+                        double c = double.Parse(tokens[3]);
+
+                        nds.Add(new Vector(a, b, c));
+                    }
+                    #endregion
+
+                    #region Read Elements
+                    // Read Hexahedrons
+                    if (tokens[0] == "E")
+                    {
+                        List<Vector> verts = new List<Vector>();
+                        List<Face> faces = new List<Face>();
+
+                        int n0 = int.Parse(tokens[1]) - 1;
+                        int n1 = int.Parse(tokens[2]) - 1;
+                        int n2 = int.Parse(tokens[3]) - 1;
+                        int n3 = int.Parse(tokens[4]) - 1;
+                        int n4 = int.Parse(tokens[5]) - 1;
+                        int n5 = int.Parse(tokens[6]) - 1;
+                        int n6 = int.Parse(tokens[7]) - 1;
+                        int n7 = int.Parse(tokens[8]) - 1;
+
+                        verts.Add(nds[n0]);
+                        verts.Add(nds[n1]);
+                        verts.Add(nds[n2]);
+                        verts.Add(nds[n3]);
+                        verts.Add(nds[n4]);
+                        verts.Add(nds[n5]);
+                        verts.Add(nds[n6]);
+                        verts.Add(nds[n7]);
+
+                        faces.Add(new Face(1, 0, 3, 2));
+                        faces.Add(new Face(0, 1, 5, 4));
+                        faces.Add(new Face(1, 2, 6, 5));
+                        faces.Add(new Face(6, 2, 3, 7));
+                        faces.Add(new Face(3, 0, 4, 7));
+                        faces.Add(new Face(6, 7, 4, 5));
+
+                        var elem = new Hexahedron(verts.ToArray(), faces.ToArray());
+                        elem.SetID(id);
+                        elem.SetNdlID(new int[8] { n0, n1, n2, n3, n4, n5, n6, n7 });
+                        elems.Add(elem);
+                        id++;
+                    }
+                    #endregion
+
+                    #region Read solid elements
+                    if (tokens[0] == "SD")
+                    {
+                        solidID.Add(int.Parse(tokens[1]) - 1);
+                    }
+                    #endregion
+
+                    #region Read void elements
+                    if (tokens[0] == "VD")
+                    {
+                        voidID.Add(int.Parse(tokens[1]) - 1);
                     }
                     #endregion
                 }
