@@ -348,14 +348,14 @@ namespace PLTP
                         List<Vector> verts = new List<Vector>();
                         List<Face> faces = new List<Face>();
 
-                        int n0 = int.Parse(tokens[1]) - 1;
-                        int n1 = int.Parse(tokens[2]) - 1;
-                        int n2 = int.Parse(tokens[3]) - 1;
-                        int n3 = int.Parse(tokens[4]) - 1;
-                        int n4 = int.Parse(tokens[5]) - 1;
-                        int n5 = int.Parse(tokens[6]) - 1;
-                        int n6 = int.Parse(tokens[7]) - 1;
-                        int n7 = int.Parse(tokens[8]) - 1;
+                        int n0 = int.Parse(tokens[1]);
+                        int n1 = int.Parse(tokens[2]);
+                        int n2 = int.Parse(tokens[3]);
+                        int n3 = int.Parse(tokens[4]);
+                        int n4 = int.Parse(tokens[5]);
+                        int n5 = int.Parse(tokens[6]);
+                        int n6 = int.Parse(tokens[7]);
+                        int n7 = int.Parse(tokens[8]);
 
                         verts.Add(nds[n0]);
                         verts.Add(nds[n1]);

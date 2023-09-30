@@ -173,7 +173,7 @@ namespace PLTP
 
             // File paths
             List<int> solidID = new List<int>();
-            List<int> nonDesignID = new List<int>();
+            List<int> voidID = new List<int>();
             List<Vector> nodeList = new List<Vector>();
 
             #region Preparation
@@ -181,7 +181,8 @@ namespace PLTP
             Console.Write("\t(Import model... ");
             sw.Start();
             // Import a FE model
-            var elems = Import.ReadHex_Abaqus(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
+            //var elems = Import.ReadHex_Abaqus(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
+            var elems = Import.ReadHex_ALFE(mdl_path, ref nodeList, ref solidID, ref voidID);
             // Import elemental sensitivity numbers
             var elemSen = Import.ReadElemSenNum(sen_path);
 
