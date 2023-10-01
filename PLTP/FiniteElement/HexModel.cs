@@ -88,16 +88,21 @@ namespace PLTP
             Cases = new int[elements.Count];
         }
 
-        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, List<int> NonDesign)
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, List<int> solidID, List<int> voidID)
         {
             NodeList = nodeList;
             Elements = elements;
             ElemSenNum = elemSenNum;
 
-            for (int i = 0; i < NonDesign.Count; i++)
+            for (int i = 0; i < solidID.Count; i++)
             {
-                elements[NonDesign[i]].SetNonDesign(true); 
+                elements[solidID[i]].SetSolid(true); 
             }
+            for (int i = 0; i < voidID.Count; i++)
+            {
+                elements[voidID[i]].SetVoid(true);
+            }
+
 
             Cases = new int[elements.Count];
         }
@@ -243,10 +248,14 @@ namespace PLTP
             {
                 int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
 ;
-                if (Elements[i].isNonDesign)
+                if (Elements[i].isSolid)
                 {
                     // output the original hexahedron
                     meshes[i] = Elements[i].ToMesh();
+                }
+                else if (Elements[i].isVoid)
+                {
+                    meshes[i] = null;
                 }
                 else
                 {
@@ -340,7 +349,6 @@ namespace PLTP
             }
             return meshes;
         }
-
         public Mesh[] ExtractIsoSensitivityModel(double isovalue)
         {
             Mesh[] meshes = new Mesh[Elements.Count];
@@ -351,8 +359,8 @@ namespace PLTP
                 var highest = 1.0;
 
                 var cur_vol = 0.0;
-                var tar_vol = VolumeFraction;
                 var ini_vol = GetVolume();
+                var tar_vol = VolumeFraction;
 
                 while (Math.Abs(cur_vol - tar_vol) > Tolerance && iter < MaximumIteration)
                 {

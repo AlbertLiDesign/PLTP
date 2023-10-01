@@ -24,8 +24,8 @@ namespace PLTP
         /// <summary>
         /// If the element is in a non-design domain
         /// </summary>
-        public bool isNonDesign = false;
-
+        public bool isSolid = false;
+        public bool isVoid = false;
         public Hexahedron() 
         {
             Vertices = new Vector[8];
@@ -63,9 +63,13 @@ namespace PLTP
             if (ndlSen.Length != 8) throw new ArgumentException("The number of nodal sensitivity numbers must be 8!");
             this.ndlSen = ndlSen;
         }
-        public void SetNonDesign(bool isNonDesign)
+        public void SetSolid(bool isSolid)
         {
-            this.isNonDesign = isNonDesign;
+            this.isSolid = isSolid;
+        }
+        public void SetVoid(bool isVoid)
+        {
+            this.isVoid = isVoid;
         }
 
         public Mesh ToMesh()

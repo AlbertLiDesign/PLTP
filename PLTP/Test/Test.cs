@@ -187,7 +187,7 @@ namespace PLTP
             var elemSen = Import.ReadElemSenNum(sen_path);
 
             // Construct a FE model
-            HexModel model = new HexModel(nodeList, elems, elemSen);
+            HexModel model = new HexModel(nodeList, elems, elemSen, solidID, voidID);
             model.SetParameters(volumeFraction, tolerance, filterRadius, maximumIteration, interpolation, keepVolume, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
