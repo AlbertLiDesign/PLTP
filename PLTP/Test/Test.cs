@@ -184,10 +184,14 @@ namespace PLTP
             //var elems = Import.ReadHex_Abaqus(mdl_path, ref nodeList, ref solidID, ref nonDesignID);
             var elems = Import.ReadHex_ALFE(mdl_path, ref nodeList, ref solidID, ref voidID);
             // Import elemental sensitivity numbers
-            var elemSen = Import.ReadElemSenNum(sen_path);
+            //var elemSen = Import.ReadElemSenNum(sen_path);
+            var ndlSen = Import.ReadElemSenNum(sen_path).ToArray();
 
             // Construct a FE model
-            HexModel model = new HexModel(nodeList, elems, elemSen, solidID, voidID);
+            HexModel model = new HexModel(nodeList, elems, solidID, voidID);
+            //HexModel model = new HexModel(nodeList, elems, elemSen);
+            //HexModel model = new HexModel(nodeList, elems);
+            
             model.SetParameters(volumeFraction, tolerance, filterRadius, maximumIteration, interpolation, keepVolume, true);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
@@ -196,7 +200,8 @@ namespace PLTP
             sw.Restart();
             Console.Write("|**..................| 10%");
             Console.Write("\t(Calculate nodal sensitivity field... ");
-            model.CalNdlSenNums();
+            //model.CalNdlSenNums();
+            model.SetNdlSenNums(ndlSen);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 

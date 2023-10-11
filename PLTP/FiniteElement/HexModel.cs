@@ -87,7 +87,23 @@ namespace PLTP
 
             Cases = new int[elements.Count];
         }
+        public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<int> solidID, List<int> voidID)
+        {
+            NodeList = nodeList;
+            Elements = elements;
 
+            for (int i = 0; i < solidID.Count; i++)
+            {
+                elements[solidID[i]].SetSolid(true);
+            }
+            for (int i = 0; i < voidID.Count; i++)
+            {
+                elements[voidID[i]].SetVoid(true);
+            }
+
+
+            Cases = new int[elements.Count];
+        }
         public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, List<int> solidID, List<int> voidID)
         {
             NodeList = nodeList;
@@ -108,6 +124,10 @@ namespace PLTP
         }
         #endregion
 
+        public void SetNdlSenNums(double[] ndl_sen)
+        {
+            NdlSenNum = (double[])ndl_sen.Clone();
+        }
         /// <summary>
         /// Calculate the nodal sensitivity numbers
         /// </summary>
