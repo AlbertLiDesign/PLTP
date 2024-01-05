@@ -101,7 +101,6 @@ namespace PLTP
                 elements[voidID[i]].SetVoid(true);
             }
 
-
             Cases = new int[elements.Count];
         }
         public HexModel(List<Vector> nodeList, List<Hexahedron> elements, List<double> elemSenNum, List<int> solidID, List<int> voidID)
@@ -207,30 +206,38 @@ namespace PLTP
                 double[] upd_ndlSen = new double[8];
                 Vector[] verts= new Vector[8];
 
-                upd_ndlSen[0] = NdlSenNum[Elements[i].NdlID[idx[0]]];
-                upd_ndlSen[1] = NdlSenNum[Elements[i].NdlID[idx[1]]];
-                upd_ndlSen[2] = NdlSenNum[Elements[i].NdlID[idx[2]]];
-                upd_ndlSen[3] = NdlSenNum[Elements[i].NdlID[idx[3]]];
-                upd_ndlSen[4] = NdlSenNum[Elements[i].NdlID[idx[4]]];
-                upd_ndlSen[5] = NdlSenNum[Elements[i].NdlID[idx[5]]];
-                upd_ndlSen[6] = NdlSenNum[Elements[i].NdlID[idx[6]]];
-                upd_ndlSen[7] = NdlSenNum[Elements[i].NdlID[idx[7]]];
+                if (Elements[i].isSolid)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        upd_ndlSen[j] = 1.0;
+                    }
+                }
+                else if (Elements[i].isVoid)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        upd_ndlSen[j] = 0.0;
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        upd_ndlSen[j] = NdlSenNum[Elements[i].NdlID[idx[j]]];
+                    }
 
-                verts[0] = NodeList[Elements[i].NdlID[idx[0]]];
-                verts[1] = NodeList[Elements[i].NdlID[idx[1]]];
-                verts[2] = NodeList[Elements[i].NdlID[idx[2]]];
-                verts[3] = NodeList[Elements[i].NdlID[idx[3]]];
-                verts[4] = NodeList[Elements[i].NdlID[idx[4]]];
-                verts[5] = NodeList[Elements[i].NdlID[idx[5]]];
-                verts[6] = NodeList[Elements[i].NdlID[idx[6]]];
-                verts[7] = NodeList[Elements[i].NdlID[idx[7]]];
+                }
+
+                for (int j = 0; j < 8; j++)
+                {
+                    verts[j] = NodeList[Elements[i].NdlID[idx[j]]];
+                }
 
                 Elements[i].SetNdlSenNum(upd_ndlSen);
                 Elements[i].Vertices = verts;
                 Elements[i].MinVert = verts[0];
             });
-
-
         }
 
         /// <summary>
@@ -268,26 +275,14 @@ namespace PLTP
             {
                 int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
 ;
-                if (Elements[i].isSolid)
+                if (flag == 255)
                 {
-                    // output the original hexahedron
                     meshes[i] = Elements[i].ToMesh();
                 }
-                else if (Elements[i].isVoid)
-                {
-                    meshes[i] = null;
-                }
+                else if (flag != 0)
+                    meshes[i] = IsoSenMdl_Hex(Elements[i], flag, isovalue);
                 else
-                {
-                    if (flag == 255)
-                    {
-                        meshes[i] = Elements[i].ToMesh();
-                    }
-                    else if (flag != 0)
-                        meshes[i] = IsoSenMdl_Hex(Elements[i], flag, isovalue);
-                    else
-                        meshes[i] = null;
-                }
+                    meshes[i] = null;
             }
             return meshes;
         }
