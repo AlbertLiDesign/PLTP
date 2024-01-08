@@ -200,44 +200,43 @@ namespace PLTP
             Size = new Vector(Math.Abs(vert_6.X-vert_0.X), Math.Abs(vert_6.Y - vert_0.Y), Math.Abs(vert_6.Z-vert_0.Z));
 
             // Unify all the vertex older
-            Parallel.For(0, Elements.Count, i =>
+            for (int i = 0; i < Elements.Count; i++)
             {
+                Vector[] verts = new Vector[8];
                 // Update the order according to the correct order
-                double[] upd_ndlSen = new double[8];
-                Vector[] verts= new Vector[8];
-
-                if (Elements[i].isSolid)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        upd_ndlSen[j] = 1.0;
-                    }
-                }
-                else if (Elements[i].isVoid)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        upd_ndlSen[j] = 0.0;
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        upd_ndlSen[j] = NdlSenNum[Elements[i].NdlID[idx[j]]];
-                    }
-
-                }
-
                 for (int j = 0; j < 8; j++)
                 {
                     verts[j] = NodeList[Elements[i].NdlID[idx[j]]];
                 }
 
-                Elements[i].SetNdlSenNum(upd_ndlSen);
+                if (Elements[i].isSolid)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        NdlSenNum[Elements[i].NdlID[idx[j]]] = 1.0;
+                    }
+                }
+                if (Elements[i].isVoid)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        NdlSenNum[Elements[i].NdlID[idx[j]]] = 0.0;
+                    }
+                }
+
                 Elements[i].Vertices = verts;
                 Elements[i].MinVert = verts[0];
-            });
+            }
+            for(int i = 0; i < Elements.Count; i++)
+            {
+                var upd_ndlSen = new double[8];
+                for (int j = 0; j < 8; j++)
+                {
+                    upd_ndlSen[j] = NdlSenNum[Elements[i].NdlID[idx[j]]];
+                }
+
+                Elements[i].SetNdlSenNum(upd_ndlSen);
+            }
         }
 
         /// <summary>

@@ -236,8 +236,8 @@ namespace PLTP
             sw.Restart();
             Console.Write("|***************.....| 75%");
             Console.Write("\t(Weld mesh... ");
-            output = MeshWeld.Weld(output, 1e-10);
-            //output.WeldVertices(1e-6);
+            //output = MeshWeld.Weld(output, 1e-10);
+            output.WeldVertices(1e-4);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
 
