@@ -169,7 +169,6 @@ namespace PLTP
         {
             // Sort the vertices of each element
             // according to the order of the first element
-
             if (UnitiseSensitivityNumber)
             {
                 double min = NdlSenNum.Min();
@@ -209,30 +208,48 @@ namespace PLTP
                     verts[j] = NodeList[Elements[i].NdlID[idx[j]]];
                 }
 
+                Elements[i].Vertices = verts;
+                Elements[i].MinVert = verts[0];
+            }
+
+            // Adjust the order of nodal sensitivity numbers
+            var copy_NS = (double[])NdlSenNum.Clone();
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    NdlSenNum[Elements[i].NdlID[j]] = copy_NS[Elements[i].NdlID[idx[j]]];
+                }
+            }
+
+            AdjustSenNum(1.0);
+        }
+
+        private void AdjustSenNum(double isovalue)
+        {
+            for (int i = 0; i < Elements.Count; i++)
+            {
                 if (Elements[i].isSolid)
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        NdlSenNum[Elements[i].NdlID[idx[j]]] = 1.0;
+                        NdlSenNum[Elements[i].NdlID[j]] = isovalue * 1.1;
                     }
                 }
                 if (Elements[i].isVoid)
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        NdlSenNum[Elements[i].NdlID[idx[j]]] = 0.0;
+                        NdlSenNum[Elements[i].NdlID[j]] = 0;
                     }
                 }
-
-                Elements[i].Vertices = verts;
-                Elements[i].MinVert = verts[0];
             }
-            for(int i = 0; i < Elements.Count; i++)
+            for (int i = 0; i < Elements.Count; i++)
             {
                 var upd_ndlSen = new double[8];
                 for (int j = 0; j < 8; j++)
                 {
-                    upd_ndlSen[j] = NdlSenNum[Elements[i].NdlID[idx[j]]];
+                    upd_ndlSen[j] = NdlSenNum[Elements[i].NdlID[j]];
                 }
 
                 Elements[i].SetNdlSenNum(upd_ndlSen);
@@ -379,6 +396,7 @@ namespace PLTP
                 while (Math.Abs(cur_vol - tar_vol) > Tolerance && iter < MaximumIteration)
                 {
                     isovalue = (highest + lowest) * 0.5;
+                    AdjustSenNum(isovalue);
                     meshes = Extract(isovalue);
                     cur_vol = Mesh.GetVolumeFromMeshes(meshes) / ini_vol;
 
@@ -390,6 +408,7 @@ namespace PLTP
             }
             else
             {
+                AdjustSenNum(isovalue);
                 meshes = Extract(isovalue);
                 var vol = Mesh.GetVolumeFromMeshes(meshes);
                 Console.WriteLine("Volume is " + vol.ToString());
