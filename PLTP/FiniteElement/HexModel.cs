@@ -187,7 +187,6 @@ namespace PLTP
                         NdlSenNum[i] = (NdlSenNum[i] - min) / (max - min);
                     });
                 }
-
             }
 
             // Get the correct vertex order

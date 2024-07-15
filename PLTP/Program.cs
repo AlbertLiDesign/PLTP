@@ -102,10 +102,11 @@ namespace PLTP // Note: actual namespace depends on the project name.
             //string mdl_path = "../../../../../data/LetterA/beso.txt";
             //string sen_path = "../../../../../data/LetterA/elem_sen_113.txt";
             //string output_path = "../../../../../data/LetterA/Smoothing.obj";
-            string mdl_path = "F:\\OneDrive - RMIT University\\Work\\AResearch\\SPBESO_VR\\Numerical examples\\Bridge2\\beso.txt";
-            string sen_path = "F:\\OneDrive - RMIT University\\Work\\AResearch\\SPBESO_VR\\Numerical examples\\Bridge2\\solution_1\\ndl_sen_90.txt";
-            string output_path = "F:\\OneDrive - RMIT University\\Work\\AResearch\\SPBESO_VR\\Numerical examples\\Bridge2\\sol_1.obj";
-            Test.TestHex(mdl_path, sen_path, 0.2, 30, 0.01, 50, true, true, output_path);
+            string mdl_path = "E:\\test\\tet\\beso.txt";
+            string sen_path = "E:\\test\\tet\\solution\\ndl_sen_104.txt";
+            string output_path = "E:\\test\\tet\\sol_1.obj";
+            //Test.TestHex(mdl_path, sen_path, 0.15, 30, 0.01, 50, true, true, output_path);
+            Test.TestTetra(mdl_path, sen_path, 0.15, 30, 0.01, 50, true, true, output_path);
         }
 
         //public static void testMCC()

@@ -471,6 +471,18 @@ namespace PLTP
 
             return meshes;
         }
+        public void SetNdlSenNums(double[] ndl_sen)
+        {
+            NdlSenNum = (double[])ndl_sen.Clone();
+            Parallel.For(0, Elements.Count, i =>
+            {
+                Elements[i].ndlSen = new double[4];
+                for (int j = 0; j < 4; j++)
+                {
+                    Elements[i].ndlSen[j] = NdlSenNum[Elements[i].NdlID[j]];
+                }
+            });
+        }
 
         #region Private Methods
         private int ComputeFlag(int id, double[] values, double isovalue)

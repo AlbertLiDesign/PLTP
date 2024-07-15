@@ -11,7 +11,7 @@ namespace PLTP
     /// </summary>
     public class Import
     {
-        public static List<double> ReadElemSenNum(string path)
+        public static List<double> ReadSenNum(string path)
         {
             List<double> ndlSens = new List<double>();
             if (File.Exists(path))
@@ -274,10 +274,10 @@ namespace PLTP
                         List<Vector> verts = new List<Vector>();
                         List<Face> faces = new List<Face>();
 
-                        int n0 = int.Parse(tokens[1]) - 1;
-                        int n1 = int.Parse(tokens[2]) - 1;
-                        int n2 = int.Parse(tokens[3]) - 1;
-                        int n3 = int.Parse(tokens[4]) - 1;
+                        int n0 = int.Parse(tokens[1]);
+                        int n1 = int.Parse(tokens[2]);
+                        int n2 = int.Parse(tokens[3]);
+                        int n3 = int.Parse(tokens[4]);
 
                         verts.Add(nds[n0]);
                         verts.Add(nds[n1]);
