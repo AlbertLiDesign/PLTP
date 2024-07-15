@@ -9,7 +9,7 @@ namespace PLTP
 {
     public static class Test
     {
-        public static void TestTetra(string mdl_path, string sen_path, double volumeFraction,
+        public static void TestTetra(string mdl_path, string sen_path, double volumeFraction, double isovalue,
 double filterRadius, double tolerance, int maximumIteration, bool interpolation, bool keepVolume, string outputPath)
         {
             Console.WriteLine("====================");
@@ -52,7 +52,7 @@ double filterRadius, double tolerance, int maximumIteration, bool interpolation,
             sw.Restart();
             Console.Write("|*****...............| 25%");
             Console.Write("\t(Extract iso-sensitivity model... ");
-            var meshes = model.ExtractIsoSensitivityModel(0.5);
+            var meshes = model.ExtractIsoSensitivityModel(isovalue);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             #endregion
@@ -246,7 +246,7 @@ double filterRadius, double tolerance, int maximumIteration, bool interpolation,
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             Console.WriteLine("Done");
         }
-        public static void TestHex(string mdl_path, string sen_path, double volumeFraction,
+        public static void TestHex(string mdl_path, string sen_path, double volumeFraction, double isovalue,
             double filterRadius, double tolerance, int maximumIteration, bool interpolation, bool keepVolume, string outputPath)
         {
             Console.WriteLine("====================");
@@ -302,7 +302,7 @@ double filterRadius, double tolerance, int maximumIteration, bool interpolation,
             sw.Restart();
             Console.Write("|*****...............| 25%");
             Console.Write("\t(Extract iso-sensitivity model... ");
-            var meshes = model.ExtractIsoSensitivityModel(0.044);
+            var meshes = model.ExtractIsoSensitivityModel(isovalue);
             sw.Stop();
             Console.Write(sw.ElapsedMilliseconds.ToString() + "ms )\n");
             #endregion

@@ -445,7 +445,6 @@ namespace PLTP
                 var cur_vol = 0.0;
                 var tar_vol = VolumeFraction;
                 var ini_vol = GetVolume();
-                string output_path = "../../../../../data/YuLi_4/Smoothing.obj";
                 while (Math.Abs(cur_vol - tar_vol) > Tolerance && iter < MaximumIteration)
                 {
                     isovalue = (highest + lowest) * 0.5;
@@ -456,9 +455,6 @@ namespace PLTP
                     if (cur_vol - tar_vol > 0.0) lowest = isovalue;
                     else highest = isovalue;
                     iter++;
-
-                    var output = Mesh.CombineMeshes(meshes);
-                    Export.WriteObj(output, output_path);
                 }
                 Console.WriteLine("Volume is " + (cur_vol * ini_vol).ToString());
             }
