@@ -5,85 +5,85 @@ namespace PLTP // Note: actual namespace depends on the project name.
 {
     internal class Program
     {
-        //static void Main()
-        //{
-        //    TestModel();
-        //}
-        static void Main(string[] args)
+        static void Main()
         {
-            string mdl_path = null;
-            string sen_path = null;
-            string output_path = null;
-            double volumeFraction = 0.2;
-            double filterRadius = 3.0;
-            double tolerance = 0.01;
-            double isovalue = 0.5;
-            int maximumIteration = 50;
-            bool interpolation = true;
-            bool keepVolume = true;
-            bool isHex = true;
-
-            for (int i = 0; i < args.Length; i++)
-            {
-                switch (args[i])
-                {
-                    case "-h":
-                    case "--help":
-                        PrintHelp();
-                        return;
-                    case "-type":
-                        isHex = Convert.ToBoolean(args[++i]);
-                        break;
-                    case "-v":
-                        volumeFraction = Convert.ToDouble(args[++i]);
-                        break;
-                    case "-r":
-                        filterRadius = Convert.ToDouble(args[++i]);
-                        break;
-                    case "-t":
-                        tolerance = Convert.ToDouble(args[++i]);
-                        break;
-                    case "-iso":
-                        isovalue = Convert.ToDouble(args[++i]);
-                        break;
-                    case "-i":
-                        maximumIteration = Convert.ToInt32(args[++i]);
-                        break;
-                    case "-k":
-                        keepVolume = Convert.ToBoolean(args[++i]);
-                        break;
-                    case "-p":
-                        interpolation = Convert.ToBoolean(args[++i]);
-                        break;
-                    case "-m":
-                        mdl_path = args[++i];
-                        break;
-                    case "-s":
-                        sen_path = args[++i];
-                        break;
-                    case "-o":
-                        output_path = args[++i];
-                        break;
-                }
-            }
-
-            if (mdl_path != null && sen_path != null && output_path != null)
-            {
-                if (isHex)
-                {
-                    Test.TestHex(mdl_path, sen_path, volumeFraction, isovalue, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
-                }
-                else
-                {
-                    Test.TestTetra(mdl_path, sen_path, volumeFraction, isovalue, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid number of arguments provided.");
-                Console.WriteLine("Expected usage: Program.exe -m <mdl_path> -s <sen_path> -o <output_path> [-v <volumeFraction>] [-r <filterRadius>] [-t <tolerance>] [-i <maximumIteration>] [-p <interpolation>] [-k <keepVolume>]");
-            }
+            TestModel();
         }
+        //static void Main(string[] args)
+        //{
+        //    string mdl_path = null;
+        //    string sen_path = null;
+        //    string output_path = null;
+        //    double volumeFraction = 0.2;
+        //    double filterRadius = 3.0;
+        //    double tolerance = 0.01;
+        //    double isovalue = 0.5;
+        //    int maximumIteration = 50;
+        //    bool interpolation = true;
+        //    bool keepVolume = true;
+        //    bool isHex = true;
+
+        //    for (int i = 0; i < args.Length; i++)
+        //    {
+        //        switch (args[i])
+        //        {
+        //            case "-h":
+        //            case "--help":
+        //                PrintHelp();
+        //                return;
+        //            case "-type":
+        //                isHex = Convert.ToBoolean(args[++i]);
+        //                break;
+        //            case "-v":
+        //                volumeFraction = Convert.ToDouble(args[++i]);
+        //                break;
+        //            case "-r":
+        //                filterRadius = Convert.ToDouble(args[++i]);
+        //                break;
+        //            case "-t":
+        //                tolerance = Convert.ToDouble(args[++i]);
+        //                break;
+        //            case "-iso":
+        //                isovalue = Convert.ToDouble(args[++i]);
+        //                break;
+        //            case "-i":
+        //                maximumIteration = Convert.ToInt32(args[++i]);
+        //                break;
+        //            case "-k":
+        //                keepVolume = Convert.ToBoolean(args[++i]);
+        //                break;
+        //            case "-p":
+        //                interpolation = Convert.ToBoolean(args[++i]);
+        //                break;
+        //            case "-m":
+        //                mdl_path = args[++i];
+        //                break;
+        //            case "-s":
+        //                sen_path = args[++i];
+        //                break;
+        //            case "-o":
+        //                output_path = args[++i];
+        //                break;
+        //        }
+        //    }
+
+        //    if (mdl_path != null && sen_path != null && output_path != null)
+        //    {
+        //        if (isHex)
+        //        {
+        //            Test.TestHex(mdl_path, sen_path, volumeFraction, isovalue, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
+        //        }
+        //        else
+        //        {
+        //            Test.TestTetra(mdl_path, sen_path, volumeFraction, isovalue, filterRadius, tolerance, maximumIteration, interpolation, keepVolume, output_path);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Invalid number of arguments provided.");
+        //        Console.WriteLine("Expected usage: Program.exe -m <mdl_path> -s <sen_path> -o <output_path> [-v <volumeFraction>] [-r <filterRadius>] [-t <tolerance>] [-i <maximumIteration>] [-p <interpolation>] [-k <keepVolume>]");
+        //    }
+        //}
         static void PrintHelp()
         {
             Console.WriteLine("Usage: Program.exe -type <elem_type> -m <mdl_path> -s <sen_path> -o <output_path> [-v <volumeFraction>] [-r <filterRadius>] [-t <tolerance>] [-i <maximumIteration>] [-p <interpolation>] [-k <keepVolume>]");
@@ -111,7 +111,7 @@ namespace PLTP // Note: actual namespace depends on the project name.
             string sen_path = "E:\\test\\tet\\solution\\ndl_sen_104.txt";
             string output_path = "E:\\test\\tet\\sol_1.obj";
             //Test.TestHex(mdl_path, sen_path, 0.15, 30, 0.01, 50, true, true, output_path);
-            //Test.TestTetra(mdl_path, sen_path, 0.15, 0.05, 30, 0.01, 50, true, false, output_path);
+            Test.TestTetra(mdl_path, sen_path, 0.15, 0.05, 3, 0.01, 50, true, false, output_path);
         }
 
         //public static void testMCC()

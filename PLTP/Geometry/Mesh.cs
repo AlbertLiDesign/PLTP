@@ -138,14 +138,21 @@ namespace PLTP
                 }
             }
 
-            var upd_faces = Faces.ToList();
-            int num = 0;
-            del.Sort();
-            for (int i = 0; i < del.Count; i++)
+            bool[] toDelete = new bool[Faces.Length];
+            foreach (int index in del)
             {
-                upd_faces.RemoveAt(del[i] - num);
-                num++;
+                toDelete[index] = true;
             }
+
+            var upd_faces = new List<Face>();
+            for (int i = 0; i < Faces.Length; i++)
+            {
+                if (!toDelete[i])
+                {
+                    upd_faces.Add(Faces[i]);
+                }
+            }
+
             Faces = upd_faces.ToArray();
         }
 
