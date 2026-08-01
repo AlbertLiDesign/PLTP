@@ -115,6 +115,101 @@ namespace PLTP
         }
 
         /// <summary>
+        /// Drop everything but the largest connected piece, returning how many
+        /// pieces there were.
+        ///
+        /// The iso-surface is a level set of the nodal sensitivity, which is the
+        /// element field averaged onto the nodes. That averaging reaches across
+        /// the solid-void boundary, so a peak sitting in what BESO decided was
+        /// void can still clear the isovalue and leave a speck of material that is
+        /// no part of the design. Measured on the million-tetrahedron result:
+        /// 2,561 pieces, the largest holding 92% of the facets and 1,723 of the
+        /// remainder no bigger than four facets each. BESO's own solid phase, by
+        /// contrast, is a single connected component with nothing floating.
+        ///
+        /// Call after welding - the pieces are only distinguishable once
+        /// coincident vertices have been merged.
+        /// </summary>
+        public int KeepLargestComponent(out int droppedFaces)
+        {
+            droppedFaces = 0;
+            if (Faces.Length == 0) return 0;
+
+            var parent = new int[Vertices.Length];
+            for (int i = 0; i < parent.Length; i++) parent[i] = i;
+
+            int Find(int a) { while (parent[a] != a) { parent[a] = parent[parent[a]]; a = parent[a]; } return a; }
+
+            foreach (var f in Faces)
+            {
+                int r0 = Find(f.Vert_ID[0]);
+                for (int k = 1; k < f.Vert_ID.Length; k++)
+                {
+                    int r = Find(f.Vert_ID[k]);
+                    if (r != r0) { parent[r] = r0; r0 = Find(r0); }
+                }
+            }
+
+            // Weigh a piece by facets, not vertices: the three vertices of one
+            // stray triangle should not count the same as three of the body.
+            var faceRoot = new int[Faces.Length];
+            var size = new Dictionary<int, int>();
+            for (int i = 0; i < Faces.Length; i++)
+            {
+                int r = Find(Faces[i].Vert_ID[0]);
+                faceRoot[i] = r;
+                size.TryGetValue(r, out int c);
+                size[r] = c + 1;
+            }
+
+            int best = -1, bestCount = -1;
+            foreach (var kv in size)
+                if (kv.Value > bestCount) { bestCount = kv.Value; best = kv.Key; }
+
+            var kept = new List<Face>(bestCount);
+            for (int i = 0; i < Faces.Length; i++)
+            {
+                if (faceRoot[i] == best) kept.Add(Faces[i]);
+                else droppedFaces++;
+            }
+            Faces = kept.ToArray();
+            return size.Count;
+        }
+
+        /// <summary>
+        /// Drop faces that collapsed to nothing when their vertices were welded.
+        ///
+        /// A cut that lands exactly on a corner produces one - and pinning the
+        /// fixed domains just past the isovalue makes that happen everywhere along
+        /// their boundary, which is the point: the material stops at the boundary
+        /// rather than a whole element beyond it. The zero-area triangles left
+        /// behind are correct in the sense that they enclose nothing, and useless
+        /// in every other. RemoveDuplicatedFaces will not catch them; they are not
+        /// duplicates, they are degenerate.
+        ///
+        /// Call after welding: before it, the repeated corners are separate
+        /// vertices that merely happen to coincide.
+        /// </summary>
+        public int RemoveDegenerateFaces()
+        {
+            var kept = new List<Face>(Faces.Length);
+            int dropped = 0;
+            foreach (var f in Faces)
+            {
+                var v = f.Vert_ID;
+                bool degenerate = false;
+                for (int i = 0; i < v.Length && !degenerate; i++)
+                    for (int j = i + 1; j < v.Length; j++)
+                        if (v[i] == v[j]) { degenerate = true; break; }
+
+                if (degenerate) dropped++;
+                else kept.Add(f);
+            }
+            Faces = kept.ToArray();
+            return dropped;
+        }
+
+        /// <summary>
         /// Remove all duplicated faces
         /// </summary>
         public void RemoveDuplicatedFaces()

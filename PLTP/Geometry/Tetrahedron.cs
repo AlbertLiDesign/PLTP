@@ -24,6 +24,16 @@ namespace PLTP
         /// </summary>
         public bool isNonDesign = false;
 
+        /// <summary>
+        /// If the element was pinned empty for the whole optimization. The
+        /// counterpart of <see cref="isNonDesign"/>: that one is emitted whole,
+        /// this one contributes nothing. Without it the iso-surface can put
+        /// material back into a hole, because a node on the boundary of a void
+        /// region averages the sensitivities of its solid neighbours and can sit
+        /// above the isovalue.
+        /// </summary>
+        public bool isVoid = false;
+
         public Tetrahedron()
         {
             vertices = new Vector[4];
@@ -77,6 +87,10 @@ namespace PLTP
         public void SetNonDesign(bool isNonDesign)
         {
             this.isNonDesign = isNonDesign;
+        }
+        public void SetVoid(bool isVoid)
+        {
+            this.isVoid = isVoid;
         }
 
         public Mesh ToMesh()

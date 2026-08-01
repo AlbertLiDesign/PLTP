@@ -152,16 +152,44 @@ namespace PLTP
 
             for (int i = 0; i < Elements.Count; i++)
             {
-                int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
+                if (Elements[i].isVoid)
+                {
+                    // Pinned empty for the whole optimization, so it contributes
+                    // nothing whatever the interpolated field says here. Emitting
+                    // nothing cannot leave a seam, so this stays a special case.
+                    meshes[i] = new Mesh(new Vector[0], new Face[0]);
+                    continue;
+                }
+
                 if (Elements[i].isNonDesign)
                 {
-                    // output the original hexahedron
+                    // The whole tetrahedron, from its corners.
+                    //
+                    // This leaves a seam. A neighbouring design element builds its
+                    // patch from points interpolated along the edges, which never
+                    // coincide with the corners, so the two do not weld and the
+                    // fixed regions come out as surface sitting against the body
+                    // rather than joined to it - 337 pieces on the 100k model
+                    // against one with the fixed domains switched off.
+                    //
+                    // Closing the seam by raising these elements' nodes above the
+                    // isovalue, so they come through the same interpolation, does
+                    // not work: the nodes are shared, so the raise reaches into
+                    // every neighbouring element as well, and since the bisection
+                    // moves the isovalue while the pinning follows it, no isovalue
+                    // removes that material. Measured: the volume floors at 27,286
+                    // against a target of 24,000, with the entire genuine design
+                    // region emptied to try to reach it. Whichever value is pinned,
+                    // 1 or a hair above the isovalue, gives the same 27,286.
+                    //
+                    // So the seam stays for now, and the volume constraint - which
+                    // counts these elements - is the thing being honoured.
                     meshes[i] = Elements[i].ToMesh();
+                    continue;
                 }
-                else
-                {
-                    meshes[i] = IsoSenMdl_Tetra(Elements[i], flag, isovalue);
-                }
+
+                int flag = ComputeFlag(i, Elements[i].ndlSen, isovalue);
+                meshes[i] = IsoSenMdl_Tetra(Elements[i], flag, isovalue);
             }
             return meshes;
         }
@@ -467,6 +495,101 @@ namespace PLTP
 
             return meshes;
         }
+        /// <summary>
+        /// Mark elements the optimization was not allowed to remove. The four-
+        /// argument constructor does the same thing, but only for a model built
+        /// from element sensitivities; this works alongside SetNdlSenNums too.
+        /// </summary>
+        public void SetNonDesign(IEnumerable<int> elementIDs)
+        {
+            foreach (var id in elementIDs) Elements[id].SetNonDesign(true);
+        }
+
+        /// <summary>
+        /// Write the fixed domains into the nodal field, so the iso-surface can
+        /// treat every element alike.
+        ///
+        /// A node of a non-design element goes to 1, which clears any isovalue the
+        /// volume bisection can arrive at - it searches strictly inside (0, 1) and
+        /// ComputeFlag tests with a strict greater-than - so all four of that
+        /// element's corners are above the threshold and the element comes out
+        /// whole. Void goes to 0 for the mirror reason. Where the two meet,
+        /// material wins.
+        ///
+        /// The value has to sit just past the isovalue, not at 1. Nodes are shared,
+        /// so a design element touching a non-design one sees those corners too,
+        /// and where its cut lands depends on how far past the threshold they are.
+        /// Put them at 1 and the interpolated cut falls a long way outside the
+        /// fixed region - the whole boundary inflates by an element, which on this
+        /// model added a layer under the full width of the deck and pushed the
+        /// volume 14% past the target with the bisection already saturated. Put
+        /// them a hair above and the cut lands on the boundary itself.
+        ///
+        /// The isovalue moves during the volume search, so this is applied per
+        /// trial, always from the field as originally computed.
+        /// </summary>
+        public void ApplyFixedDomains(double isovalue)
+        {
+            if (NdlSenNum == null || NdlSenNum.Length == 0) return;
+
+            if (ndlBase == null) ndlBase = (double[])NdlSenNum.Clone();
+            Array.Copy(ndlBase, NdlSenNum, NdlSenNum.Length);
+
+            // Far enough off the threshold that the interpolation is not dividing
+            // by a near-zero difference, close enough to be geometrically nothing.
+            const double margin = 1e-6;
+            double above = isovalue + margin;
+            double below = isovalue - margin;
+
+            foreach (var e in Elements)
+                if (e.isVoid)
+                    for (int k = 0; k < e.NdlID.Length; k++)
+                        NdlSenNum[e.NdlID[k]] = System.Math.Min(NdlSenNum[e.NdlID[k]], below);
+
+            foreach (var e in Elements)
+                if (e.isNonDesign)
+                    for (int k = 0; k < e.NdlID.Length; k++)
+                        NdlSenNum[e.NdlID[k]] = System.Math.Max(NdlSenNum[e.NdlID[k]], above);
+
+            Parallel.For(0, Elements.Count, i =>
+            {
+                var v = new double[4];
+                for (int j = 0; j < 4; j++) v[j] = NdlSenNum[Elements[i].NdlID[j]];
+                Elements[i].SetNdlSenNum(v);
+            });
+        }
+
+        // The nodal field as computed, kept because ApplyFixedDomains overwrites
+        // parts of it and runs again for every isovalue the bisection tries.
+        private double[] ndlBase;
+
+        /// <summary>
+        /// Mark elements the optimization was not allowed to fill. They are
+        /// emitted empty.
+        /// </summary>
+        public void SetVoid(IEnumerable<int> elementIDs)
+        {
+            foreach (var id in elementIDs) Elements[id].SetVoid(true);
+        }
+
+        /// <summary>
+        /// Supply the element field that CalNdlSenNums will project onto the
+        /// nodes. Use this rather than SetNdlSenNums when the caller has an
+        /// element field: the projection here is a gather over everything within
+        /// FilterRadius weighted by (rmin - distance), which is the filter the
+        /// optimization itself ran with. Handing over a nodal field instead
+        /// bypasses it, and the surface then carries whatever smoothing the caller
+        /// happened to apply - typically a one-ring average, which is the element
+        /// size rather than the filter radius.
+        /// </summary>
+        public void SetElemSenNums(List<double> elem_sen)
+        {
+            if (elem_sen.Count != Elements.Count)
+                throw new ArgumentException(
+                    $"Expected one value per element ({Elements.Count}), got {elem_sen.Count}.");
+            ElemSenNum = new List<double>(elem_sen);
+        }
+
         public void SetNdlSenNums(double[] ndl_sen)
         {
             NdlSenNum = (double[])ndl_sen.Clone();
