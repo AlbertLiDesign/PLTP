@@ -51,7 +51,7 @@ namespace PLTP
             // Write mesh
             for (int i = 0; i < 256; i++)
             {
-                var outputPath = folder_path + "\\allcases_" + i + ".obj";
+                var outputPath = Path.Combine(folder_path, "allcases_" + i + ".obj");
                 Console.Write("\t(Write mesh... ");
                 Export.WriteObj(meshes[i], outputPath);
             }
@@ -60,7 +60,7 @@ namespace PLTP
         }
         public static void MCC(string folder_path, bool interpolation)
         {
-            var mdl_path = folder_path + "\\Model.mdl";
+            var mdl_path = Path.Combine(folder_path, "Model.mdl");
             Console.WriteLine("====================");
             Console.WriteLine("Welcome to use PLTP.");
             Console.WriteLine("====================");
@@ -114,7 +114,7 @@ namespace PLTP
             #endregion
 
             // Write mesh
-            var outputPath = folder_path + "\\mesh.obj";
+            var outputPath = Path.Combine(folder_path, "mesh.obj");
             sw.Restart();
             Console.Write("|********************| 100%");
             Console.Write("\t(Write mesh... ");
