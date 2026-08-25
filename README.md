@@ -66,8 +66,6 @@ If this code is useful in your work, please cite it.
 
 ## Web App
 
-![image-20260825220641669](E:\topo\PLTP\assets\image-20260825220641669.png)
-
 `PLTP.Web` is an interactive front end for the same library: load a model and its sensitivity
 field, set the parameters, watch the extraction run, turn the result around in 3D and download
 the `.obj` or `.stl`. It is a local tool — it runs on your machine and reads your files from
@@ -326,13 +324,18 @@ PLTP.Web/
 
 ## Sample Data
 
-`data/` holds seven complete cases, each a model plus its sensitivity field:
+`data/` holds two complete cases, each a model plus its sensitivity field. Both appear as
+one-click samples in the web app.
 
-| Case | Format |
-|------|--------|
-| `LetterA` | TOPX `beso.txt` + `elem_sen_113.txt` |
-| `Cantilever`, `Table`, `YuLi`, `YuLi_4` | Abaqus `.inp` + `Sensitivities.txt` |
-| `tetra_2`, `tetra_3` | tetrahedral Abaqus `.inp` + sensitivities |
+| Case | Elements | Format |
+|------|----------|--------|
+| `LetterA` | 80,000 hexahedra | TOPX `beso.txt` + `elem_sen_113.txt` |
+| `Cantilever` | 24,000 hexahedra | Abaqus `.inp` + `Sensitivities.txt` |
+
+Both are hexahedral. The tetrahedral sets that used to sit here were dropped for their weight —
+`tetra_3` alone was 18 MB. The tetrahedral path is fully supported and separately implemented
+(see [Known Limitations](#known-limitations)); it just needs a model of your own, through the
+upload tab or `Test.TestTetra`.
 
 ---
 
