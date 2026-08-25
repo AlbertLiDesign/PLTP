@@ -1,5 +1,9 @@
 # PLTP
 
+![The lookup tables, in two dimensions](assets/fig2.jpg)
+
+*Each cell contributes the closed polygon of its solid part, not just the cut line. In three dimensions the same idea gives 256 hexahedral cases. (Fig. 2 of the paper.)*
+
 PLTP converts a finished BESO topology optimization result into a **watertight triangulated solid**.
 
 It takes a finite element mesh (hexahedral or tetrahedral) together with a nodal sensitivity field and
@@ -11,10 +15,16 @@ PLTP is the post-processing companion to the [TOPX](https://github.com/AlbertLiD
 optimizer: it reads TOPX's `beso.txt` model file and its `ndl_sen_<k>.txt` nodal sensitivity output
 directly. Abaqus `.inp` meshes are supported as well.
 
+![A chair, optimized and smoothed](assets/fig9.jpg)
+
+*A tetrahedral BESO result before and after extraction, and printed. Smoothing the boundary also lowered the compliance, 61.231 to 57.235 Nmm. (Fig. 9 of the paper.)*
+
 ---
 
 ## Table of Contents
 
+- [Citation](#citation)
+- [Web App](#web-app)
 - [Pipeline](#pipeline)
 - [Requirements and Build](#requirements-and-build)
 - [Usage](#usage)
@@ -24,6 +34,106 @@ directly. Abaqus `.inp` meshes are supported as well.
 - [Project Layout](#project-layout)
 - [Sample Data](#sample-data)
 - [Known Limitations](#known-limitations)
+
+---
+
+## Citation
+
+The method PLTP implements is published as:
+
+> Zhi Li, Ting-Uei Lee, Yuan Yao, Yi Min Xie.
+> **Smoothing topology optimization results using pre-built lookup tables.**
+> *Advances in Engineering Software* **173** (2022) 103204.
+> [doi:10.1016/j.advengsoft.2022.103204](https://doi.org/10.1016/j.advengsoft.2022.103204)
+
+A copy is in [`paper/`](paper/), and the two figures above are Fig. 2 and Fig. 9 of it.
+If this code is useful in your work, please cite it.
+
+```bibtex
+@article{li2022smoothing,
+  title   = {Smoothing topology optimization results using pre-built lookup tables},
+  author  = {Li, Zhi and Lee, Ting-Uei and Yao, Yuan and Xie, Yi Min},
+  journal = {Advances in Engineering Software},
+  volume  = {173},
+  pages   = {103204},
+  year    = {2022},
+  issn    = {0965-9978},
+  doi     = {10.1016/j.advengsoft.2022.103204}
+}
+```
+
+---
+
+## Web App
+
+![image-20260825220641669](E:\topo\PLTP\assets\image-20260825220641669.png)
+
+`PLTP.Web` is an interactive front end for the same library: load a model and its sensitivity
+field, set the parameters, watch the extraction run, turn the result around in 3D and download
+the `.obj` or `.stl`. It is a local tool — it runs on your machine and reads your files from
+there.
+
+![The web app](assets/image-20260825220641669.png)
+
+*The cantilever sample: parameters on the left, the extracted surface in the middle, and what it
+actually came out as - vertices, faces, the isovalue the volume bisection settled at, and the
+volume fraction it reached.*
+
+```bash
+./run-web.sh          # Linux, macOS      →  http://localhost:5080
+```
+```powershell
+.\run-web.ps1         # Windows
+```
+
+Both scripts build, start the server and open a browser. Or drive `dotnet` yourself:
+
+```bash
+dotnet run --project PLTP.Web -c Release --urls http://localhost:5080
+```
+
+**Requirements: the .NET 8 SDK or newer, and nothing else.** No npm install, no CDN, no network
+at run time — the viewer is hand-written WebGL2 with no third-party JavaScript, so a fresh clone
+works offline.
+
+The seven cases in `data/` appear as one-click samples, each carrying its own filter radius,
+because that radius is a physical length belonging to the mesh rather than a setting that
+transfers between them.
+
+### What the browser gives you that the library does not
+
+- **Detection, reported.** Format, element type and whether the sensitivity field is per element
+  or per node are worked out from the files and written to the log before anything runs. The
+  readers match on row prefixes and fail *silently* on the wrong format, so this is the
+  difference between a clear error and a puzzle. All three can be overridden.
+- **The volume bisection, live.** Every trial prints its isovalue and the volume fraction it
+  produced, so a search that saturates short of the target is visible while it happens rather
+  than inferred afterwards. Long runs can be cancelled.
+- **A normalisation switch.** The isovalue lives on `[0, 1]`, but a raw solver field does not —
+  LetterA's runs around `1e-11`. The hexahedral path always min-maxed the field inside
+  `SortVerts` and the tetrahedral path never did; here both do, on one switch, and the range it
+  mapped from goes in the log.
+- **The surface itself.** Orbit, section along any axis, flat or smooth shading, the
+  triangulation, a bounding box, PNG capture — plus vertex, face, achieved-volume and
+  achieved-isovalue counts. That last one is worth having: it is the isovalue you would pass by
+  hand to reproduce the run without the bisection.
+
+### API
+
+The browser talks to a small JSON API, which is also usable directly:
+
+| | |
+|---|---|
+| `GET /api/samples` | the cases found in `data/` |
+| `POST /api/jobs` | multipart: `model` + `sensitivity` files, or `sample=<id>`, plus the parameters |
+| `GET /api/jobs/{id}?since=<n>` | state, progress and log lines after the first `n` |
+| `POST /api/jobs/{id}/cancel` | stop a running extraction |
+| `GET /api/jobs/{id}/mesh` | the surface as packed float32 positions and uint32 indices |
+| `GET /api/jobs/{id}/download/{obj\|stl}` | the finished file |
+
+Jobs run one at a time — extraction is already parallel inside, and a large model peaks near
+10 GB, so two at once would contend for the same cores and could take the process out on memory.
+The six most recent results stay in memory; older ones are evicted.
 
 ---
 
@@ -197,6 +307,19 @@ PLTP/
 │   ├── Table.cs             the 256-case hexahedral lookup tables
 │   └── Utils.cs             KD-tree search, mesh welding
 └── Dependencies/KDTree.dll
+
+PLTP.Web/
+├── Program.cs               the JSON API and the static file host
+├── Services/
+│   ├── PltpRunner.cs        the pipeline, with progress reporting and detection
+│   ├── Sniff.cs             format and element type from the file itself
+│   ├── JobStore.cs          one extraction at a time, with cancellation
+│   ├── MeshBinary.cs        the packed mesh the viewer downloads
+│   └── SampleCatalog.cs     the cases in data/, with per-mesh defaults
+└── wwwroot/
+    ├── index.html, css/app.css
+    └── js/viewer.js         hand-written WebGL2 - no third-party JavaScript
+        js/app.js
 ```
 
 ---
@@ -222,7 +345,8 @@ PLTP/
 - **`SD,` / `VD,` indices are parsed as 1-based** (`int.Parse(tokens[1]) - 1`), while TOPX writes them
   from 0-based element IDs. Domains imported from TOPX would be shifted by one. No sample case in
   `data/` has a non-empty solid or void domain, so this path is untested.
-- **The command line is not wired up**; `Main` runs `TestModel()` with hardcoded paths.
+- **The command line is not wired up**; `Main` runs `TestModel()` with hardcoded paths. Use
+  `PLTP.Web` for an interactive run, or restore the commented-out `Main` for a scripted one.
 - **Two different welders** are in use — `MeshWeld.Weld` (tetrahedral drivers) and
   `Mesh.WeldVertices` (`TestHex`) — with tolerances from `1e-4` to `1e-10`. They are not interchangeable.
 - **`Utils.cs` contains decompiled code**: `MeshWeld` is supported by `Class18` / `Class19` / `Class20`,

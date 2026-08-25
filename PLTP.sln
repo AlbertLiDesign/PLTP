@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PLTP", "PLTP\PLTP.csproj", "{CE1D268C-4B0D-4F26-8E78-0546D57DFB2B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PLTP.Web", "PLTP.Web\PLTP.Web.csproj", "{7A3E6B21-4C58-4D9E-9F2A-1B6C4D3E8A57}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82AFDD73-E124-4C63-8792-E5EE7DD11A42}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
