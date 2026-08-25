@@ -444,7 +444,29 @@ namespace PLTP
             return meshes;
         }
 
-        public Mesh[] ExtractIsoSensitivityModel(double isovalue)
+
+        #region What the last extraction came out as
+        /// <summary>
+        /// The isovalue the last extraction actually used. With the volume
+        /// constraint on this is the one the bisection settled at, which is not
+        /// the isovalue that was passed in.
+        /// </summary>
+        public double LastIsovalue;
+        /// <summary>The volume of the last extracted surface, in model units.</summary>
+        public double LastVolume;
+        /// <summary>The volume of the whole mesh, the denominator of the volume fraction.</summary>
+        public double InitialVolume;
+        /// <summary>Trials the volume bisection ran, 0 when it was off.</summary>
+        public int LastIterations;
+        #endregion
+
+        /// <param name="progress">
+        /// Called after each trial of the volume bisection with the trial number,
+        /// the isovalue tried and the volume fraction it gave. A caller driving
+        /// this from a UI reports from here; throwing from it aborts the search,
+        /// which is the only place a long run can be interrupted.
+        /// </param>
+        public Mesh[] ExtractIsoSensitivityModel(double isovalue, Action<int, double, double>? progress = null)
         {
             Mesh[] meshes = new Mesh[Elements.Count];
             if (KeepVolume)
@@ -482,13 +504,22 @@ namespace PLTP
                     if (cur_vol - tar_vol > 0.0) lowest = isovalue;
                     else highest = isovalue;
                     iter++;
+                    progress?.Invoke(iter, isovalue, cur_vol);
                 }
+                LastIsovalue = isovalue;
+                LastVolume = cur_vol * ini_vol;
+                InitialVolume = ini_vol;
+                LastIterations = iter;
                 Console.WriteLine("Volume is " + (cur_vol * ini_vol).ToString());
             }
             else
             {
                 meshes = Extract(isovalue);
                 var vol = Mesh.GetVolumeFromMeshes(meshes);
+                LastIsovalue = isovalue;
+                LastVolume = vol;
+                InitialVolume = GetVolume();
+                LastIterations = 0;
                 Console.WriteLine("Volume is " + vol.ToString());
             }
 
