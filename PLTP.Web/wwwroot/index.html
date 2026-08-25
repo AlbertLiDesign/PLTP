@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLTP — iso-sensitivity surface extraction</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%235b9bf0'/><path d='M9 22 L16 9 L23 22 Z' fill='%230d1017'/></svg>">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="panel" id="panel">
+    <header class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M6 25 L16 6 L26 25 Z"/><path d="M11 21 L16 12 L21 21 Z" class="inner"/></svg>
+      </div>
+      <div>
+        <h1>PLTP</h1>
+        <p>Turn a BESO result into a watertight surface</p>
+      </div>
+    </header>
+
+    <!-- ------------------------------------------------------------ input -->
+    <section class="block">
+      <div class="block-head">
+        <h2>1 · Input</h2>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab is-on" data-source="sample" role="tab">Samples</button>
+        <button class="tab" data-source="upload" role="tab">Your files</button>
+      </div>
+
+      <div class="source" id="source-sample">
+        <div class="samples" id="samples"></div>
+        <p class="hint" id="sample-note"></p>
+      </div>
+
+      <div class="source hidden" id="source-upload">
+        <label class="drop" id="drop-model">
+          <input type="file" id="file-model" accept=".txt,.inp,.dat,.msh,*/*">
+          <span class="drop-title">Model</span>
+          <span class="drop-sub" data-empty="beso.txt from TOPX, or an Abaqus .inp">beso.txt from TOPX, or an Abaqus .inp</span>
+        </label>
+        <label class="drop" id="drop-sen">
+          <input type="file" id="file-sen" accept=".txt,.dat,*/*">
+          <span class="drop-title">Sensitivities</span>
+          <span class="drop-sub" data-empty="one value per element, or per node">one value per element, or per node</span>
+        </label>
+        <p class="hint">
+          The readers match on row prefixes and fail quietly on the wrong format, so the
+          detected type is reported in the log before anything else runs.
+        </p>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- parameters -->
+    <section class="block">
+      <div class="block-head">
+        <h2>2 · Extraction</h2>
+      </div>
+
+      <label class="switch">
+        <input type="checkbox" id="keepVolume" checked>
+        <span class="track"><span class="knob"></span></span>
+        <span class="switch-text">
+          <b>Hold the volume</b>
+          <i>Bisect the isovalue until the extracted volume hits the target</i>
+        </span>
+      </label>
+
+      <div class="field" id="field-vf">
+        <label for="volumeFraction">Target volume fraction</label>
+        <div class="row">
+          <input type="range" id="volumeFraction-range" min="0.01" max="0.9" step="0.01" value="0.2">
+          <input type="number" id="volumeFraction" min="0.001" max="0.999" step="0.01" value="0.2">
+        </div>
+        <p class="hint">Of the whole mesh, not of what survived the optimization.</p>
+      </div>
+
+      <div class="field" id="field-iso">
+        <label for="isovalue">Isovalue</label>
+        <div class="row">
+          <input type="range" id="isovalue-range" min="0" max="1" step="0.005" value="0.5">
+          <input type="number" id="isovalue" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <p class="hint">On the normalised field, so 0 keeps everything and 1 keeps nothing.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="tolerance">Volume tolerance</label>
+          <input type="number" id="tolerance" min="0.0001" max="0.5" step="0.001" value="0.01">
+        </div>
+        <div class="field">
+          <label for="maximumIteration">Max iterations</label>
+          <input type="number" id="maximumIteration" min="1" max="500" step="1" value="50">
+        </div>
+      </div>
+
+      <div class="field" id="field-rmin">
+        <label for="filterRadius">Filter radius <span class="tag">rmin</span></label>
+        <input type="number" id="filterRadius" min="0" step="0.1" value="3">
+        <p class="hint">
+          A physical length in model units, not a count of elements. Scaling it with the
+          element size makes the result mesh-dependent. Only used when the sensitivity
+          file is elemental and has to be projected onto the nodes.
+        </p>
+      </div>
+
+      <label class="switch">
+        <input type="checkbox" id="interpolation" checked>
+        <span class="track"><span class="knob"></span></span>
+        <span class="switch-text">
+          <b>Interpolate crossings</b>
+          <i>Place cut points along the edge by value; off puts them at midpoints</i>
+        </span>
+      </label>
+
+      <label class="switch">
+        <input type="checkbox" id="normalize" checked>
+        <span class="track"><span class="knob"></span></span>
+        <span class="switch-text">
+          <b>Normalise the field</b>
+          <i>Map the nodal values onto [0, 1] so the isovalue means something</i>
+        </span>
+      </label>
+
+      <label class="switch">
+        <input type="checkbox" id="keepLargestComponent">
+        <span class="track"><span class="knob"></span></span>
+        <span class="switch-text">
+          <b>Keep the largest piece</b>
+          <i>Drop islands the optimization left floating</i>
+        </span>
+      </label>
+
+      <details class="advanced">
+        <summary>Overrides</summary>
+        <p class="hint">
+          Everything here is detected from the file. Set one only when the detection
+          gets it wrong.
+        </p>
+        <div class="grid-2">
+          <div class="field">
+            <label for="elementType">Element type</label>
+            <select id="elementType">
+              <option value="auto">Detect</option>
+              <option value="hex">Hexahedra</option>
+              <option value="tet">Tetrahedra</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="format">File format</label>
+            <select id="format">
+              <option value="auto">Detect</option>
+              <option value="alfe">ALFE / TOPX</option>
+              <option value="abaqus">Abaqus .inp</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sensitivityKind">Sensitivity field</label>
+            <select id="sensitivityKind">
+              <option value="auto">Detect</option>
+              <option value="elemental">Per element</option>
+              <option value="nodal">Per node</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="weldTolerance">Weld tolerance</label>
+            <input type="number" id="weldTolerance" min="0" step="1e-6" value="0.00001">
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ------------------------------------------------------------- run -->
+    <div class="run-bar">
+      <button class="primary" id="run">Extract surface</button>
+      <button class="ghost hidden" id="cancel">Cancel</button>
+    </div>
+
+    <div class="progress hidden" id="progress">
+      <div class="progress-head">
+        <span id="stage">queued</span>
+        <span id="elapsed" class="mono"></span>
+      </div>
+      <div class="bar"><div class="fill" id="bar-fill"></div></div>
+    </div>
+
+    <section class="block log-block">
+      <div class="block-head">
+        <h2>Log</h2>
+        <button class="link" id="clear-log">clear</button>
+      </div>
+      <div class="log" id="log"></div>
+    </section>
+
+    <footer class="cite">
+      <div class="block-head"><h2>Cite</h2></div>
+      <p class="cite-title">Smoothing topology optimization results using pre-built lookup tables</p>
+      <p class="cite-meta">
+        Zhi&nbsp;Li, Ting-Uei&nbsp;Lee, Yuan&nbsp;Yao, Yi&nbsp;Min&nbsp;Xie ·
+        <i>Advances in Engineering Software</i> <b>173</b> (2022) 103204
+      </p>
+      <div class="cite-links">
+        <a href="https://doi.org/10.1016/j.advengsoft.2022.103204"
+           target="_blank" rel="noopener noreferrer">DOI</a>
+        <a id="cite-pdf" class="hidden" href="api/paper" target="_blank" rel="noopener">PDF</a>
+        <button id="cite-bib" type="button">Copy BibTeX</button>
+      </div>
+
+      <details class="advanced" id="cite-bib-text">
+        <summary>BibTeX</summary>
+        <pre>@article{li2022smoothing,
+  title   = {Smoothing topology optimization results using pre-built lookup tables},
+  author  = {Li, Zhi and Lee, Ting-Uei and Yao, Yuan and Xie, Yi Min},
+  journal = {Advances in Engineering Software},
+  volume  = {173},
+  pages   = {103204},
+  year    = {2022},
+  issn    = {0965-9978},
+  doi     = {10.1016/j.advengsoft.2022.103204}
+}</pre>
+      </details>
+    </footer>
+  </aside>
+
+  <!-- ------------------------------------------------------------- stage -->
+  <main class="stage">
+    <canvas id="canvas"></canvas>
+
+    <div class="empty" id="empty">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 6 L56 20 L56 44 L32 58 L8 44 L8 20 Z"/>
+        <path d="M32 6 L32 32 M32 32 L56 20 M32 32 L8 20 M32 32 L32 58" class="thin"/>
+      </svg>
+      <h3>Nothing extracted yet</h3>
+      <p>Pick a sample or drop in a model and its sensitivity file, then run the extraction.</p>
+    </div>
+
+    <div class="toolbar" id="toolbar">
+      <div class="tool-group">
+        <button data-view="iso" title="Isometric">ISO</button>
+        <button data-view="front" title="Front">FR</button>
+        <button data-view="right" title="Right">RT</button>
+        <button data-view="top" title="Top">TP</button>
+      </div>
+      <div class="tool-group">
+        <button id="t-fit" title="Fit to view">Fit</button>
+        <button id="t-up" title="Toggle the up axis">Z up</button>
+      </div>
+      <div class="tool-group">
+        <button id="t-shading" title="Flat or smooth shading">Smooth</button>
+        <button id="t-wire" title="Show the triangulation">Wire</button>
+        <button id="t-box" title="Show the bounding box">Box</button>
+      </div>
+      <div class="tool-group">
+        <button id="t-clip" title="Section the model">Section</button>
+        <button id="t-shot" title="Save a PNG">PNG</button>
+      </div>
+    </div>
+
+    <div class="clip-bar hidden" id="clip-bar">
+      <div class="tool-group">
+        <button class="is-on" data-axis="0">X</button>
+        <button data-axis="1">Y</button>
+        <button data-axis="2">Z</button>
+      </div>
+      <input type="range" id="clip-t" min="0" max="1" step="0.002" value="1">
+      <button id="clip-flip" title="Flip which side is kept">Flip</button>
+    </div>
+
+    <svg class="gizmo" id="gizmo" viewBox="0 0 68 68" aria-hidden="true"></svg>
+
+    <div class="stats hidden" id="stats"></div>
+
+    <div class="downloads hidden" id="downloads">
+      <a class="dl" id="dl-obj" download>Download .obj</a>
+      <a class="dl" id="dl-stl" download>Download .stl</a>
+    </div>
+  </main>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

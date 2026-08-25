@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- net8.0 rather than the library's net7.0: it is the LTS a fresh clone is
+         most likely to already have. RollForward lets it run on a machine that
+         only has .NET 9. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PLTP.Web</RootNamespace>
+    <AssemblyName>pltp-web</AssemblyName>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PLTP\PLTP.csproj" />
+  </ItemGroup>
+
+</Project>
