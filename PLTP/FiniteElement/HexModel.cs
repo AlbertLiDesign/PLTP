@@ -197,28 +197,40 @@ namespace PLTP
 
             Size = new Vector(Math.Abs(vert_6.X-vert_0.X), Math.Abs(vert_6.Y - vert_0.Y), Math.Abs(vert_6.Z-vert_0.Z));
 
-            // Unify all the vertex older
+            // Unify all the vertex order.
+            //
+            // The node IDs are permuted alongside the corners, so that afterwards
+            // NdlID[j] is the node sitting at Vertices[j]. Everything downstream -
+            // AdjustSenNum above all - reads the field as NdlSenNum[NdlID[j]] and
+            // is then correct by construction.
+            //
+            // This used to be done the other way round: NdlID was left alone and
+            // the global nodal field was permuted instead, one element at a time,
+            // as NdlSenNum[NdlID[j]] = copy[NdlID[idx[j]]]. That cannot work,
+            // because nodes are shared. A node is corner j of one element and
+            // corner j' of the next, so each of the (up to eight) elements
+            // touching it wrote a different neighbouring corner's value into the
+            // same slot and the last one won. Measured on the 24,000-element
+            // cantilever: 99.8% of nodes were written from more than one source,
+            // 73.3% of element corners ended up holding the wrong node's value,
+            // and the error reached 0.0038 on a field whose entire range was
+            // 0.0081. The interpolated crossings then landed almost anywhere
+            // along their edges, which is what put spikes all over the extracted
+            // boundary.
             for (int i = 0; i < Elements.Count; i++)
             {
                 Vector[] verts = new Vector[8];
+                int[] nds = new int[8];
                 // Update the order according to the correct order
                 for (int j = 0; j < 8; j++)
                 {
-                    verts[j] = NodeList[Elements[i].NdlID[idx[j]]];
+                    nds[j] = Elements[i].NdlID[idx[j]];
+                    verts[j] = NodeList[nds[j]];
                 }
 
                 Elements[i].Vertices = verts;
                 Elements[i].MinVert = verts[0];
-            }
-
-            // Adjust the order of nodal sensitivity numbers
-            var copy_NS = (double[])NdlSenNum.Clone();
-            for (int i = 0; i < Elements.Count; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    NdlSenNum[Elements[i].NdlID[j]] = copy_NS[Elements[i].NdlID[idx[j]]];
-                }
+                Elements[i].SetNdlID(nds);
             }
 
             AdjustSenNum(1.0);
