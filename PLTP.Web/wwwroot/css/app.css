@@ -425,3 +425,8 @@ input[type="range"]::-moz-range-thumb {
   line-height: 1.55; color: var(--text-dim); user-select: all;
   scrollbar-width: thin;
 }
+
+.licence {
+  margin: 4px 0 0; font-size: 10.5px; line-height: 1.5; color: var(--text-faint);
+}
+.licence a { color: var(--text-dim); }

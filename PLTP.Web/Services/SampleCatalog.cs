@@ -20,7 +20,15 @@ public sealed record Sample(
 /// The filter radius is a physical length, not a count of elements, so each
 /// sample carries its own - roughly two and a half times the average element
 /// size of that mesh, measured from its bounding box. A shared default would be
-/// meaningless across meshes whose elements differ by a factor of three.
+/// meaningless across meshes whose elements differ in size.
+///
+/// Both are hexahedral: the tetrahedral sets were dropped from the repository
+/// for their weight. The tetrahedral path is unaffected, but trying it needs a
+/// model of your own through the upload tab.
+///
+/// Entries are filtered by whether their files are actually present, so removing
+/// a data set is a matter of deleting it - nothing here has to agree with the
+/// disk for the app to start.
 /// </summary>
 public sealed class SampleCatalog
 {
@@ -35,26 +43,6 @@ public sealed class SampleCatalog
         new("cantilever", "Cantilever",
             "The textbook cantilever, hexahedral, exported from Abaqus.",
             "Cantilever/Job-1_BESO.inp", "Cantilever/Sensitivities.txt", "hex", "abaqus", 0.30, 2.5, 0.5, 24_000),
-
-        new("table", "Table",
-            "Four legs and a deck - the largest hexahedral sample here.",
-            "Table/Job-1_BESO.inp", "Table/Sensitivities.txt", "hex", "abaqus", 0.30, 2.0, 0.5, 96_000),
-
-        new("yuli", "YuLi",
-            "Small hexahedral model, quick enough to feel the parameters move.",
-            "YuLi/Job-1_BESO_111.inp", "YuLi/Sensitivities.txt", "hex", "abaqus", 0.30, 2.5, 0.5, 6_000),
-
-        new("tetra-2", "Tetra 2",
-            "Coarse tetrahedral mesh - the other half of the codebase entirely.",
-            "tetra_2/Job-2_BESO_96.inp", "tetra_2/Sensitivity.txt", "tet", "abaqus", 0.20, 2.0, 0.5, 12_729),
-
-        new("tetra-3", "Tetra 3",
-            "The same shape at 241k tetrahedra. Give the radius search a moment.",
-            "tetra_3/Job-4_BESO_88.inp", "tetra_3/Sensitivities.txt", "tet", "abaqus", 0.20, 0.75, 0.5, 241_547),
-
-        new("yuli-4", "YuLi 4",
-            "Tetrahedral version of the YuLi block.",
-            "YuLi_4/Job-2_BESO_96.inp", "YuLi_4/Sensitivities.txt", "tet", "abaqus", 0.20, 2.0, 0.5, 12_729),
     };
 
     /// <summary>

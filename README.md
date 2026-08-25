@@ -34,6 +34,7 @@ directly. Abaqus `.inp` meshes are supported as well.
 - [Project Layout](#project-layout)
 - [Sample Data](#sample-data)
 - [Known Limitations](#known-limitations)
+- [License](#license)
 
 ---
 
@@ -65,8 +66,6 @@ If this code is useful in your work, please cite it.
 ---
 
 ## Web App
-
-![image-20260825220641669](E:\topo\PLTP\assets\image-20260825220641669.png)
 
 `PLTP.Web` is an interactive front end for the same library: load a model and its sensitivity
 field, set the parameters, watch the extraction run, turn the result around in 3D and download
@@ -326,13 +325,18 @@ PLTP.Web/
 
 ## Sample Data
 
-`data/` holds seven complete cases, each a model plus its sensitivity field:
+`data/` holds two complete cases, each a model plus its sensitivity field. Both appear as
+one-click samples in the web app.
 
-| Case | Format |
-|------|--------|
-| `LetterA` | TOPX `beso.txt` + `elem_sen_113.txt` |
-| `Cantilever`, `Table`, `YuLi`, `YuLi_4` | Abaqus `.inp` + `Sensitivities.txt` |
-| `tetra_2`, `tetra_3` | tetrahedral Abaqus `.inp` + sensitivities |
+| Case | Elements | Format |
+|------|----------|--------|
+| `LetterA` | 80,000 hexahedra | TOPX `beso.txt` + `elem_sen_113.txt` |
+| `Cantilever` | 24,000 hexahedra | Abaqus `.inp` + `Sensitivities.txt` |
+
+Both are hexahedral. The tetrahedral sets that used to sit here were dropped for their weight —
+`tetra_3` alone was 18 MB. The tetrahedral path is fully supported and separately implemented
+(see [Known Limitations](#known-limitations)); it just needs a model of your own, through the
+upload tab or `Test.TestTetra`.
 
 ---
 
@@ -351,3 +355,19 @@ PLTP.Web/
   `Mesh.WeldVertices` (`TestHex`) — with tolerances from `1e-4` to `1e-10`. They are not interchangeable.
 - **`Utils.cs` contains decompiled code**: `MeshWeld` is supported by `Class18` / `Class19` / `Class20`,
   machine-generated names implementing the spatial hashing used for welding.
+
+---
+
+## License
+
+PLTP is free software: you can redistribute it and/or modify it under the terms of the
+**GNU General Public License, version 3**, as published by the Free Software Foundation.
+The full text is in [`LICENSE`](LICENSE).
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+One thing to be aware of: `PLTP/Dependencies/KDTree.dll` is a bundled binary that declares
+only "Copyright © 2015" and states no license. Redistributing it alongside GPL-licensed code
+assumes its terms are GPL-compatible, which the repository has no way to show.
