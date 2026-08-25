@@ -34,6 +34,7 @@ directly. Abaqus `.inp` meshes are supported as well.
 - [Project Layout](#project-layout)
 - [Sample Data](#sample-data)
 - [Known Limitations](#known-limitations)
+- [License](#license)
 
 ---
 
@@ -354,3 +355,19 @@ upload tab or `Test.TestTetra`.
   `Mesh.WeldVertices` (`TestHex`) — with tolerances from `1e-4` to `1e-10`. They are not interchangeable.
 - **`Utils.cs` contains decompiled code**: `MeshWeld` is supported by `Class18` / `Class19` / `Class20`,
   machine-generated names implementing the spatial hashing used for welding.
+
+---
+
+## License
+
+PLTP is free software: you can redistribute it and/or modify it under the terms of the
+**GNU General Public License, version 3**, as published by the Free Software Foundation.
+The full text is in [`LICENSE`](LICENSE).
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+One thing to be aware of: `PLTP/Dependencies/KDTree.dll` is a bundled binary that declares
+only "Copyright © 2015" and states no license. Redistributing it alongside GPL-licensed code
+assumes its terms are GPL-compatible, which the repository has no way to show.
